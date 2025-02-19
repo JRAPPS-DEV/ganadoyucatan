@@ -37,37 +37,37 @@ class TiendaController extends Controller
         $ciudades = Ciudad::where('estado_id', $estadoId)->get();
         return response()->json($ciudades);
     }
-public function tiendaHome(Request $request){
-    $query = Product::where('status', '1');
-    if ($request->has('estado_id')) {
-        $query->where('estado', $request->estado_id);
-    }    if ($request->has('ciudad_id')) {
-        $query->where('ciudad', $request->ciudad_id);
-    }
-    if ($request->has('lisTipo')) {
-        $query->where('tipo', $request->lisTipo);
-    }
-    if ($request->has('min_price')) {
-        $query->where('precio', '>=', $request->min_price);
-    }
-    if ($request->has('max_price')) {
+    public function tiendaHome(Request $request){
+        $query = Product::where('status', '1');
+        if ($request->has('estado_id')) {
+            $query->where('estado', $request->estado_id);
+        }    if ($request->has('ciudad_id')) {
+            $query->where('ciudad', $request->ciudad_id);
+        }
+        if ($request->has('lisTipo')) {
+            $query->where('tipo', $request->lisTipo);
+        }
+        if ($request->has('min_price')) {
+            $query->where('precio', '>=', $request->min_price);
+        }
+        if ($request->has('max_price')) {
 
-        $query->where('precio', '<=', $request->max_price);
+            $query->where('precio', '<=', $request->max_price);
+        }
+        $products = $query->orderBy('idproducto', 'desc')->paginate(10);
+
+        if ($products->count() >= 10) {
+            $random = $query->get()->random(3);
+            $products = $query->orderBy('idproducto', 'desc')->whereNotIn('idproducto', [$random[0]->idproducto, $random[1]->idproducto, $random[2]->idproducto])->paginate(9);
+        }else{
+            $random = null;
+        }
+
+        $estados = Estado::all();
+        $data = ['products' => $products, 'random' => $random, 'estados' => $estados];
+
+        return view('Tienda.home', $data);
     }
-    $products = $query->orderBy('idproducto', 'desc')->paginate(10);
-
-    if ($products->count() >= 10) {
-        $random = $query->get()->random(3);
-        $products = $query->orderBy('idproducto', 'desc')->whereNotIn('idproducto', [$random[0]->idproducto, $random[1]->idproducto, $random[2]->idproducto])->paginate(9);
-    }else{
-        $random = null;
-    }
-
-    $estados = Estado::all();
-    $data = ['products' => $products, 'random' => $random, 'estados' => $estados];
-
-    return view('Tienda.home', $data);
-}
     public function tiendaProducto($id, $ruta){
         $product = Product::where('idproducto', $id)->where('ruta', $ruta)->get();
         $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
@@ -358,7 +358,35 @@ public function tiendaHome(Request $request){
     public function getEmbriones(){
         return view('Tienda.Embriones.embrionesHome');
     }
+    public function getEmbrionesProducto($id){
+        // $product = Product::where('idproducto', $id)->get();
+        // $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
+        // if ($random->count() >= 6) {
+        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(6);
+        // }else if($random->count() == 5){
+        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(5);
+        // }else if($random->count() == 4){
+        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(4);
+        // }else if($random->count() == 3){
+        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
+        // }else{
+        //    $random = null;
+        // }
+        // $images = PGallery::where('productoid', $id)->get();
+        // $video = Video::where('producto_id', $id)->get();
+        // Visits::create([
+        //     'ip' => request()->ip(),
+        //     'idproducto' => $id,
+        //     'fecha' => date('Y-m-d h:i:s'),
+        //     'vendedorid' => $product[0]['vendedorid'],
+        //     'type' => 'gen']);
+        // $data = ['product' => $product, 'images' => $images, 'random' => $random, 'video' => $video];
+        return view('Tienda.Embriones.embrionesProduct');
+    }
     public function getPajillas(){
         return view('Tienda.Pajillas.pajillasHome');
+    }
+    public function getProductPajillas($id){
+        return view('Tienda.Pajillas.pajillasProduct');
     }
 }

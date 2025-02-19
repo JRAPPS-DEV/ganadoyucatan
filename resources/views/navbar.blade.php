@@ -4,6 +4,8 @@
         <p onclick="location.href='/tianguisTienda'">Ganado Comercial</p>
         <p onclick="location.href='/tienda'">Ganado genético</p>
         <p onclick="location.href='/subastas'">Subasta</p>
+        <p onclick="location.href='/embriones'">Embriones</p>
+        <p onclick="location.href='/pajillas'">Pajillas</p>
         <p onclick="location.href='/blog'">Blog</p>
         <p onclick="location.href='/recomendaciones'">Recomendaciones</p>
         <p onclick="location.href='{{ url('/register') }}'">Publicar gratis</p>
@@ -36,6 +38,8 @@
                         <p class="click-menu" onclick="location.href='/tienda'">Ganado genético</p>
                         <p class="click-menu" onclick="location.href='/tianguisTienda'">Ganado comercial</p>
                         <p class="click-menu" onclick="location.href='/subastas'">Subastas</p>
+                        <p class="click-menu" onclick="location.href='/embriones'">Embriones</p>
+                        <p class="click-menu" onclick="location.href='/pajillas'">Pajillas</p>
                         <p class="click-menu" onclick="location.href='/blog'">Blog</p>
                         <p class="click-menu" onclick="location.href='{{ url('/register') }}'">Publicar gratis</p>
 

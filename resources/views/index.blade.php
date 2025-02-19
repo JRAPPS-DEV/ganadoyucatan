@@ -66,8 +66,8 @@
         <div class="noticiasRight">
             <hr>
             <h1 class="title">Noticias</h1>
-            <h2 class="content">Próximamente ...</h2>
-            <button class="mainButton">Ver más</button>
+            <h2 class="content">El Boletín Ganadero de Yucatán</h2>
+            <button onclick="location.href='/blog'" class="mainButton">Ver más</button>
         </div>
     </div>
     <div class="embriones-container">
@@ -148,7 +148,7 @@
         const prevButton = document.querySelector(".prev-button");
         const nextButton = document.querySelector(".next-button");
         let currentIndex = 0;
-        const intervalTime = 2500;
+        const intervalTime = 10000;
 
         function showSlide(index) {
             images.forEach((image, i) => {
