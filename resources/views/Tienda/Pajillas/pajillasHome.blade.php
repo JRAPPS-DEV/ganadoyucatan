@@ -127,7 +127,7 @@
                         @php
                             $portada = $p->imagenes->first()->url_imagen ?? 'https://via.placeholder.com/400';
                         @endphp
-                        <img class="img-products" src="{{ asset('storage/' . $portada) }}" alt="Imagen de {{ $p->nombre }}">
+                        <img class="img-products" src="{{ asset('uploads/pajilla/' . $portada) }}" alt="Imagen de {{ $p->nombre }}">
                         <div class="card-description">
                             <div class="icons">
                                 <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
