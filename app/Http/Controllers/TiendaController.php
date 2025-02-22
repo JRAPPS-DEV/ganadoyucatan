@@ -27,6 +27,9 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Pajilla;
+use App\Models\PajillaImagen;
+use App\Models\PajillaVideo;
 class TiendaController extends Controller
 {
     public function getEstados(){
@@ -384,9 +387,13 @@ class TiendaController extends Controller
         return view('Tienda.Embriones.embrionesProduct');
     }
     public function getPajillas(){
-        return view('Tienda.Pajillas.pajillasHome');
+        $products = Pajilla::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
+
+        return view('Tienda.Pajillas.pajillasHome', compact('products'));
     }
     public function getProductPajillas($id){
-        return view('Tienda.Pajillas.pajillasProduct');
+        $pajilla = Pajilla::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        return view('Tienda.Pajillas.pajillasProduct', compact('pajilla'));
     }
+
 }

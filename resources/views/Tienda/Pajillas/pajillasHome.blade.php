@@ -85,63 +85,73 @@
 			</div>
             <div class="container-cards">
                 <p class="title-container--cards">Publicaciones destacadas</p>
-                <div class="container-destacadas">
-    			{{-- @for ($index = 0; $index <= 2; $index++)
-       	 			@if (isset($random[$index])) --}}
-                    	<div class="card-tianguis">
-                    	    <img class="img-products" src="https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?auto=compress&cs=tinysrgb&w=400" alt="" srcset="">
-                    	    <div class="card-description">
-                    	        <div class="icons">
-                    	            {{-- <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
-                    	            <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
-                    	            <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt=""> --}}
-                    	        </div>
-                    	        <div class="card-description--info">
-                    	            <p class="raza">Raza</p>
-                    	            <p class="description" >Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-                    	            <button class="buttonTienda" >Ver más</button>
-                    	        </div>
-                    	        <div class="card-description--footer">
-                    	            <p>Location, ciudad</p>
-                    	        </div>
-                    	    </div>
-                    	</div>
-                    {{-- @endif
-                @endfor --}}
-                </div>
+{{--                 <div class="container-destacadas">
+                    @foreach($products as $p)
+                    <div class="card-tianguis">
+                        @php
+                            $portada = $p->imagenes->first()->url_imagen ?? 'https://via.placeholder.com/400';
+                        @endphp
+                        <img class="img-products" src="{{ asset('storage/' . $portada) }}" alt="Imagen de {{ $p->nombre }}">
+                        <div class="card-description">
+                            <div class="icons">
+                                <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt="">
+                            </div>
+                            <div class="card-description--info">
+                                <p class="raza">{{ $p->raza }}</p>
+                                <p class="description">{{ $p->nombre }}</p>
+                                <p class="precio">${{ number_format($p->precio, 2) }}</p>
+                                <a href="{{ route('pajilla.detalle', $p->idproducto) }}">
+                                    <button class="buttonTienda">Ver más</button>
+                                </a>
+                            </div>
+                            <div class="card-description--footer">
+                                <p>{{ $p->location->nombre }}, {{ $p->rancho }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div> --}}
+
                 <div class="publicidad-container">
                     <hr>
                     <h1 class="content-publicidad">Espacio <br>publicitario</h1>
                     <button class="warningButton" id="openModal" style="margin-left: 2rem;">Solicitar <br>publicidad</button>
                 </div>
-                <p class="title-container--cards">Ganado Comercial</p>
+
+                <p class="title-container--cards">Pajillas en venta</p>
                 <div class="container-normal">
-                    {{-- @foreach($products as $p)
-                            @php
-                                $portada = $p->portada;
-                                if ($portada->count() > 0) {
-                                    $portada = $portada[0]->ruta;
-                                }
-                            @endphp --}}
-                        <div class="card-tianguis--normal">
-                            <img class="img-products" src="" alt="" srcset="">
-                            <div class="card-description">
-                                <div class="icons">
-                                    <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
-                                    <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
-                                    <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt="">
-                                </div>
-                                <div class="card-description--info">
-                                    <p class="raza">raza</p>
-                                    <p class="description">nombre</p>
+                    @foreach($products as $p)
+                    <div class="card-tianguis--normal">
+                        @php
+                            $portada = $p->imagenes->first()->url_imagen ?? 'https://via.placeholder.com/400';
+                        @endphp
+                        <img class="img-products" src="{{ asset('storage/' . $portada) }}" alt="Imagen de {{ $p->nombre }}">
+                        <div class="card-description">
+                            <div class="icons">
+                                <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt="">
+                            </div>
+                            <div class="card-description--info">
+                                <p class="raza">{{ $p->raza }}</p>
+                                <p class="description">{{ $p->nombre }}</p>
+                                <p class="precio">${{ number_format($p->precio, 2) }}</p>
+                                <a href="{{ route('pajilla.detalle', $p->idproducto) }}">
                                     <button class="buttonTienda">Ver más</button>
-                                </div>
-                                <div class="card-description--footer">
-                                    <p>location</p>
-                                </div>
+                                </a>
+                            </div>
+                            <div class="card-description--footer">
+                                <p>{{ $p->location->nombre }}, {{ $p->rancho }}</p>
                             </div>
                         </div>
-                    {{-- @endforeach --}}
+                    </div>
+                    @endforeach
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $products->links() }}
                 </div>
             </div>
 		</div>

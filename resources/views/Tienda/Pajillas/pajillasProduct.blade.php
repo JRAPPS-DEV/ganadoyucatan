@@ -5,77 +5,29 @@
     <div class="banner-product--pajillas">
         <h1>Pajillas de semen bovino</h1>
     </div>
+
     <div class="container-product--Main">
         <div class="route">
-            <p>Inicio<span>></span></p><p>Pajillas de semen bovino</p><span>></span><p>Nombre del producto</p>
+            <p>Inicio<span>></span></p>
+            <p>Pajillas de semen bovino</p><span>></span>
+            <p>{{ $pajilla->nombre }}</p>
         </div>
+
         <div class="information-product--container">
             <div class="container">
                 <div class="parent">
-                    <div class="div1">
-                        @if(isset($images[0]))
-                            <img class="left" onclick="swapImages('div1')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[0]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div2">
-                        @if(isset($images[1]))
-                        <img class="left"  onclick="swapImages('div2')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[1]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div3">
-                        @if(isset($images[2]))
-                        <img class="left" onclick="swapImages('div3')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[2]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div4">
-                        @if(isset($images[3]))
-                        <img class="left" onclick="swapImages('div4')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[3]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div5">
-                        @if(isset($images[4]))
-                        <img class="left" onclick="swapImages('div5')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[4]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div6">
-                        @if(isset($images[5]))
-                        <img class="left" onclick="swapImages('div6')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[5]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div7">
-                        @if(isset($images[6]))
-                        <img class="left" onclick="swapImages('div7')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[6]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div8">
-                        @if(isset($images[7]))
-                        <img class="left" onclick="swapImages('div8')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[7]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div9">
-                        @if(isset($images[8]))
-                        <img class="left" onclick="swapImages('div9')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[8]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div10">
-                        @if(isset($images[9]))
-                        <img class="left" onclick="swapImages('div10')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[9]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div11">
-                        @if(isset($images[10]))
-                        <img class="left" onclick="swapImages('div11')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[10]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
-                    <div class="div12">
-                        @if(isset($images[11]))
-                        <img class="left" onclick="swapImages('div11')" src="{{asset('uploads/tianguis/'.$p->imagen. '/'.$images[11]['ruta'].'.webp')}}" alt="Imagen 1">
-                        @endif
-                    </div>
+                    @foreach($pajilla->imagenes as $index => $imagen)
+                        <div class="div{{ $index + 1 }}">
+                            <img class="left" onclick="swapImages('div{{ $index + 1 }}')" 
+                                 src="{{ asset('storage/' . $imagen->url_imagen) }}" 
+                                 alt="Imagen {{ $index + 1 }}">
+                        </div>
+                    @endforeach
+
                     <div class="div13">
                         <div class="right-container">
-                            @if(isset($images[0]))
-                                <img class="right" id="mainImage" src="" alt="Imagen Principal">
+                            @if($pajilla->imagenes->isNotEmpty())
+                                <img class="right" id="mainImage" src="{{ asset('storage/' . $pajilla->imagenes->first()->url_imagen) }}" alt="Imagen Principal">
                                 <button class="fullscreen-button" onclick="openFullscreen()">
                                     <img width="24" height="24" src="https://img.icons8.com/fluency-systems-regular/48/fullscreen.png" alt="fullscreen"/>
                                 </button>
@@ -84,76 +36,70 @@
                         </div>
                     </div>
                 </div>
-                <div class="youtube-link">
 
-                </div>
+                @if($pajilla->videos->isNotEmpty())
+                    <div class="youtube-link">
+                        @foreach($pajilla->videos as $video)
+                            <iframe width="560" height="315" src="{{ $video->url_video }}" frameborder="0" allowfullscreen></iframe>
+                        @endforeach
+                    </div>
+                @endif
             </div>
+
             <div class="information-product">
-                <p class="description">description</p>
-                <p class="raza">raza, ciudad</p>
-                <p class="description">$1000 MXN</p>
-                <p class="info">Error incidunt aliquam debitis obcaecati. Totam corrupti </p>
+                <p class="description">{{ $pajilla->descripcion }}</p>
+                <p class="raza">{{ $pajilla->raza }}, {{ $pajilla->location->nombre ?? 'Ubicación no disponible' }}</p>
+                <p class="description">${{ number_format($pajilla->precio, 2) }} MXN</p>
+                <p class="info">Stock disponible: {{ $pajilla->stock }}</p>
                 <div class="contact-button">
-                    <button class="mainButtonB" onclick="location.href='https://wa.me/+52'"><a href="https://wa.me/+52" style="color: white;">Contacto</a></button>
+                    <button class="mainButtonB" onclick="location.href='https://wa.me/+52'">
+                        <a href="https://wa.me/+52" style="color: white;">Contacto</a>
+                    </button>
                     <a id="openModal">Hacer contacto <span>></span></a>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="description-product">
         <div class="desc-left">
-            {{-- Visitas: {{$p->visits->count()}} --}}
-            <p>descripcion <span> </span></p>
+            <p>Descripción <span></span></p>
         </div>
+
         <div class="desc-right">
             <h2>Descripción del Ganado</h2>
             <div class="container-desc">
-                <div class="desc1"><span>Peso: </span><p>peso</p></div>
-                <div class="desc2"><span>Edad: </span><p>edad</p></div>
-                <div class="desc3"><span>Raza: </span><p>raza</p></div>
-                <div class="desc4"><span>Tipo: </span><p>tipo</p></div>
-                <div class="desc5"><span>Rancho:</span><p>rancho</p></div>
-                <div class="desc6"><span>Arete: </span><p>arete</p></div>
-                <div class="desc7"><span>Certificado:</span><p>certificado</p></div>
-                <div class="desc8"><span>A cargo</span><p>nombres apellidos</p></div>
+                <div class="desc1"><span>Peso: </span><p>{{ $pajilla->peso ?? 'No disponible' }}</p></div>
+                <div class="desc2"><span>Edad: </span><p>{{ $pajilla->edad ?? 'No disponible' }}</p></div>
+                <div class="desc3"><span>Raza: </span><p>{{ $pajilla->raza }}</p></div>
+                <div class="desc4"><span>Tipo: </span><p>{{ $pajilla->tipo ?? 'No disponible' }}</p></div>
+                <div class="desc5"><span>Rancho:</span><p>{{ $pajilla->rancho }}</p></div>
+                <div class="desc6"><span>Arete: </span><p>{{ $pajilla->arete ?? 'No disponible' }}</p></div>
+                <div class="desc7"><span>Certificado:</span><p>{{ $pajilla->certificado ? 'Sí' : 'No' }}</p></div>
+                <div class="desc8"><span>A cargo</span><p>{{ $pajilla->vendedorid ?? 'No disponible' }}</p></div>
             </div>
-            <hr>
-        {{--<h2>Reseñas del ganado</h2>
-            <div class="container-reseñas">
-                <div class="card-reseñas">
-                    <div class="reseña">
-                        <p class="reseña-description"></p>
-                        <p class="reseña-name"></p>
-                    </div>
-                    <div class="dierecis">
-                        <img src="" alt="" srcset="">
-                    </div>
-                </div>
-
-            </div> --}}
         </div>
     </div>
+
     <div class="relationated-product">
         <p class="interest">Más ganado que te podría interesar</p>
         <div class="relationated-product-cards">
-            <div class="card-relationated">
-                <img class="img-products" src="" alt="" srcset="">
-                <div class="card-description">
-                    <div class="icons">
-                        {{-- <img src="{{ asset('static/new/Iconos/pinestrella.png') }}" alt="">
-                        <img src="{{ asset('static/new/Iconos/pinmoño.png') }}" alt="">
-                        <img src="{{ asset('static/new/Iconos/pinvaca.png') }}" alt=""> --}}
-                    </div>
-                    <div class="card-description--info">
-                        <p class="raza">raza</p>
-                        <p class="description">precio</p>
-                        <button class="secondaryButton" onclick="">Ver más</button>
+            @foreach(App\Models\Pajilla::inRandomOrder()->take(4)->get() as $relacionado)
+                <div class="card-relationated">
+                    <img class="img-products" src="{{ $relacionado->imagenes->first() ? asset('storage/' . $relacionado->imagenes->first()->url_imagen) : asset('default-image.jpg') }}" alt="{{ $relacionado->nombre }}">
+                    <div class="card-description">
+                        <div class="card-description--info">
+                            <p class="raza">{{ $relacionado->raza }}</p>
+                            <p class="description">${{ number_format($relacionado->precio, 2) }} MXN</p>
+                            <a href="{{ route('pajilla.detalle', $relacionado->idproducto) }}">
+                                <button class="secondaryButton">Ver más</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
-
 </div>
 <!--Modal Contact-->
 <div id="modal">
