@@ -34,7 +34,21 @@
                             {{-- <td>{{$p->visits->count()}}</td> --}}
                             <td>{{$p->rancho}}</td>
                             <td>{{$p->location->nombre}}</td>
-                            {{-- <td><button style="background-color:#d79e46;border-color: #d79e46;" class="btn btn-info btn-sm" onclick="openProductInNewTab('{{$p->idproducto}}', '{{$p->ruta}}')" target="_blank" title="Ver producto"><i class="far fa-eye"></i></button><button class="btn btn-primary  btn-sm editProductBtn" data-id="{{$p->idproducto}}" id="editProduct" title="Editar producto"><i class="fas fa-pencil-alt"></i></button><a href="{{ route('deleteGen', $p->idproducto) }}" class="btn btn-danger" title="Eliminar producto" onclick="confirmation(event)"><i class="far fa-trash-alt"></i></a></td> --}}
+                            <td>
+                              <button style="background-color:#d79e46;border-color: #d79e46;" class="btn btn-info btn-sm" onclick="openProductInNewTab('{{$p->idproducto}}', '{{$p->ruta}}')" target="_blank" title="Ver producto"disabled>
+                                  <i class="far fa-eye"></i>
+                              </button>
+                              <button class="btn btn-primary btn-sm editProductBtn" data-id="{{$p->idproducto}}" id="editProduct" title="Editar producto" disabled>
+                                  <i class="fas fa-pencil-alt"></i>
+                              </button >
+                              <form action="{{ route('deletePaj', $p->idproducto) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-danger btn-sm" title="Eliminar producto">
+                                      <i class="far fa-trash-alt"></i>
+                                  </button>
+                              </form>
+                          </td>
                           </tr>
                         @endforeach
                       </tbody>

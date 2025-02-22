@@ -69,6 +69,7 @@ Route::resource('posts', PostController::class);
 //rutas pagilla
 Route::get('/products/addNewPajilla', [ProductsController::class, 'getPajillas'])->name('getPajillas');
 Route::post('/products/addNewPaj', [ProductsController::class, 'postNewPajilla'])->name('addNewPaj');
+Route::delete('/products/deletePaj/{id}', [ProductsController::class, 'deletePajilla'])->name('deletePaj');
 /*chat soporte*/
  Route::get('/conversation', [ConversationController::class, 'index'])->name('conversationIndex');
   Route::get('/conversation/{conversation}', [ConversationController::class, 'show'])->name('conversationShow');

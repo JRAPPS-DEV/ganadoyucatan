@@ -1303,4 +1303,24 @@ class ProductsController extends Controller
         $data = ['products' => $products];
         return view('Admin.Pajilla.pajillaHome', $data);
     }
+    public function deletePajilla($id){
+        $pajilla = Pajilla::find($id);
+
+        if ($pajilla) {
+            $imagenes = PajillaImagen::where('idproducto', $id)->get();
+            foreach ($imagenes as $imagen) {
+                Storage::disk('webp_images_paj')->delete($imagen->url_imagen);
+                $imagen->delete();
+            }
+            $video = PajillaVideo::where('idproducto', $id)->first();
+            if ($video) {
+                Storage::disk('public')->delete($video->url_video);
+                $video->delete();
+            }
+            $pajilla->delete();
+            return redirect()->back()->with('message', 'Producto eliminado con éxito')->with('typealert', 'success');
+        } else {
+            return redirect()->back()->with('message', 'El producto no existe')->with('typealert', 'danger');
+        }
+    }
 }
