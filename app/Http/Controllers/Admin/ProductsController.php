@@ -1259,18 +1259,23 @@ class ProductsController extends Controller
         $pajilla->comisaria = $request->input('comisarias');
         $pajilla->premium = $request->input('premium') ? true : false;
         $pajilla->save();
-
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $imagen) {
-                $path = Storage::disk('webp_images_paj')->putFile('', $imagen); 
-
-                PajillaImagen::create([
-                    'idproducto' => $pajilla->idproducto,
-                    'url_imagen' => $path
-                ]);
+                if ($imagen->isValid()) {
+                    $path = Storage::disk('webp_images_paj')->putFile('', $imagen);
+                    if (Storage::disk('webp_images_paj')->exists($path)) {
+                        PajillaImagen::create([
+                            'idproducto' => $pajilla->idproducto,
+                            'url_imagen' => $path
+                        ]);
+                    } else {
+                        Log::error('El archivo no se pudo guardar ' . $imagen->getClientOriginalName());
+                    }
+                } else {
+                    Log::error('El archivo no es valido ' . $imagen->getClientOriginalName());
+                }
             }
         }
-
         if ($request->deleted_images) {
             $deletedImages = explode(',', $request->deleted_images);
             foreach ($deletedImages as $imageName) {
