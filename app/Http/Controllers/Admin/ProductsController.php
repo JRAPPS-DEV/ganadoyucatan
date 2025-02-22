@@ -1258,11 +1258,11 @@ class ProductsController extends Controller
         $pajilla->ciudad = $request->input('ciudades');
         $pajilla->comisaria = $request->input('comisarias');
         $pajilla->premium = $request->input('premium') ? true : false;
-
         $pajilla->save();
+
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $imagen) {
-                $path = $imagen->store('webp_images_paj', 'public');
+                $path = Storage::disk('webp_images_paj')->putFile('', $imagen); 
 
                 PajillaImagen::create([
                     'idproducto' => $pajilla->idproducto,
@@ -1270,6 +1270,7 @@ class ProductsController extends Controller
                 ]);
             }
         }
+
         if ($request->deleted_images) {
             $deletedImages = explode(',', $request->deleted_images);
             foreach ($deletedImages as $imageName) {
