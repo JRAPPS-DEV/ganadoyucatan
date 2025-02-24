@@ -1,5 +1,6 @@
 <?php 
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\PajEmbController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\PostController;
@@ -70,6 +71,9 @@ Route::resource('posts', PostController::class);
 Route::get('/products/addNewPajilla', [ProductsController::class, 'getPajillas'])->name('getPajillas');
 Route::post('/products/addNewPaj', [ProductsController::class, 'postNewPajilla'])->name('addNewPaj');
 Route::delete('/products/deletePaj/{id}', [ProductsController::class, 'deletePajilla'])->name('deletePaj');
+Route::get('/products/addNewEmbrion', [PajEmbController::class, 'getEmbriones'])->name('getEmbriones');
+Route::post('/products/addNewEmb', [PajEmbController::class, 'postNewEmbrion'])->name('addNewEmb');
+Route::delete('/products/deleteEmb/{id}', [PajEmbController::class, 'deleteEmbrion'])->name('deleteEmb');
 /*chat soporte*/
  Route::get('/conversation', [ConversationController::class, 'index'])->name('conversationIndex');
   Route::get('/conversation/{conversation}', [ConversationController::class, 'show'])->name('conversationShow');

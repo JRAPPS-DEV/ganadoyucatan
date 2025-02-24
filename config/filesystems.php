@@ -69,7 +69,7 @@ return [
         ],   
         'webp_images_paj' => [
         'driver' => 'local',
-        'root' => 'C:\Users\Alan\Documents\ganadoyucatan\public/uploads/pajilla'
+        'root' => '/home/lz9kr6l1o9ym/public_html/uploads/pajilla'
         ],        
         'videos' => [
         'driver' => 'local',
@@ -94,6 +94,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'webp_images_emb' => [
+            'driver' => 'local',
+            'root' => '/home/lz9kr6l1o9ym/public_html/uploads/emb',
+            'url' => env('APP_URL').'/uploads/posts', 
+            'visibility' => 'public',
+            'throw' => false,
+        ],   
 
     ],
 
