@@ -30,6 +30,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Pajilla;
 use App\Models\PajillaImagen;
 use App\Models\PajillaVideo;
+use App\Models\Embrion;
+use App\Models\EmbrionImagen;
+use App\Models\EmbrionVideo;
 class TiendaController extends Controller
 {
     public function getEstados(){
@@ -359,32 +362,12 @@ class TiendaController extends Controller
         return view('suscripcion');
     }
     public function getEmbriones(){
-        return view('Tienda.Embriones.embrionesHome');
+        $products = Embrion::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
+        return view('Tienda.Embriones.embrionesHome', compact('products'));
     }
     public function getEmbrionesProducto($id){
-        // $product = Product::where('idproducto', $id)->get();
-        // $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
-        // if ($random->count() >= 6) {
-        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(6);
-        // }else if($random->count() == 5){
-        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(5);
-        // }else if($random->count() == 4){
-        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get()->random(4);
-        // }else if($random->count() == 3){
-        //     $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
-        // }else{
-        //    $random = null;
-        // }
-        // $images = PGallery::where('productoid', $id)->get();
-        // $video = Video::where('producto_id', $id)->get();
-        // Visits::create([
-        //     'ip' => request()->ip(),
-        //     'idproducto' => $id,
-        //     'fecha' => date('Y-m-d h:i:s'),
-        //     'vendedorid' => $product[0]['vendedorid'],
-        //     'type' => 'gen']);
-        // $data = ['product' => $product, 'images' => $images, 'random' => $random, 'video' => $video];
-        return view('Tienda.Embriones.embrionesProduct');
+        $embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
     }
     public function getPajillas(){
         $products = Pajilla::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);

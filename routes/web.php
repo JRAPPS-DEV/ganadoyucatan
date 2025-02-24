@@ -52,7 +52,7 @@ Route::get('/blog', [PostController::class, 'getPosts']);
 Route::get('/blog/{id}', [PostController::class, 'show']);
 
 Route::get('/embriones', [TiendaController::class, 'getEmbriones']);
-Route::get('/embriones/producto/{id}', [TiendaController::class, 'getEmbrionesProducto']);
+Route::get('/embriones/producto/{id}', [TiendaController::class, 'getEmbrionesProducto'])->name('embrion.detalle');
 Route::get('/pajillas',  [TiendaController::class, 'getPajillas']);
 Route::get('/pajillas/producto/{id}', [TiendaController::class, 'getProductPajillas'])->name('pajilla.detalle');
 
