@@ -378,7 +378,7 @@ class TiendaController extends Controller
             $query->whereBetween('precio', [$request->minPrecio, $request->maxPrecio]);
         }
         $products = $query->paginate(25);
-        return view('Tienda.Embriones.embrionesProduct', compact('products'));
+        return view('Tienda.Embriones.embrionesHome', compact('products'));
     }
     public function getEmbrionesProducto($id){
         $embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
