@@ -361,7 +361,7 @@ class TiendaController extends Controller
     public function getSuscripcion(){
         return view('suscripcion');
     }
-    public function getEmbriones(){
+    public function getEmbriones(Request $request){
         //$products = Embrion::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
         //return view('Tienda.Embriones.embrionesHome', compact('products'));
         $query = Embrion::with(['imagenes', 'videos', 'location'])->orderBy('idproducto', 'desc');
