@@ -362,11 +362,8 @@ class TiendaController extends Controller
         return view('suscripcion');
     }
     public function getEmbriones(){
-        $products = Embrion::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
-        return view('Tienda.Embriones.embrionesHome', compact('products'));
-    }
-    public function getEmbrionesProducto($id){
-        //$embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        //$products = Embrion::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
+        //return view('Tienda.Embriones.embrionesHome', compact('products'));
         $query = Embrion::with(['imagenes', 'videos', 'location'])->orderBy('idproducto', 'desc');
         if ($request->filled('estado')) {
             $query->where('estado', $request->estado);
@@ -382,7 +379,10 @@ class TiendaController extends Controller
         }
         $products = $query->paginate(25);
         return view('Tienda.Embriones.embrionesProduct', compact('products'));
-        //return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
+    }
+    public function getEmbrionesProducto($id){
+        $embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
     }
     public function getPajillas(Request $request) {
         $query = Pajilla::with(['location', 'imagenes'])->orderBy('idproducto', 'desc');
