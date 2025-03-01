@@ -15,8 +15,6 @@
 		</div>
 		<div class="container-tienda">
 			<div class="filtro-container">
-                <div class="filtro-container-info">
-                <div class="filtro-container-info">
                     <h2>Filtro</h2>
                     <hr>
                     <form class="tianguis-form" action="{{ route('getEmbrionesTienda') }}" method="GET">
