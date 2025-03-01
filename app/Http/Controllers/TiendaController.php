@@ -366,8 +366,23 @@ class TiendaController extends Controller
         return view('Tienda.Embriones.embrionesHome', compact('products'));
     }
     public function getEmbrionesProducto($id){
-        $embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
-        return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
+        //$embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        $query = Embrion::with(['imagenes', 'videos', 'location'])->orderBy('idproducto', 'desc');
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+        if ($request->filled('ciudad')) {
+            $query->where('ciudad', $request->ciudad);
+        }
+        if ($request->filled('txtRaza')) {
+            $query->where('raza', $request->txtRaza);
+        }
+        if ($request->filled('minPrecio') && $request->filled('maxPrecio')) {
+            $query->whereBetween('precio', [$request->minPrecio, $request->maxPrecio]);
+        }
+        $products = $query->paginate(25);
+        return view('Tienda.Embriones.embrionesProduct', compact('products'));
+        //return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
     }
     public function getPajillas(Request $request) {
         $query = Pajilla::with(['location', 'imagenes'])->orderBy('idproducto', 'desc');
