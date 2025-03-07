@@ -668,39 +668,6 @@ Footer
 TODO
 Filtro de precio
 */
-/* .price-filter {
-    width: 80%;
-    margin: 0 auto;
-    position: relative;
-    height: 20px;
-}
-
-.price-line {
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: #000000;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.min-price-handle,
-.max-price-handle {
-    width:  10px;
-    height: 10px;
-    background-color: #000000;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    border-radius: 50%;
-}
-.min-price-handle {
-    left: 0;
-}
-.max-price-handle {
-    right: 0;
-} */
 .card {
     width: 100%;
 }

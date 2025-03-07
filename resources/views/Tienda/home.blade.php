@@ -72,19 +72,20 @@
                             <div class="price-content">
                                 <div>
                                 <label>Min</label>
-                                <p id="min-value">$20000</p>
+                                <p id="min-value">$20000</p> {{-- TODO cambiar el valor de minimo --}}
                                 </div>
 
                                 <div>
                                 <label>Max</label>
-                                <p id="max-value">$50000</p>
+                                <p id="max-value">$50000</p> {{-- TODO cambiar el valor de maximo --}}
                                 </div>
                             </div>
 
                             <div class="range-slider">
                                 <div class="range-fill"></div>
-                                <input type="range" class="min-price" value="200000" min="20000" max="500000" step="10000" />
-                                <input type="range" class="max-price" value="300000" min="20000" max="500000" step="10000" />
+                                <input type="range" class="min-price" value="200000" min="20000" max="500000" step="10000" /> {{--TODO cambiar el valor de minimo, maximo, y step (de cuánto en cuánto se moverán los valores). Value (valor por defecto del min) --}}
+                                <input type="range" class="max-price" value="300000" min="20000" max="500000" step="10000" /> {{--TODO cambiar el valor de minimo, maximo, y step (de cuánto en cuánto se moverán los valores). Value (valor por defecto del max) --}}
+
                             </div>
                         </div>
                         <div class="align-center">
@@ -109,6 +110,7 @@
                     	        <div class="card-description--info">
                     	            <p class="raza">{{$random[$index]->nombre}}</p>
                     	            <p class="description" >{{substr($random[$index]->descripcion, 0, 15)}}</p>
+                                    <p class="raza" >${{$p->precio}}</p>
                     	            <button class="buttonTienda" onclick="location.href='/tienda/producto/{{$random[0]->idproducto}}/{{$random[0]->ruta}}'">Ver más</button>
                     	        </div>
                     	        <div class="card-description--footer">
@@ -137,6 +139,7 @@
                                 <div class="card-description--info">
                                     <p class="raza">{{$p->raza}}</p>
                                     <p class="description" >{{$p->nombre}}</p>
+                                    <p class="raza" >${{$p->precio}}</p>
                                     <button class="buttonTienda" onclick="location.href='<?= '/tienda/producto/'.$p->idproducto.'/'.$p->ruta; ?>'">Ver más</button>
                                 </div>
                                 <div class="card-description--footer">
@@ -199,107 +202,117 @@
     });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputElements = document.querySelectorAll(".range-slider input");
-    const minValue = document.getElementById("min-value");
-    const maxValue = document.getElementById("max-value");
-    const rangeFill = document.querySelector(".range-fill");
+document.addEventListener("DOMContentLoaded", function () {
+  const savedScrollPosition = localStorage.getItem('scrollPosition');
+  if (savedScrollPosition) {
+    setTimeout(() => {
+        window.scrollTo({
+            top: parseInt(savedScrollPosition),
+            behavior: 'smooth'
+        });
+    }, 100);
+    localStorage.removeItem('scrollPosition');
+  }
+  const minInput = document.querySelector(".min-price");
+  const maxInput = document.querySelector(".max-price");
+  const minValue = document.getElementById("min-value");
+  const maxValue = document.getElementById("max-value");
+  const rangeFill = document.querySelector(".range-fill");
 
-    // Function to validate range and update the fill color on slider
-    function validateRange() {
-        const minPrice = parseInt(inputElements[0].value);
-        const maxPrice = parseInt(inputElements[1].value);
+  const minRange = parseInt(minInput.min);
+  const maxRange = parseInt(maxInput.max);
 
-        if (minPrice > maxPrice) {
-        const tempValue = maxPrice;
-        maxPrice = minPrice;
-        minPrice = tempValue;
-        }
+  function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
 
-        const minPercentage = ((minPrice) / 500) * 100;
-        const maxPercentage = ((maxPrice) / 500) * 100;
+  const savedMinPrice = getQueryParam("min_price");
+  const savedMaxPrice = getQueryParam("max_price");
 
-        rangeFill.style.left = minPercentage + "%";
-        rangeFill.style.width = maxPercentage - minPercentage + "%";
+    if (savedMinPrice) minInput.value = savedMinPrice;
+    if (savedMaxPrice) maxInput.value = savedMaxPrice;
 
-        minValue.innerHTML = "$" + minPrice;
-        maxValue.innerHTML = "$" + maxPrice;
+
+  function validateRange() {
+    let minPrice = parseInt(minInput.value);
+    let maxPrice = parseInt(maxInput.value);
+
+    if (minPrice > maxPrice) {
+      let tempValue = maxPrice;
+      maxPrice = minPrice;
+      minPrice = tempValue;
     }
 
-    // Add an event listener to each input element
-    inputElements.forEach((element) => {
-        element.addEventListener("input", validateRange);
-    });
+    const minPercentage = ((minPrice - minRange) / (maxRange - minRange)) * 100;
+    const maxPercentage = ((maxPrice - minRange) / (maxRange - minRange)) * 100;
 
-    // Initial call to validateRange
-    validateRange();
-    });
+    rangeFill.style.left = `${minPercentage}%`;
+    rangeFill.style.width = `${maxPercentage - minPercentage}%`;
+
+    minValue.innerHTML = `$${minPrice}`;
+    maxValue.innerHTML = `$${maxPrice}`;
+  }
+
+  minInput.addEventListener("input", validateRange);
+  maxInput.addEventListener("input", validateRange);
+
+  validateRange();
+});
     /*select ciudades*/
-    document.addEventListener('DOMContentLoaded', function(){
-        var estadoSelected = document.getElementById('estados');
-        var ciudadesSelect = document.getElementById('ciudades');
+document.addEventListener('DOMContentLoaded', function(){
+    var estadoSelected = document.getElementById('estados');
+    var ciudadesSelect = document.getElementById('ciudades');
 
-        estadoSelected.addEventListener('change', function(){
-            var estadoId = this.options[this.selectedIndex].getAttribute('data-estado-id');
+    estadoSelected.addEventListener('change', function(){
+        var estadoId = this.options[this.selectedIndex].getAttribute('data-estado-id');
 
-            getCiudades(estadoId, function (ciudades) {
-                ciudadesSelect.innerHTML = '<option value="" selected disabled hidden>Ciudad</option>';
-                ciudades.forEach(function (ciudad) {
-                    var option = document.createElement('option');
-                    option.value = ciudad.id;
-                    option.text = ciudad.nombre;
-                    ciudadesSelect.add(option);
-                });
-                ciudadesSelect.removeAttribute('disabled');
+        getCiudades(estadoId, function (ciudades) {
+            ciudadesSelect.innerHTML = '<option value="" selected disabled hidden>Ciudad</option>';
+            ciudades.forEach(function (ciudad) {
+                var option = document.createElement('option');
+                option.value = ciudad.id;
+                option.text = ciudad.nombre;
+                ciudadesSelect.add(option);
             });
+            ciudadesSelect.removeAttribute('disabled');
         });
-        function getCiudades(estadoId, callback){
-            fetch('/get-ciudades-by-estado/' + estadoId).then(response => response.json()).then(data => callback(data)).catch(error => console.error("Error al obtener ciudades", error));
-        }
-        var estadosSelect = document.getElementById('estados');
-        var ciudadesSelect = document.getElementById('ciudades');
-        var lisTipoSelect = document.getElementById('lisTipo');
-        var minPriceInput = document.querySelector('.min-price');
-        //var maxPriceInput = document.getElementById("max-value");
-        var buscarFitlro = document.getElementById('filterButton');
-
-        buscarFitlro.addEventListener('click', function() {
-            actualizarFiltros();
-        });
-
-        function actualizarFiltros() {
-            var estadoId = estadosSelect.options[estadosSelect.selectedIndex].getAttribute('data-estado-id');
-            var ciudadId = ciudadesSelect.value ? ciudadesSelect.value : null;
-            var lisTipo = lisTipoSelect.value ?  lisTipoSelect.value : null;
-            var minPrice = minPriceInput.value ? minPriceInput.value : null;
-            //var maxPrice = maxPriceInput.value ? maxPriceInput : null;
-            queryEstado = '';
-            queryCiudad = '';
-            queryTipo = '';
-            queryMin = '';
-            queryMax = '';
-            if(estadoId != null){
-                queryEstado = 'estado_id=' + estadoId;
-            }
-            if(ciudadId != null){
-                queryCiudad = '&ciudad_id=' + ciudadId;
-            }
-            if(lisTipo != null){
-                queryTipo = '&lisTipo=' + lisTipo;
-            }if(minPrice != null){
-                queryMin = '&min_price=' + minPrice;
-            }/*if(maxPrice != null){
-                queryMax = '&max_price=' + maxPrice;
-            }*/
-
-            window.location.href = '/tienda?' + queryEstado + queryCiudad + queryTipo + queryMin + queryMax; //+  +  '&min_price=' + minPrice + '&max_price=' + maxPrice;
-        }
     });
+    function getCiudades(estadoId, callback){
+        fetch('/get-ciudades-by-estado/' + estadoId).then(response => response.json()).then(data => callback(data)).catch(error => console.error("Error al obtener ciudades", error));
+    }
+    var estadosSelect = document.getElementById('estados');
+    var ciudadesSelect = document.getElementById('ciudades');
+    var lisTipoSelect = document.getElementById('lisTipo');
+    var minPriceInput = document.querySelector('.min-price');
+    var maxPriceInput = document.querySelector('.max-price');
+    var buscarFitlro = document.getElementById('filterButton');
+
+    buscarFitlro.addEventListener('click', function() {
+        actualizarFiltros();
+    });
+
+    function actualizarFiltros() {
+        localStorage.setItem('scrollPosition', window.scrollY);
+        var estadoId = estadosSelect.options[estadosSelect.selectedIndex].getAttribute('data-estado-id');
+        var ciudadId = ciudadesSelect.value ? ciudadesSelect.value : null;
+        var lisTipo = lisTipoSelect.value ?  lisTipoSelect.value : null;
+        var minPrice = minPriceInput.value ? minPriceInput.value : null;
+        var maxPrice = maxPriceInput.value ? maxPriceInput.value : null;
+
+        queryEstado = estadoId ? 'estado_id=' + estadoId : '';
+        queryCiudad = ciudadId ? '&ciudad_id=' + ciudadId : '';
+        queryTipo = lisTipo ? '&lisTipo=' + lisTipo : '';
+        queryMin = minPrice ? '&min_price=' + minPrice : '';
+        queryMax = maxPrice ? '&max_price=' + maxPrice : '';
+
+        window.location.href = '/tienda?' + queryEstado + queryCiudad + queryTipo + queryMin + queryMax; //+  +  '&min_price=' + minPrice + '&max_price=' + maxPrice;
+    }
+});
 
     // carrusel de publicidad
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const publicidadContainer = document.querySelector(".publicidad-container");
-    console.log(publicidadContainer);
     if (!publicidadContainer) {
         console.error("Element with class 'publicidad-container' not found.");
         return;
@@ -321,41 +334,6 @@
 
     setInterval(changeBackground, intervalTime);
 });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const inputElements = document.querySelectorAll(".range-slider input");
-    const minValue = document.getElementById("min-value");
-    const maxValue = document.getElementById("max-value");
-    const rangeFill = document.querySelector(".range-fill");
-
-    function validateRange() {
-        const minPrice = parseInt(inputElements[0].value);
-        const maxPrice = parseInt(inputElements[1].value);
-
-        if (minPrice > maxPrice) {
-        const tempValue = maxPrice;
-        maxPrice = minPrice;
-        minPrice = tempValue;
-        }
-
-
-        const minPercentage = ((minPrice - 20000) / 480000) * 100;
-        const maxPercentage = ((maxPrice - 20000) / 480000) * 100;
-
-        rangeFill.style.left = minPercentage + "%";
-        rangeFill.style.width = maxPercentage - minPercentage + "%";
-
-        minValue.innerHTML = "$" + minPrice;
-        maxValue.innerHTML = "$" + maxPrice;
-    }
-
-    inputElements.forEach((element) => {
-        element.addEventListener("input", validateRange);
-    });
-
-    validateRange();
-    });
 </script>
 
 
