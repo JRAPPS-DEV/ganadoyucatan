@@ -19,7 +19,7 @@
                     @foreach($pajilla->imagenes as $index => $imagen)
                         <div class="div{{ $index + 1 }}">
                             <img class="left" onclick="swapImages('div{{ $index + 1 }}')" 
-                                 src="{{ asset('public/pajilla/' . $imagen->url_imagen) }}" 
+                                 src="{{ asset('uploads/pajilla/' . $imagen->url_imagen) }}" 
                                  alt="Imagen {{ $index + 1 }}">
                         </div>
                     @endforeach
@@ -27,7 +27,7 @@
                     <div class="div13">
                         <div class="right-container">
                             @if($pajilla->imagenes->isNotEmpty())
-                                <img class="right" id="mainImage" src="{{ asset('public/pajilla/' . $pajilla->imagenes->first()->url_imagen) }}" alt="Imagen Principal">
+                                <img class="right" id="mainImage" src="{{ asset('uploads/pajilla/' . $pajilla->imagenes->first()->url_imagen) }}" alt="Imagen Principal">
                                 <button class="fullscreen-button" onclick="openFullscreen()">
                                     <img width="24" height="24" src="https://img.icons8.com/fluency-systems-regular/48/fullscreen.png" alt="fullscreen"/>
                                 </button>
