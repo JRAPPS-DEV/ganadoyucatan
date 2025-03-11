@@ -3,7 +3,9 @@
 <head>
 	<title>Embriones - Ganado Yucatán</title>
 </head>
-
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="{{url('/static/js/location.js') }}" ></script>
 	<!-- //TODO Nueva sección de tienda -->
 	<div class="tienda-section">
 		<div class="banner-main-embriones">
@@ -16,85 +18,94 @@
                 <div class="filtro-container-info">
                     <h2>Filtro</h2>
                     <hr>
-                    <form class="tianguis-form" action="/tianguis/testT" method="get"></form>
-                    <div class="filtro-container-down">
-                        <h3>Filtrar por preferencia</h3>
-                        <hr>
-                        <h3>Filtrar por locación</h3>
-                        <div class="label-dropdown">
-                            <select id="estados">
-                                <option value="" selected disabled hidden>Estado</option>
-                                {{-- @foreach($estados as $e)
-                                	<option value="{{$e->id}}" data-estado-id="{{$e->id}}">{{$e->nombre}}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-                        <div class="label-dropdown">
-                            <select id="ciudades">
-								<option value="" selected disabled hidden>Ciudad</option>
-							</select>
-                        </div>
-                        <div class="label-dropdown">
-                            <select class="form-control selectpicker" id="lisTipo" name="lisTipo" >
-								<option value="" selected disabled hidden>Seleccione un tipo</option>
-                                <option value="Novillas">Novillas</option>
-                                <option value="Ternero">Ternero</option>
-                                <option value="Toro de engorda">Toro de engorda</option>
-                                <option value="Vaca de engorda">Vaca de engorda</option>
-                                <option value="Vaquillona">Vaquillona</option>
-                                <option value="Vaquillonas preñadas">Vaquillonas preñadas</option>
-                                <option value="Ganado para matadero">Ganado para matadero</option>
-                                <option value="Vaca terminada<">Vaca terminada</option>
-                                <option value="Toro terminado">Toro terminado</option>
-                                <option value="Novillonas de registro">Novillonas de registro</option>
-                                <option value="Novillonas preñada">Novillonas preñadas</option>
-                                <option value="Toro para cebar">Toro para cebar</option>
-                                <option value="Vaca para cebar">Vaca para cebar</option>
-                                <option value="Vaca Semiterminada">Vaca Semiterminada</option>
-                                <option value="Toro Semiterminado">Toro Semiterminado</option>
-                                <option value="Toro Castrado">Toro Castrado</option>
-							</select>
-                        </div>
-                        <hr>
-                        <div class="card">
-                            <h4>Rango de precio: $</h4>
+                    <form class="tianguis-form" action="{{ route('getEmbrionesTienda') }}" method="GET">
+                        <div class="filtro-container-down">
+                            <h3>Filtrar por preferencia</h3>
+                            <hr>
+                            <h3>Filtrar por locación</h3>
+                            <div class="label-dropdown">
+                                <select name="estado" id="estados">
+                                    <option value="" selected disabled hidden>Estado</option>
+                                </select>
+                            </div>
+                            <div class="label-dropdown">
+                                <select name="ciudad" id="ciudades">
+                                    <option value="" selected disabled hidden>Ciudad</option>
+                                </select>
+                            </div>
+                            <div class="label-dropdown">
+                                <h3>Raza</h3>
+                                <select class="form-control selectpicker" id="txtRaza" name="txtRaza">
+                                    <option value="">Todas</option>
+                                    <option value="Brahman rojo">Brahman rojo</option>
+                                    <option value="Brahman gris">Brahman gris</option>
+                                    <option value="Brahman ameri">Brahman ameri</option>
+                                    <option value="Nelore">Nelore</option>
+                                    <option value="Nelore mocho">Nelore mocho</option>
+                                    <option value="Nelore pinto">Nelore pinto</option>
+                                    <option value="Beefmaster">Beefmaster</option>
+                                    <option value="Suizo europeo">Suizo europeo</option>
+                                    <option value="Simmental">Simmental</option>
+                                    <option value="Simbrah">Simbrah</option>
+                                    <option value="Gyr">Gyr</option>
+                                    <option value="Guzerat">Guzerat</option>
+                                    <option value="Charolais">Charolais</option>
+                                    <option value="Suizo america">Suizo america</option>
+                                    <option value="Limouzin">Limouzin</option>
+                                    <option value="Indubrasil">Indubrasil</option>
+                                    <option value="Brangus">Brangus</option>
+                                    <option value="Angus">Angus</option>
+                                    <option value="Hereford">Hereford</option>
+                                    <option value="Charolesa">Charolesa</option>
+                                    <option value="Pardo suizo europeo">Pardo suizo europeo</option>
+                                    <option value="Pardo suizo americano">Pardo suizo americano</option>
+                                    <option value="Aberdeen angus">Aberdeen angus</option>
+                                    <option value="Santa Gertrudis">Santa Gertrudis</option>
+                                    <option value="Cebu Brahman">Cebu Brahman</option>
+                                    <option value="Belgian Blue">Belgian Blue</option>
+                                    <option value="Braford">Braford</option>
+                                </select>
+                            </div>
 
-                            <div class="price-content">
-                                <div>
-                                <label>Min</label>
-                                <p id="min-value">$20000</p>
+                            <hr>
+                            <div class="card">
+                                <h4>Rango de precio: $</h4>
+                                <div class="price-content">
+                                    <div>
+                                        <label>Min</label>
+                                        <p id="min-value">$20000</p>
+                                    </div>
+                                    <div>
+                                        <label>Max</label>
+                                        <p id="max-value">$50000</p>
+                                    </div>
                                 </div>
-
-                                <div>
-                                <label>Max</label>
-                                <p id="max-value">$50000</p>
+                                <div class="range-slider">
+                                    <div class="range-fill"></div>
+                                    <input type="range" class="min-price" name="minPrecio" value="200000" min="20000" max="500000" step="10000" />
+                                    <input type="range" class="max-price" name="maxPrecio" value="300000" min="20000" max="500000" step="10000" />
                                 </div>
                             </div>
 
-                            <div class="range-slider">
-                                <div class="range-fill"></div>
-                                <input type="range" class="min-price" value="200000" min="20000" max="500000" step="10000" />
-                                <input type="range" class="max-price" value="300000" min="20000" max="500000" step="10000" />
+                            <div class="align-center">
+                                <button type="submit" id="filterButton" class="mainButtonB">Buscar</button>
                             </div>
                         </div>
-                        <div class="align-center">
-                            <button id="filterButton" class="mainButtonB">Buscar</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
 			</div>
             <div class="container-cards">
                 <p class="title-container--cards">Publicaciones destacadas</p>
                 <div class="container-destacadas">
-    			{{-- @for ($index = 0; $index <= 2; $index++)
-       	 			@if (isset($random[$index])) --}}
+{{--     			@for ($index = 0; $index <= 2; $index++)
+       	 			@if (isset($random[$index]))
                     	<div class="card-tianguis">
                     	    <img class="img-products" src="https://images.pexels.com/photos/36347/cow-pasture-animal-almabtrieb.jpg?auto=compress&cs=tinysrgb&w=400" alt="" srcset="">
                     	    <div class="card-description">
                     	        <div class="icons">
-                    	            {{-- <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
+                    	            <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
                     	            <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
-                    	            <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt=""> --}}
+                    	            <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt=""> 
                     	        </div>
                     	        <div class="card-description--info">
                     	            <p class="raza">Raza</p>
@@ -106,42 +117,42 @@
                     	        </div>
                     	    </div>
                     	</div>
-                    {{-- @endif
-                @endfor --}}
+                    @endif
+                @endfor  --}}
                 </div>
                 <div class="publicidad-container">
                     <hr>
                     <h1 class="content-publicidad">Espacio <br>publicitario</h1>
                     <button class="warningButton" id="openModal" style="margin-left: 2rem;">Solicitar <br>publicidad</button>
                 </div>
-                <p class="title-container--cards">Ganado Comercial</p>
+                <p class="title-container--cards">Embriones en venta</p>
                 <div class="container-normal">
-                    {{-- @foreach($products as $p)
-                            @php
-                                $portada = $p->portada;
-                                if ($portada->count() > 0) {
-                                    $portada = $portada[0]->ruta;
-                                }
-                            @endphp --}}
-                        <div class="card-tianguis--normal">
-                            <img class="img-products" src="" alt="" srcset="">
-                            <div class="card-description">
-                                <div class="icons">
-                                    <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
-                                    <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
-                                    <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt="">
-                                </div>
-                                <div class="card-description--info">
-                                    <p class="raza">raza</p>
-                                    <p class="description">nombre</p>
+                    @foreach($products as $p)
+                    <div class="card-tianguis--normal">
+                        @php
+                            $portada = $p->imagenes->first()->url_imagen ?? 'https://via.placeholder.com/400';
+                        @endphp
+                        <img class="img-products" src="{{ asset('uploads/embrion/' . $portada) }}" alt="Imagen de {{ $p->nombre }}">
+                        <div class="card-description">
+                            <div class="icons">
+                                <img src="{{ asset('static/new/Iconos/reloj-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/estrella-verde.png') }}" alt="">
+                                <img src="{{ asset('static/new/Iconos/vaca-verde.png') }}" alt="">
+                            </div>
+                            <div class="card-description--info">
+                                <p class="raza">{{ $p->raza }}</p>
+                                <p class="description">{{ $p->nombre }}</p>
+                                <p class="precio">${{ number_format($p->precio, 2) }}</p>
+                                <a href="{{ route('embrion.detalle', $p->idproducto) }}">
                                     <button class="buttonTienda">Ver más</button>
-                                </div>
-                                <div class="card-description--footer">
-                                    <p>location</p>
-                                </div>
+                                </a>
+                            </div>
+                            <div class="card-description--footer">
+                                <p>{{ $p->location->nombre }}, {{ $p->rancho }}</p>
                             </div>
                         </div>
-                    {{-- @endforeach --}}
+                    </div>
+                    @endforeach
                 </div>
             </div>
 		</div>

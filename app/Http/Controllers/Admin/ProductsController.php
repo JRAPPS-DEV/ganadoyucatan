@@ -1258,16 +1258,22 @@ class ProductsController extends Controller
         $pajilla->ciudad = $request->input('ciudades');
         $pajilla->comisaria = $request->input('comisarias');
         $pajilla->premium = $request->input('premium') ? true : false;
-
         $pajilla->save();
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $imagen) {
-                $path = $imagen->store('webp_images_paj', 'public');
-
-                PajillaImagen::create([
-                    'idproducto' => $pajilla->idproducto,
-                    'url_imagen' => $path
-                ]);
+                if ($imagen->isValid()) {
+                    $path = Storage::disk('webp_images_paj')->putFile('', $imagen);
+                    if (Storage::disk('webp_images_paj')->exists($path)) {
+                        PajillaImagen::create([
+                            'idproducto' => $pajilla->idproducto,
+                            'url_imagen' => $path
+                        ]);
+                    } else {
+                        Log::error('El archivo no se pudo guardar ' . $imagen->getClientOriginalName());
+                    }
+                } else {
+                    Log::error('El archivo no es valido ' . $imagen->getClientOriginalName());
+                }
             }
         }
         if ($request->deleted_images) {
@@ -1301,5 +1307,25 @@ class ProductsController extends Controller
         $products = Pajilla::where('vendedorid', $id)->orderBy('idproducto', 'desc')->paginate(25);
         $data = ['products' => $products];
         return view('Admin.Pajilla.pajillaHome', $data);
+    }
+    public function deletePajilla($id){
+        $pajilla = Pajilla::find($id);
+
+        if ($pajilla) {
+            $imagenes = PajillaImagen::where('idproducto', $id)->get();
+            foreach ($imagenes as $imagen) {
+                Storage::disk('webp_images_paj')->delete($imagen->url_imagen);
+                $imagen->delete();
+            }
+            $video = PajillaVideo::where('idproducto', $id)->first();
+            if ($video) {
+                Storage::disk('public')->delete($video->url_video);
+                $video->delete();
+            }
+            $pajilla->delete();
+            return redirect()->back()->with('message', 'Producto eliminado con éxito')->with('typealert', 'success');
+        } else {
+            return redirect()->back()->with('message', 'El producto no existe')->with('typealert', 'danger');
+        }
     }
 }

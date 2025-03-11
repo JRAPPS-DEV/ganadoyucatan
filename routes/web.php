@@ -51,8 +51,10 @@ Route::get('/suscripcion', [TiendaController::class, 'getSuscripcion']);
 Route::get('/blog', [PostController::class, 'getPosts']);
 Route::get('/blog/{id}', [PostController::class, 'show']);
 
-Route::get('/embriones', [TiendaController::class, 'getEmbriones']);
-Route::get('/pajillas',  [TiendaController::class, 'getPajillas']);
+Route::get('/embriones', [TiendaController::class, 'getEmbriones'])->name('getEmbrionesTienda');
+Route::get('/embriones/producto/{id}', [TiendaController::class, 'getEmbrionesProducto'])->name('embrion.detalle');
+Route::get('/pajillas', [TiendaController::class, 'getPajillas'])->name('getPajillasTienda');
+Route::get('/pajillas/producto/{id}', [TiendaController::class, 'getProductPajillas'])->name('pajilla.detalle');
 
 /*ciudades*/
 Route::get('/get-estados', [TiendaController::class, 'getEstados']);

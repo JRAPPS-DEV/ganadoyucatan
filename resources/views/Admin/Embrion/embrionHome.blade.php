@@ -3,8 +3,8 @@
     <main class="app-content">
       <div class="app-title">
         <div style="margin-inline-start: 40%;">
-            <h1>Pajillas de Semen
-                <br><button style="background-color: #d79e46;border-color: #d79e46;" class="btn btn-primary" id="agregar1" type="button"data-bs-toggle="modal" data-bs-target="#agregar"> <i class="fas fa-plus-circle"></i> Publicar Pajilla</button>
+            <h1>Embriones Geneticos
+                <br><button style="background-color: #d79e46;border-color: #d79e46;" class="btn btn-primary" id="agregar1" type="button"data-bs-toggle="modal" data-bs-target="#agregar"> <i class="fas fa-plus-circle"></i> Publicar Embrion</button>
             </h1>
         </div>
       </div>
@@ -41,7 +41,7 @@
                               <button class="btn btn-primary btn-sm editProductBtn" data-id="{{$p->idproducto}}" id="editProduct" title="Editar producto" disabled>
                                   <i class="fas fa-pencil-alt"></i>
                               </button >
-                              <form action="{{ route('deletePaj', $p->idproducto) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                              <form action="{{ route('deleteEmb', $p->idproducto) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
                                   @csrf
                                   @method('DELETE')
                                   <button type="submit" class="btn btn-danger btn-sm" title="Eliminar producto">
@@ -62,11 +62,11 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div style="background: #d79e46; border-color:#d79e46;" class="modal-header headerRegister">
-        <h5 class="modal-title" id="titleModal">Agregar Pajilla</h5>
+        <h5 class="modal-title" id="titleModal">Agregar Embrion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {!!Form::open(['url'=> 'admin/products/addNewPaj', 'files' => true, 'style' => 'padding: 0;'])!!}
+        {!!Form::open(['url'=> 'admin/products/addNewEmb', 'files' => true, 'style' => 'padding: 0;'])!!}
           {{-- <form id="formProductos" name="formProductos" class="form-horizontal" action="{{url('admin/products/addNewGen')}}" method="POST" style="padding: 0;"> --}}
               @csrf
               <input type="hidden" id="idProducto" name="idProducto" value="">

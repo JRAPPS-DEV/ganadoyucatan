@@ -27,6 +27,12 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Pajilla;
+use App\Models\PajillaImagen;
+use App\Models\PajillaVideo;
+use App\Models\Embrion;
+use App\Models\EmbrionImagen;
+use App\Models\EmbrionVideo;
 class TiendaController extends Controller
 {
     public function getEstados(){
@@ -37,37 +43,37 @@ class TiendaController extends Controller
         $ciudades = Ciudad::where('estado_id', $estadoId)->get();
         return response()->json($ciudades);
     }
-public function tiendaHome(Request $request){
-    $query = Product::where('status', '1');
-    if ($request->has('estado_id')) {
-        $query->where('estado', $request->estado_id);
-    }    if ($request->has('ciudad_id')) {
-        $query->where('ciudad', $request->ciudad_id);
-    }
-    if ($request->has('lisTipo')) {
-        $query->where('tipo', $request->lisTipo);
-    }
-    if ($request->has('min_price')) {
-        $query->where('precio', '>=', $request->min_price);
-    }
-    if ($request->has('max_price')) {
+    public function tiendaHome(Request $request){
+        $query = Product::where('status', '1');
+        if ($request->has('estado_id')) {
+            $query->where('estado', $request->estado_id);
+        }    if ($request->has('ciudad_id')) {
+            $query->where('ciudad', $request->ciudad_id);
+        }
+        if ($request->has('lisTipo')) {
+            $query->where('tipo', $request->lisTipo);
+        }
+        if ($request->has('min_price')) {
+            $query->where('precio', '>=', $request->min_price);
+        }
+        if ($request->has('max_price')) {
 
-        $query->where('precio', '<=', $request->max_price);
+            $query->where('precio', '<=', $request->max_price);
+        }
+        $products = $query->orderBy('idproducto', 'desc')->paginate(10);
+
+        if ($products->count() >= 10) {
+            $random = $query->get()->random(3);
+            $products = $query->orderBy('idproducto', 'desc')->whereNotIn('idproducto', [$random[0]->idproducto, $random[1]->idproducto, $random[2]->idproducto])->paginate(9);
+        }else{
+            $random = null;
+        }
+
+        $estados = Estado::all();
+        $data = ['products' => $products, 'random' => $random, 'estados' => $estados];
+
+        return view('Tienda.home', $data);
     }
-    $products = $query->orderBy('idproducto', 'desc')->paginate(10);
-
-    if ($products->count() >= 10) {
-        $random = $query->get()->random(3);
-        $products = $query->orderBy('idproducto', 'desc')->whereNotIn('idproducto', [$random[0]->idproducto, $random[1]->idproducto, $random[2]->idproducto])->paginate(9);
-    }else{
-        $random = null;
-    }
-
-    $estados = Estado::all();
-    $data = ['products' => $products, 'random' => $random, 'estados' => $estados];
-
-    return view('Tienda.home', $data);
-}
     public function tiendaProducto($id, $ruta){
         $product = Product::where('idproducto', $id)->where('ruta', $ruta)->get();
         $random = Product::where('status', '1')->whereNot('idproducto', $id)->get();
@@ -355,10 +361,51 @@ public function tiendaHome(Request $request){
     public function getSuscripcion(){
         return view('suscripcion');
     }
-    public function getEmbriones(){
-        return view('Tienda.Embriones.embrionesHome');
+    public function getEmbriones(Request $request){
+        //$products = Embrion::with(['location', 'imagenes'])->orderBy('idproducto', 'desc')->paginate(25);
+        //return view('Tienda.Embriones.embrionesHome', compact('products'));
+        $query = Embrion::with(['imagenes', 'videos', 'location'])->orderBy('idproducto', 'desc');
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+        if ($request->filled('ciudad')) {
+            $query->where('ciudad', $request->ciudad);
+        }
+        if ($request->filled('txtRaza')) {
+            $query->where('raza', $request->txtRaza);
+        }
+        if ($request->filled('minPrecio') && $request->filled('maxPrecio')) {
+            $query->whereBetween('precio', [$request->minPrecio, $request->maxPrecio]);
+        }
+        $products = $query->paginate(25);
+        return view('Tienda.Embriones.embrionesHome', compact('products'));
     }
-    public function getPajillas(){
-        return view('Tienda.Pajillas.pajillasHome');
+    public function getEmbrionesProducto($id){
+        $embrion = Embrion::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        return view('Tienda.Embriones.embrionesProduct', compact('embrion'));
     }
+    public function getPajillas(Request $request) {
+        $query = Pajilla::with(['location', 'imagenes'])->orderBy('idproducto', 'desc');
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+        if ($request->filled('ciudad')) {
+            $query->where('ciudad', $request->ciudad);
+        }
+        if ($request->filled('txtRaza')) {
+            $query->where('raza', $request->txtRaza);
+        }
+        if ($request->filled('minPrecio') && $request->filled('maxPrecio')) {
+            $query->whereBetween('precio', [$request->minPrecio, $request->maxPrecio]);
+        }
+        $products = $query->paginate(25);
+
+        return view('Tienda.Pajillas.pajillasHome', compact('products'));
+    }
+
+    public function getProductPajillas($id){
+        $pajilla = Pajilla::with(['imagenes', 'videos', 'location'])->findOrFail($id);
+        return view('Tienda.Pajillas.pajillasProduct', compact('pajilla'));
+    }
+
 }
