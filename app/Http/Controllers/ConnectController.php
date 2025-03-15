@@ -64,23 +64,32 @@ class ConnectController extends Controller
             return back()->withErrors($validator)->with('message', 'Se ha producdio un error')->with('typealert', 'danger');
         }else{
             $user = new Persona;
+            //$user->asociacion = e($request->input('asociacion'));
             $user->nombres = e($request->input('nombre'));
+            $user->nombre_rancho = e($request->input('nombre_rancho'));
             $user->telefono = e($request->input('telefono'));
             $user->email_user = e($request->input('telefono'));
             $user->password = Hash::make($request->input('password'));
-            //$user->asociacion = e($request->input('asociacion'));
+            $user->tipo_explotacion = e($request->input('tipo_explotacion'));
+            $user->numero_registro_union = e($request->input('numero_registro_union'));
+            $user->tamano_ato = e($request->input('tamano_ato'));
+            $user->tipo_produccion = e($request->input('tipo_produccion'));
+            $user->registro_asociacion = e($request->input('registro_asociacion'));
+            $user->rfc = e($request->input('rfc'));
+            $user->mercado_destino = e($request->input('mercado_destino'));
+            $user->municipio = e($request->input('municipio'));
             $user->rolid = '6';
-            $user->datecreated =  date('Y-m-d H:i:s');
-            $user->updated_at = date('Y-m-d H:i:s');
             $user->estado = e($request->input('intEstado'));
-            if($request->hasFile('imagen')){
+            $user->datecreated = now();
+            $user->updated_at = now();
+            if ($request->hasFile('imagen')) {
                 $imagen = $request->file('imagen');
-                $nombreArchivo = e($request->input('telefono')).'.webp';
+                $nombreArchivo = e($request->input('telefono')) . '_fierro.webp';
                 $imgWebp = imagecreatefromstring(file_get_contents($imagen->getRealPath()));
-                imagewebp($imgWebp, 'userspics/'.$nombreArchivo);
-                $user->foto = $nombreArchivo;
+                imagewebp($imgWebp, 'userspics/' . $nombreArchivo);
+                $user->foto_fierro = $nombreArchivo;
             } else {
-                $user->foto = null;
+                $user->foto_fierro = null;
             }
             if($user->save()){
                 if(Auth::attempt(['email_user' => $request->input('telefono'), 'password' => $request->input('password')], true)){
