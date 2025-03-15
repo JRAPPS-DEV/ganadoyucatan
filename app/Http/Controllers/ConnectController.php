@@ -64,6 +64,7 @@ class ConnectController extends Controller
             return back()->withErrors($validator)->with('message', 'Se ha producdio un error')->with('typealert', 'danger');
         }else{
             $user = new Persona;
+            //$user->asociacion = e($request->input('asociacion'));
             $user->nombres = e($request->input('nombre'));
             $user->nombre_rancho = e($request->input('nombre_rancho'));
             $user->telefono = e($request->input('telefono'));
