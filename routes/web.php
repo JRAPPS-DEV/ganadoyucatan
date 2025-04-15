@@ -58,7 +58,9 @@ Route::get('/pajillas/producto/{id}', [TiendaController::class, 'getProductPajil
 
 /*ciudades*/
 Route::get('/get-estados', [TiendaController::class, 'getEstados']);
+Route::get('/get-estadosRegister', [TiendaController::class, 'getEstadosRegister']);
 Route::get('/get-ciudades-by-estado/{estadoId}', [TiendaController::class, 'getCiudadesByEstado']);
+Route::get('/get-comisarias-by-ciudad/{ciudadId}', [TiendaController::class, 'getComisariasByCiudad']);
 Route::middleware('auth')->group(function () {
     Route::post('support-conversations', [SupportConversationController::class, 'store']);
 
