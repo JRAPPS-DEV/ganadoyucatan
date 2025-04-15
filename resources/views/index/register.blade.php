@@ -121,7 +121,7 @@
                     <label for="telefono">Contraseña</label>
                     <input type="password" id="password" name="password" placeholder="Contraseña">
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="ubicacion">Ubicación</label>
                     <select type="text" id="intEstado" name="intEstado" placeholder="Ubicación">
                         <option selected value="1">Yucatan</option>
@@ -130,7 +130,23 @@
                         <option value="4">Chiapas</option>
                         <option value="5">Tabasco</option>
                     </select>
-                </div>
+                </div> --}}
+                    <div class="form-group">
+                      <label class="control-label" for="estados">Estado:</label>
+                      <select class="form-control" name="estados" id="estados">
+                          <option value=""></option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="ciudades">Ciudad:</label>
+                        <select  class="form-control" name="ciudades" id="ciudades">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="comisarias">Comisarias:</label>
+                        <select class="form-control"  name="comisarias" id="comisarias">
+                        </select>
+                    </div>
                 <div class="form-group">
                     <label for="nombre_rancho">Nombre del Rancho</label>
                     <input type="text" id="nombre_rancho" name="nombre_rancho" placeholder="Nombre del rancho">
@@ -185,11 +201,11 @@
                     <label for="rfc">RFC</label>
                     <input type="text" id="rfc" name="rfc" placeholder="RFC">
                 </div>
-
+{{-- 
                 <div class="form-group">
                     <label for="municipio">Municipio</label>
                     <input type="text" id="municipio" name="municipio" placeholder="Municipio">
-                </div>
+                </div> --}}
 
                 <div class="checkbox-privacidad">
                 <input type="checkbox" id="politicasPrivacidad" required>
@@ -201,7 +217,7 @@
     </div>
 
 
-
+    <script src="{{url('/static/js/locationRegister.js') }}" ></script>
 <script>
     const sign_in_btn = document.querySelector("#sign-in-btn");
     const sign_up_btn = document.querySelector("#sign-up-btn");

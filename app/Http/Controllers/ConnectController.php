@@ -77,9 +77,10 @@ class ConnectController extends Controller
             $user->registro_asociacion = e($request->input('registro_asociacion'));
             $user->rfc = e($request->input('rfc'));
             $user->mercado_destino = e($request->input('mercado_destino'));
-            $user->municipio = e($request->input('municipio'));
+            $user->ciudad = e($request->input('ciudades'));
+            $user->municipio = e($request->input('comisarias'));
             $user->rolid = '6';
-            $user->estado = e($request->input('intEstado'));
+            $user->estado = '1';//e($request->input('intEstado'));
             $user->datecreated = now();
             $user->updated_at = now();
             if ($request->hasFile('imagen')) {

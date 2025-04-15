@@ -10,6 +10,7 @@ use App\Models\ProductT;
 use App\Models\ProductS;
 use App\Models\Estado;
 use App\Models\Ciudad;
+use App\Models\Comisaria;
 use App\Models\PGallery;
 use App\Models\PTGallery;
 use App\Models\PSubGallery;
@@ -39,10 +40,18 @@ class TiendaController extends Controller
         $estados = Estado::all();
         return response()->json($estados);
     }
+    public function getEstadosRegister(){
+        $estados = Estado::where('id', 1)->get();
+        return response()->json($estados);
+    }
     public function getCiudadesByEstado($estadoId){
         $ciudades = Ciudad::where('estado_id', $estadoId)->get();
         return response()->json($ciudades);
     }
+    public function getComisariasByCiudad($ciudadId){
+        $comisarias = Comisaria::where('ciudad_id', $ciudadId)->get();
+        return response()->json($comisarias);
+    }   
     public function tiendaHome(Request $request){
         $query = Product::where('status', '1');
         if ($request->has('estado_id')) {
