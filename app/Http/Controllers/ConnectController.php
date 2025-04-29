@@ -92,6 +92,14 @@ class ConnectController extends Controller
             } else {
                 $user->foto_fierro = null;
             }
+            if ($request->hasFile('logo')) {
+                $logo = $request->file('logo');
+                $nombreLogo = e($request->input('telefono')) . '_logo.webp';
+                $imgWebpLogo = imagecreatefromstring(file_get_contents($logo->getRealPath()));
+                imagewebp($imgWebpLogo, 'userspics/' . $nombreLogo);
+                $user->logo = $nombreLogo;
+            }
+
             if($user->save()){
                 if(Auth::attempt(['email_user' => $request->input('telefono'), 'password' => $request->input('password')], true)){
                    return redirect('/admin/products/home');
