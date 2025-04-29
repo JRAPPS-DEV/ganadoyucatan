@@ -4,7 +4,22 @@
     <link rel="stylesheet" href="{{url('/static/new/css/register.css')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-
+    @if(Session::has('message'))
+            <div class="alert alert-{{Session::get('typealert')}}" style="display:none;">
+                {{Session::get('message')}}
+                @if ($errors->any())
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li> {{ $error }} </li>
+                    @endforeach
+                </ul>
+                @endif
+                <script >
+                    $('.alert').slideDown();
+                    setTimeout(function(){ $('.alert').slideUp(); }, 5000);
+                </script>
+            </div>
+    @endif
 
     <div class="container-register">
         <div class="register-form" style="padding-block-start: 40%;">
@@ -81,7 +96,7 @@
                     <input type="text" id="registro_asociacion" name="registro_asociacion" placeholder="Número de Registro">
                 </div>
 
-                <div class="form-group">
+{{--                 <div class="form-group">
                     <label for="tamano_ato">Tamaño del Ato Ganadero</label>
                     <input type="number" id="tamano_ato" name="tamano_ato" placeholder="Número de cabezas de ganado">
                 </div>
@@ -93,7 +108,7 @@
                         <option value="Leche">Leche</option>
                         <option value="Doble propósito">Doble propósito</option>
                     </select>
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <label for="rfc">RFC</label>
