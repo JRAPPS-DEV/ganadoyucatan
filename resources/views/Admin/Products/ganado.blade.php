@@ -45,11 +45,11 @@
                         <b>Ganado Genético</b>
                         <tr>
                           <th>Nombre</th>
-                          <th>Numero</th>
+                          {{-- <th>Numero</th> --}}
                           <th>Precio</th>
                           <th>Raza</th>
                           <th>Estatus</th>
-                          <th>Propietario</th>
+                          {{-- <th>Propietario</th> --}}
                           <th>Descripcion</th>
                           <th>Acciones</th>
                         </tr>
@@ -58,11 +58,11 @@
                         @foreach($products as $p)
                           <tr>
                             <td>{{$p->nombre}}</td>
-                            <td>{{$p->owner->email_user}}</td>
+                           {{--  <td>{{$p->owner->email_user}}</td> --}}
                             <td>{{$p->precio}}</td>
                             <td>{{$p->raza}}</td>
                             <td>@if($p->status == 1)<span class="badge badge-success">Activo</span>@else <span class="badge badge-danger">Inactivo</span>@endif</td>
-                            <td>{{$p->owner->nombres}}</td>
+                            {{-- <td>{{$p->owner->nombres}}</td> --}}
                             <td>{{$p->descripcion}}</td>
                             <td><button class="btn btn-primary btn-sm" onclick="openGenInNewTab('{{$p->idproducto}}', '{{$p->ruta}}')" target="_blank" title="Ver producto"><i style="color:white;" class="far fa-eye"></i></button>
                               {{-- <a href="{{ route('aprobProduct', $p->idproducto) }}"onclick="aprob(event)"><button class="btn btn-primary  btn-sm aprobProductBtn" data-id="{{$p->idproducto}}" id="aprobProducrt" title="Aprobar producto"><i class="fa-solid fa-check-double"></i></i></button></a> --}}

@@ -287,11 +287,28 @@ class ProductsController extends Controller
         $comisarias = Comisaria::where('ciudad_id', $ciudadId)->get();
         return response()->json($comisarias);
     }    
-    public function getAllGanado(){
+/*    public function getAllGanado(){
         $subastas = ProductS::paginate(10);
         $products = Product::paginate(10);
         $data = ['products' => $products, 'subastas' => $subastas];
         return view('Admin.Products.ganado', $data);
+    }*/
+        public function getAllGanado(){
+        $id = Auth::id();
+        $geneticos = Product::where('vendedorid', $id)
+                            ->orderBy('idproducto', 'desc')
+                            ->paginate(25);
+        $comerciales = ProductT::where('status', '2')->where('vendedorid', Auth::id())->orderBy('idproducto', 'desc')
+                               ->paginate(25);
+        $subastas = ProductS::where('vendedorid', $id)->orderBy('id_producto', 'desc')
+                            ->paginate(25);
+        $data = [
+            'geneticos' => $geneticos,
+            'comerciales' => $comerciales,
+            'subastas' => $subastas
+        ];
+        
+        return view('Admin.Products.ganado_unificado', $data);
     }
     public function getProductsHome(){
         return view('Admin.Products.home');
