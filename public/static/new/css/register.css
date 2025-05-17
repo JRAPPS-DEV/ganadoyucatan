@@ -44,23 +44,28 @@ select option:hover{
 }
 .container-register{
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     background-image: url('../background/_header-tianguis-genetica.jpg');
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     align-items: center;
     justify-content: center;
+    padding: 40px 0;
 }
 .register-form{
-    width:  30%;
-    height: auto;
+    width:  50%;
+    max-width: 400px;
+    margin: auto;
+    padding: 2rem;
     border-radius: 4px;
     background-color: white;
     background-image: url('../Iconos/vacaroja.png');
     background-size: 200px 200px;
     background-repeat: no-repeat;
-    background-position-y: 180px;
-    background-position-x: 200px;
+    background-position: right bottom;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .register-form img{

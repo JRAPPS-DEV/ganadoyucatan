@@ -22,7 +22,7 @@
     @endif
 
     <div class="container-register">
-        <div class="register-form" style="padding-block-start: 40%;">
+        <div class="register-form">
             <img onclick="location.href=`https://ganadoyucatan.com/`" src="{{url('/static/new/Iconos/logo-red.png')}}" alt="">
             <p class="main-text">TE DAMOS LA BIENVENIDA <br>GANADERO</p>
             <P class="secondary-text">Disfuta de los beneficios de tu suscripción anual</P>
@@ -96,7 +96,7 @@
                     <input type="text" id="registro_asociacion" name="registro_asociacion" placeholder="Número de Registro">
                 </div>
 
-{{--                 <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="tamano_ato">Tamaño del Ato Ganadero</label>
                     <input type="number" id="tamano_ato" name="tamano_ato" placeholder="Número de cabezas de ganado">
                 </div>
