@@ -145,6 +145,149 @@ input::placeholder{
     text-decoration: underline;
     margin-left: 5px;
 }
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    font-family: inherit;
+}
+
+.dropdown-toggle {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+    color: #333;
+    font-size: var(--medium);
+    font-weight: var(--light);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-top: 2px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 5px 0;
+}
+
+.dropdown-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: var(--medium);
+    font-weight: var(--light);
+    cursor: pointer;
+}
+
+.dropdown-option:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+.dropdown-option label{
+    width: 90%;
+}
+.dropdown-option input[type="checkbox"] {
+    width: 10%;
+    margin: 0;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.file-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.file-btn {
+    /* Usa los estilos de .mainButton ya definidos */
+    height: 30px;
+    border-radius: 15px;
+    font-size: 12px;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.file-name {
+    font-size: var(--small);
+    color: #666;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.image-carousel {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 1.5rem;
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    border-radius: 12px;
+}
+
+.carousel-images img.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+}
+
+.carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(10, 10, 10, 0.6);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.carousel-dots .dot.active {
+    background-color: rgb(249, 0, 0);
+}
+
 @media screen and (max-width: 767px) {
     .register-form{
         width: 90%;

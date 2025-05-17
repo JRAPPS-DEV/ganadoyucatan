@@ -62,22 +62,51 @@
                     <input type="text" id="nombre_rancho" name="nombre_rancho" placeholder="Nombre del rancho">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group custom-file-upload">
                     <label for="imagen">Sube tu fierro</label>
-                    <input type="file" id="imagen" name="imagen" accept="image/*">
+                    <div class="file-wrapper">
+                        <button type="button" class="file-btn">Seleccionar archivo</button>
+                        <span class="file-name">Ningún archivo seleccionado</span>
+                        <input type="file" id="imagen" name="imagen" accept="image/*" hidden>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="logo">Sube tu logo</label>
-                    <input type="file" id="logo" name="logo" accept="image/*">
+                    {{-- <label for="logo">Sube tu logo</label>
+                    <input type="file" id="logo" name="logo" accept="image/*"> --}}
+                    <label for="imagen">Sube tu logo</label>
+                    <div class="file-wrapper">
+                        <button type="button" class="file-btn">Seleccionar archivo</button>
+                        <span class="file-name">Ningún archivo seleccionado</span>
+                        <input type="file" id="imagen" name="imagen" accept="image/*" hidden>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="tipo_explotacion">Tipo de Explotación</label>
-                    <select id="tipo_explotacion" name="tipo_explotacion">
-                        <option value="Ganado genético">Ganado genético</option>
-                        <option value="Ganado de engorda">Ganado de engorda</option>
-                        <option value="Alta genética">Alta genética</option>
-                        <option value="Ganado comercial">Ganado comercial</option>
-                    </select>
+                    <label for="tiendasDropdown">Tiendas de Interés</label>
+                    <div class="custom-dropdown" id="tiendasDropdown">
+                        <div class="dropdown-toggle">Selecciona tiendas de interés</div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-option">
+                                <span>Ganado comercial</span>
+                                <input type="checkbox" name="tiendas_interes[]" value="Ganado comercial">
+                            </div>
+                            <div class="dropdown-option">
+                                <span>Ganado genético</span>
+                                <input type="checkbox" name="tiendas_interes[]" value="Ganado genético">
+                            </div>
+                            <div class="dropdown-option">
+                                <span>Subasta ganadera</span>
+                                <input type="checkbox" name="tiendas_interes[]" value="Subasta ganadera">
+                            </div>
+                            <div class="dropdown-option">
+                                <span>Embriones en venta</span>
+                                <input type="checkbox" name="tiendas_interes[]" value="Embriones en venta">
+                            </div>
+                            <div class="dropdown-option">
+                                <span>Pajillas de semen bovino</span>
+                                <input type="checkbox" name="tiendas_interes[]" value="Pajillas de semen bovino">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="mercado_destino">Mercado Destino</label>
@@ -119,13 +148,25 @@
                 <input type="checkbox" id="politicasPrivacidad" required>
                     <label for="politicasPrivacidad">Acepto las <a href="/politicaPrivacidad" class="privacy-policy-link">políticas de privacidad</a></label>
                 </div>
+                <div class="image-carousel">
+                    <div class="carousel-images">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXkqRVY8Lmc8EdVHTznCUmUz4FKmMWAug_Aw&s" alt="Imagen 1">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQct-THo9_M3Ja8U-ELjDWZu3QtEDOtC9IRHQ&s" alt="Imagen 2">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmKLKBxUf7jZy36_Ff54h46F5C4O8r2UI86Q&s" alt="Imagen 3">
+                    </div>
+                    <div class="carousel-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
                 <button class="mainButton" type="submit">Entrar</button>
             {!! Form::close() !!}
         </div>
     </div>
 
 
-    <script src="{{url('/static/js/locationRegister.js') }}" ></script>
+<script src="{{url('/static/js/locationRegister.js') }}" ></script>
 <script>
     const sign_in_btn = document.querySelector("#sign-in-btn");
     const sign_up_btn = document.querySelector("#sign-up-btn");
@@ -139,3 +180,74 @@
         container.classList.remove("sign-up-mode");
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.querySelector('.dropdown-toggle');
+    const menu = document.querySelector('.dropdown-menu');
+
+    toggle.addEventListener('click', function () {
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.custom-dropdown')) {
+            menu.style.display = 'none';
+        }
+    });
+
+    const checkboxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const selected = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.parentElement.querySelector('span').textContent.trim());
+            toggle.textContent = selected.length > 0 ? selected.join(', ') : 'Selecciona tiendas de interés';
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('imagen');
+    const fileBtn = document.querySelector('.file-btn');
+    const fileName = document.querySelector('.file-name');
+
+    fileBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function () {
+        fileName.textContent = this.files.length > 0 ? this.files[0].name : 'Ningún archivo seleccionado';
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const images = document.querySelectorAll('.carousel-images img');
+    const dots = document.querySelectorAll('.carousel-dots .dot');
+    let index = 0;
+
+    function showImage(i) {
+        images.forEach(img => img.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        images[i].classList.add('active');
+        dots[i].classList.add('active');
+    }
+
+    function nextImage() {
+        index = (index + 1) % images.length;
+        showImage(index);
+    }
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            index = i;
+            showImage(index);
+        });
+    });
+
+    showImage(index); // init
+    setInterval(nextImage, 4000); // cambia cada 4 segundos
+});
+</script>
+
+
