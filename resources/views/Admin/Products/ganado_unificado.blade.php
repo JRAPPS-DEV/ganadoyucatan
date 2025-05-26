@@ -3,7 +3,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <style type="text/css">
   .control-label{
-    color: #425b28;
+    color: black;
     font-weight: bold;
   }    
   @keyframes rotate {
@@ -353,7 +353,7 @@
               </div>
               <div class="container">
                     <input type="file" id="file-input" name="imagenes-cargadas[]" multiple style="display:none;">
-                    <button type="button" id="add-images" class="btn btn-primary" style="background: #d79e46; border-color: #d79e46">Agregar imágenes</button>
+                    <button type="button" id="add-images" class="btn btn-primary" style="background: #d79e46; border-color: #d79e46">Agregar imágenes genetico</button>
                     <br>
                     <div id="image-container" class="d-flex flex-wrap mt-3" >
                         <!-- Imágenes aquí -->
@@ -849,7 +849,7 @@ function confirmation(ev) {
     }
   });
 }
-
+{{-- 
 // Event listeners para edición (falta agregar esta logica, a espera de aprobacion)
 $(document).ready(function() {
   // Editar producto genético
@@ -869,6 +869,284 @@ $(document).ready(function() {
     var productId = $(this).data('id');
     // Lógica para editar subasta
   });
+}); --}}
+</script>
+{{-- scripts controlar imagenes --}}
+</script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+let imagesArray = [];
+let deletedImages = [];
+let maxFiles = 30;
+
+
+
+function updateImagesInput() {
+    let imagesInput = document.getElementById('images');
+    imagesInput.value = JSON.stringify(imagesArray);
+    let imageWrapper = document.querySelector('.image-wrapper[data-index="0"]');
+    let firstImageWrapper = document.querySelector('.image-wrapper');
+    let imageWrappers = document.querySelectorAll('.image-wrapper');
+    imageWrappers.forEach((imageWrapper) => {
+        if (imageWrapper.getAttribute('data-index') !== '0') {
+            imageWrapper.style.border = '';
+            imageWrapper.style.borderRadius = '';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.remove();
+            }
+        } else {
+            imageWrapper.style.border = '3px inset #a250ff';
+            imageWrapper.style.borderRadius = '5px';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.innerHTML = 'Imagen principal';
+            } else {
+                label = document.createElement('div');
+                label.classList.add('image-label');
+                label.innerHTML = 'Imagen principal';
+                imageWrapper.appendChild(label);
+            }
+        }
+    });
+    if (!imageWrapper) {
+        firstImageWrapper.style.border = '3px inset #a250ff';
+        firstImageWrapper.style.borderRadius = '5px';
+        label = document.createElement('div');
+        label.classList.add('image-label');
+        label.innerHTML = 'Imagen principal';
+        firstImageWrapper.appendChild(label);
+    }
+}
+function addImage(image) {
+    let container = document.getElementById('image-container');
+    let newImage = document.createElement('div');
+    newImage.setAttribute('class', 'image-wrapper');
+    newImage.style.position = 'relative';
+    newImage.style.marginInlineEnd = '10px';
+    newImage.style.marginBlockEnd = '5px';
+    newImage.style.marginBlockStart = '5px';
+    newImage.style.maxHeight =  '125';
+    newImage.setAttribute('data-path', image.path);
+    newImage.innerHTML = `
+        <img style="width: 10rem; height: 7.5rem" src="{{ url('/') }}${image.url}" alt="Image">
+        <div class="loading-text" style="position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Cargando...</div>
+        <button type="button" class="delete-image" style="  position: absolute;top: 0;right: 0;width: 30px;height: 30px;background-color: #f3395b;border-radius: 50%;color: white;font-size: 18px;text-align: center;line-height: 27px;vertical-align: middle;cursor: pointer;border: none;" data-path="${image.path}">&#x2715;</button>
+    `;
+    container.appendChild(newImage);
+    imagesArray.push(image);
+    updateImagesInput();
+    let imageElement = newImage.querySelector('img');
+    imageElement.onload = function() {
+        newImage.querySelector('.loading-text').style.display = 'none';
+    }
+}
+
+function deleteImage(imagePath) {
+    /*console.log("Vista:", imagePath);*/
+    let container = document.getElementById('image-container');
+    let imageWrapper = container.querySelector(`.image-wrapper[data-path="${imagePath}"]`);
+    console.log(imageWrapper);
+    container.removeChild(imageWrapper);
+    imagesArray = imagesArray.filter(image => image.path !== imagePath);
+    updateImagesInput();
+}
+function updateImageOrder(){
+  let container = document.getElementById('image-container');
+  let imageWrapper = container.querySelectorAll('.image-wrapper');
+  imagesArray = [];
+  for (let i = 0; i < imagesWrappers.length; i++){
+    let imageId = parseInt(imageWrappers[i].getAttribute('data-id'));
+    let image = {
+      id: imageId,
+      order: i
+    };
+    imagesArray.push(image);
+  }
+  updateImagesInput();
+}
+function handleAddImage(file) {
+    let loadingIcon = document.getElementById('loading-icon');
+    loadingIcon.style.display = 'block';
+    document.getElementById('enviarBtn').disabled = true;
+    let formData = new FormData();
+    formData.append('uploaded_image', file);
+    formData.append('action', 'add');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_action') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            let image = {
+                path: data.image.path,
+                url: '/uploads/' + data.image.path
+            };
+            addImage(image);
+            loadingIcon.style.display = 'none';
+            document.getElementById('enviarBtn').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('loading-icon').style.display = 'none';
+            loadingIcon.classList.remove('rotate');
+            document.getElementById('add-images').disabled = false;
+        });
+}
+
+function handleDeleteImage(imagePath) {
+    console.log("Image path:", imagePath);
+    let formData = new FormData();
+    formData.append('image_path', imagePath);
+    formData.append('action', 'delete');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_action') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                deleteImage(imagePath);
+            } else {
+                alert('Error al eliminar la imagen');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+function handleUpdateImageOrder(newOrder){
+  fetch('{{route('product.image_action')}}', {
+    method: 'POST',
+    headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({
+      action: 'update', 
+      new_oder: newOrder
+    })
+  }).then(response => response.json()).then(data =>{
+    if(data.error){
+      alert('Error al cambiar la posición la imagen');
+    }else{
+      updateImageOrder();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+}
+/*nuevas funciones (listeners) */
+document.getElementById('add-images').addEventListener('click', () => {
+  let fileInput = document.getElementById('file-input');
+  fileInput.click();
 });
+document.getElementById('file-input').addEventListener('change', (event) => {
+    let files = event.target.files;
+    if (imagesArray.length + files.length <= maxFiles) {
+        for (let i = 0; i < files.length; i++) {
+            handleAddImage(files[i]);
+        }
+    } else {
+        alert('Has alcanzado el límite máximo de imágenes permitidas.');
+    }
+});
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.delete-image')) {
+        let imagePath = event.target.getAttribute('data-path');
+        handleDeleteImage(imagePath);
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    let sortable = Sortable.create(document.getElementById('image-container'), {
+        animation: 150,
+        onEnd: function (evt) {
+            let oldIndex = evt.oldIndex;
+            let newIndex = evt.newIndex;
+            let movedItem = imagesArray.splice(oldIndex, 1)[0];
+            imagesArray.splice(newIndex, 0, movedItem);
+            let imageWrappers = document.querySelectorAll('#image-container > div');
+            for (let i = 0; i < imageWrappers.length; i++) {
+                imageWrappers[i].setAttribute('data-index', i);
+            }
+
+            updateImagesInput();
+        }
+    });
+});
+  $(document).on('click', '.editProductBtn', function() {
+      var productId = $(this).data('id');
+      var url = 'getProductInfo/' + productId;
+      $('#userEditInfoContainer').empty();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response){
+          $('#userEditInfoContainer').html(response);
+          loadExistingImages(productId);
+          $('#modalForGen').modal('show');
+          
+        },
+        error: function(xhr, status, error){
+          //recordar poner los errores
+        }
+     });
+  });
+  function loadExistingImages(productId) {
+      let container = document.getElementById('image-container');
+      container.innerHTML = '';
+      $.ajax({
+          type: 'GET',
+          url: 'getProductImages/' + productId,
+          success: function(response) {
+              response.forEach(function(imageData) {
+                let image = {
+                    path: imageData.imagePath,
+                    url: '/uploads/' + imageData.imagePath
+            
+                  };
+                let imageJson = JSON.stringify(image);
+                let imageObj = JSON.parse(imageJson);
+                addImage(imageObj);
+              });
+          },
+          error: function(xhr, status, error) {
+              //ERRORes aqui igual
+          }
+      });
+  }
+  function openProductInNewTab(id, ruta){
+    const url = `/tienda/producto/${id}/${ruta}`;
+    const newTab = window.open(url, '_blank');
+    if(newTab){
+      newTab.focus();
+    }else{
+      alert('El navegador bloqueó la apertura de una nueva pestaña');
+    }
+  }
+  function confirmation(ev){
+  ev.preventDefault();
+  var url = ev.currentTarget.getAttribute('href');
+  swal({
+    title: "¿Desea eliminar este producto?",
+    text: "Esta publicación se eliminará para siempre",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((confirmCancel)=>{
+    if(confirmCancel){
+      window.location.href = url;
+    }
+  });
+}
+
 </script>
 @endsection
