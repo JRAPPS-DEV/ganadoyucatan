@@ -927,7 +927,8 @@ class ProductsController extends Controller
 
     }
     public function postNewCom(Request $request){
-        $imagesJson = $request->input('images');
+       
+        $imagesJson = $request->input('imagesCom');
         $images = json_decode($imagesJson, true);
         if (!$images || count($images) == 0) {
             return back()->withErrors(['message' => 'Por favor, cargue al menos una imagen.'])->withInput();
