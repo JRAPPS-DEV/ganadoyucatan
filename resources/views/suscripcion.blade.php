@@ -99,6 +99,21 @@
             </div>
         </section>
 
+        <section class="asociaciones-section">
+            <h2>Asociaciones Locales</h2>
+            <p>¿Representas una asociación ganadera local o algún organismo del sector?</p>
+            <p>Déjanos tus datos y nos pondremos en contacto contigo.</p>
+
+            <form class="asociaciones-form">
+                <input type="text" name="nombre" placeholder="Nombre completo" required />
+                <input type="email" name="correo" placeholder="Correo electrónico" required />
+                <input type="tel" name="telefono" placeholder="Teléfono de contacto" required />
+                <textarea name="mensaje" placeholder="Mensaje (opcional)" rows="4"></textarea>
+                <button type="submit">Enviar información</button>
+            </form>
+        </section>
+
+
         <section id="subscription-steps" class="subscription-steps hidden">
             <h2>¿Cómo completar tu suscripción?</h2>
             <ol>
