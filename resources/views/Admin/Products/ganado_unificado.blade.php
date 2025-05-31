@@ -77,7 +77,7 @@
                     <td>{{$p->rancho}}</td>
                     <td>{{$p->location->nombre}}</td>
                     <td>
-                      <button style="background-color:#d79e46;border-color: #d79e46;" class="btn btn-info btn-sm" onclick="openProductInNewTab('{{$p->idproducto}}', '{{$p->ruta}}')" title="Ver producto"><i class="far fa-eye"></i></button>
+                      <button style="background-color:#d79e46;border-color: #d79e46;" class="btn btn-info btn-sm" onclick="openProductInNewTabGen('{{$p->idproducto}}', '{{$p->ruta}}')" title="Ver producto"><i class="far fa-eye"></i></button>
                       <button class="btn btn-primary btn-sm editProductBtnGenetico" data-id="{{$p->idproducto}}" title="Editar producto"><i class="fas fa-pencil-alt"></i></button>
                       <a href="{{ route('deleteGen', $p->idproducto) }}" class="btn btn-danger" title="Eliminar producto" onclick="confirmation(event)"><i class="far fa-trash-alt"></i></a>
                     </td>
@@ -352,8 +352,8 @@
                 </div>
               </div>
               <div class="container">
-                    <input type="file" id="file-input" name="imagenes-cargadas[]" multiple style="display:none;">
-                    <button type="button" id="add-images" class="btn btn-primary" style="background: #d79e46; border-color: #d79e46">Agregar imágenes genetico</button>
+                    <input type="file" id="file-inputGen" name="imagenes-cargadas[]" multiple style="display:none;">
+                    <button type="button" id="add-imagesGen" class="btn btn-primary" style="background: #d79e46; border-color: #d79e46">Agregar imágenes genetico</button>
                     <br>
                     <div id="image-container" class="d-flex flex-wrap mt-3" >
                         <!-- Imágenes aquí -->
@@ -409,19 +409,19 @@
                       <input class="form-control" id="txtLink" name="txtLink" type="text">
                     </div>
                     <div class="form-group">
-                      <label class="control-label" for="estados">Estado:</label>
-                      <select class="form-control" name="estados" id="estados">
+                      <label class="control-label" for="estadosCom">Estado:</label>
+                      <select class="form-control" name="estadosCom" id="estadosCom">
                           <option value=""></option>
                       </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="ciudades">Ciudad:</label>
-                        <select  class="form-control" name="ciudades" id="ciudades">
+                        <label class="control-label" for="ciudadesCom">Ciudad:</label>
+                        <select  class="form-control" name="ciudadesCom" id="ciudadesCom">
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="comisarias">Comisarias:</label>
-                        <select class="form-control"  name="comisarias" id="comisarias">
+                        <label class="control-label" for="comisariasCom">Comisarias:</label>
+                        <select class="form-control"  name="comisariasCom" id="comisariasCom">
                         </select>
                     </div>
                 </div>
@@ -556,15 +556,15 @@
                 </div>
               </div>
               <div class="container">
-                    <input type="file" id="file-input" name="imagenes-cargadas[]" multiple style="display:none;" required="Agregar al menos una imagen">
-                    <button type="button" id="add-images" class="btn btn-primary" style="background: #425b28; border-color: #425b28">Agregar imágenes</button>
+                    <input type="file" id="file-inputCom" name="imagenes-cargadasCom[]" multiple style="display:none;" required="Agregar al menos una imagen">
+                    <button type="button" id="add-imagesCom" class="btn btn-primary" style="background: #425b28; border-color: #425b28">Agregar imágenes Comercial</button>
                     <br>
-                    <div id="image-container" class="d-flex flex-wrap mt-3" >
+                    <div id="image-containerCom" class="d-flex flex-wrap mt-3" >
                         <!-- Imágenes aquí -->
                     </div>
                 <div id="hidden-inputs"></div>
                 <input type="hidden" name="deleted_images" id="deleted_images">
-                <input type="hidden" name="images" id="images" value="">
+                <input type="hidden" name="imagesCom" id="imagesCom" value="">
               </div>              
               <div class="container">
                     <label for="video">Cargar video:</label>
@@ -729,8 +729,8 @@
                 </div>
               </div>
               <div class="container">
-                    <input type="file" id="file-input" name="imagenes-cargadas[]" multiple style="display:none;" required="Agregar al menos una imagen">
-                    <button type="button" id="add-images" class="btn btn-primary" style="background: #c31b36; border-color: #c31b36">Agregar imágenes</button>
+                    <input type="file" id="file-inputSub" name="imagenes-cargadas[]" multiple style="display:none;" required="Agregar al menos una imagen">
+                    <button type="button" id="add-images" class="btn btn-primary" style="background: #c31b36; border-color: #c31b36">Agregar imágenes Subasta</button>
                     <br>
                     <div id="image-container" class="d-flex flex-wrap mt-3" >
                         <!-- Imágenes aquí -->
@@ -818,7 +818,7 @@ function openSubInNewTab(id){
   }else{
     alerT('Se ha bloqueado la apertura de una nueva ventada');
   }
-}function openProductInNewTab(id, ruta) {
+}function openProductInNewTabGen(id, ruta) {
   const url = `/tienda/producto/${id}/${ruta}`;
   window.open(url, '_blank');
 }
@@ -879,15 +879,15 @@ $(document).ready(function() {
 
 
 <script>
-let imagesArray = [];
-let deletedImages = [];
-let maxFiles = 30;
+let imagesArrayGen = [];
+let deletedImagesGen = [];
+let maxFilesGen = 30;
 
 
 
-function updateImagesInput() {
+function updateImagesInputGen() {
     let imagesInput = document.getElementById('images');
-    imagesInput.value = JSON.stringify(imagesArray);
+    imagesInput.value = JSON.stringify(imagesArrayGen);
     let imageWrapper = document.querySelector('.image-wrapper[data-index="0"]');
     let firstImageWrapper = document.querySelector('.image-wrapper');
     let imageWrappers = document.querySelectorAll('.image-wrapper');
@@ -922,7 +922,7 @@ function updateImagesInput() {
         firstImageWrapper.appendChild(label);
     }
 }
-function addImage(image) {
+function addImageGen(image) {
     let container = document.getElementById('image-container');
     let newImage = document.createElement('div');
     newImage.setAttribute('class', 'image-wrapper');
@@ -938,38 +938,37 @@ function addImage(image) {
         <button type="button" class="delete-image" style="  position: absolute;top: 0;right: 0;width: 30px;height: 30px;background-color: #f3395b;border-radius: 50%;color: white;font-size: 18px;text-align: center;line-height: 27px;vertical-align: middle;cursor: pointer;border: none;" data-path="${image.path}">&#x2715;</button>
     `;
     container.appendChild(newImage);
-    imagesArray.push(image);
-    updateImagesInput();
+    imagesArrayGen.push(image);
+    updateImagesInputGen();
     let imageElement = newImage.querySelector('img');
     imageElement.onload = function() {
         newImage.querySelector('.loading-text').style.display = 'none';
     }
 }
 
-function deleteImage(imagePath) {
-    /*console.log("Vista:", imagePath);*/
+function deleteImageGen(imagePath) {
     let container = document.getElementById('image-container');
     let imageWrapper = container.querySelector(`.image-wrapper[data-path="${imagePath}"]`);
     console.log(imageWrapper);
     container.removeChild(imageWrapper);
-    imagesArray = imagesArray.filter(image => image.path !== imagePath);
-    updateImagesInput();
+    imagesArrayGen = imagesArrayGen.filter(image => image.path !== imagePath);
+    updateImagesInputGen();
 }
-function updateImageOrder(){
+function updateImageOrderGen(){
   let container = document.getElementById('image-container');
   let imageWrapper = container.querySelectorAll('.image-wrapper');
-  imagesArray = [];
+  imagesArrayGen = [];
   for (let i = 0; i < imagesWrappers.length; i++){
     let imageId = parseInt(imageWrappers[i].getAttribute('data-id'));
     let image = {
       id: imageId,
       order: i
     };
-    imagesArray.push(image);
+    imagesArrayGen.push(image);
   }
-  updateImagesInput();
+  updateImagesInputGen();
 }
-function handleAddImage(file) {
+function handleAddImageGen(file) {
     let loadingIcon = document.getElementById('loading-icon');
     loadingIcon.style.display = 'block';
     document.getElementById('enviarBtn').disabled = true;
@@ -988,7 +987,7 @@ function handleAddImage(file) {
                 path: data.image.path,
                 url: '/uploads/' + data.image.path
             };
-            addImage(image);
+            addImageGen(image);
             loadingIcon.style.display = 'none';
             document.getElementById('enviarBtn').disabled = false;
         })
@@ -996,11 +995,11 @@ function handleAddImage(file) {
             console.error('Error:', error);
             document.getElementById('loading-icon').style.display = 'none';
             loadingIcon.classList.remove('rotate');
-            document.getElementById('add-images').disabled = false;
+            document.getElementById('add-imagesGen').disabled = false;
         });
 }
 
-function handleDeleteImage(imagePath) {
+function handleDeleteImageGen(imagePath) {
     console.log("Image path:", imagePath);
     let formData = new FormData();
     formData.append('image_path', imagePath);
@@ -1014,7 +1013,7 @@ function handleDeleteImage(imagePath) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                deleteImage(imagePath);
+                deleteImageGen(imagePath);
             } else {
                 alert('Error al eliminar la imagen');
             }
@@ -1023,7 +1022,7 @@ function handleDeleteImage(imagePath) {
             console.error('Error:', error);
         });
 }
-function handleUpdateImageOrder(newOrder){
+function handleUpdateImageOrderGen(newOrder){
   fetch('{{route('product.image_action')}}', {
     method: 'POST',
     headers: {
@@ -1038,22 +1037,22 @@ function handleUpdateImageOrder(newOrder){
     if(data.error){
       alert('Error al cambiar la posición la imagen');
     }else{
-      updateImageOrder();
+      updateImageOrderGen();
     }
   }).catch(error => {
     console.error('Error:', error);
   });
 }
 /*nuevas funciones (listeners) */
-document.getElementById('add-images').addEventListener('click', () => {
-  let fileInput = document.getElementById('file-input');
+document.getElementById('add-imagesGen').addEventListener('click', () => {
+  let fileInput = document.getElementById('file-inputGen');
   fileInput.click();
 });
-document.getElementById('file-input').addEventListener('change', (event) => {
+document.getElementById('file-inputGen').addEventListener('change', (event) => {
     let files = event.target.files;
-    if (imagesArray.length + files.length <= maxFiles) {
+    if (imagesArrayGen.length + files.length <= maxFilesGen) {
         for (let i = 0; i < files.length; i++) {
-            handleAddImage(files[i]);
+            handleAddImageGen(files[i]);
         }
     } else {
         alert('Has alcanzado el límite máximo de imágenes permitidas.');
@@ -1062,7 +1061,7 @@ document.getElementById('file-input').addEventListener('change', (event) => {
 document.addEventListener('click', function (event) {
     if (event.target.matches('.delete-image')) {
         let imagePath = event.target.getAttribute('data-path');
-        handleDeleteImage(imagePath);
+        handleDeleteImageGen(imagePath);
     }
 });
 document.addEventListener('DOMContentLoaded', function () {
@@ -1071,14 +1070,14 @@ document.addEventListener('DOMContentLoaded', function () {
         onEnd: function (evt) {
             let oldIndex = evt.oldIndex;
             let newIndex = evt.newIndex;
-            let movedItem = imagesArray.splice(oldIndex, 1)[0];
-            imagesArray.splice(newIndex, 0, movedItem);
+            let movedItem = imagesArrayGen.splice(oldIndex, 1)[0];
+            imagesArrayGen.splice(newIndex, 0, movedItem);
             let imageWrappers = document.querySelectorAll('#image-container > div');
             for (let i = 0; i < imageWrappers.length; i++) {
                 imageWrappers[i].setAttribute('data-index', i);
             }
 
-            updateImagesInput();
+            updateImagesInputGen();
         }
     });
 });
@@ -1091,7 +1090,7 @@ document.addEventListener('DOMContentLoaded', function () {
         url: url,
         success: function(response){
           $('#userEditInfoContainer').html(response);
-          loadExistingImages(productId);
+          loadExistingImagesGen(productId);
           $('#modalForGen').modal('show');
           
         },
@@ -1100,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
      });
   });
-  function loadExistingImages(productId) {
+  function loadExistingImagesGen(productId) {
       let container = document.getElementById('image-container');
       container.innerHTML = '';
       $.ajax({
@@ -1115,7 +1114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                   };
                 let imageJson = JSON.stringify(image);
                 let imageObj = JSON.parse(imageJson);
-                addImage(imageObj);
+                addImageGen(imageObj);
               });
           },
           error: function(xhr, status, error) {
@@ -1123,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
       });
   }
-  function openProductInNewTab(id, ruta){
+  function openProductInNewTabGen(id, ruta){
     const url = `/tienda/producto/${id}/${ruta}`;
     const newTab = window.open(url, '_blank');
     if(newTab){
@@ -1147,6 +1146,225 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 }
+//funciones comercial
+let imagesArrayCom = [];
+let deletedImagesCom = [];
+let maxFilesCom = 30;
 
+function updateImagesInputCom() {
+    let imagesInput = document.getElementById('imagesCom');
+    imagesInput.value = JSON.stringify(imagesArrayCom);
+    let imageWrapper = document.querySelector('.image-wrapper[data-index="0"]');
+    let firstImageWrapper = document.querySelector('.image-wrapper');
+    let imageWrappers = document.querySelectorAll('.image-wrapper');
+    imageWrappers.forEach((imageWrapper) => {
+        if (imageWrapper.getAttribute('data-index') !== '0') {
+            imageWrapper.style.border = '';
+            imageWrapper.style.borderRadius = '';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.remove();
+            }
+        } else {
+            imageWrapper.style.border = '3px inset #a250ff';
+            imageWrapper.style.borderRadius = '5px';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.innerHTML = 'Imagen principal';
+            } else {
+                label = document.createElement('div');
+                label.classList.add('image-label');
+                label.innerHTML = 'Imagen principal';
+                imageWrapper.appendChild(label);
+            }
+        }
+    });
+    if (!imageWrapper) {
+        firstImageWrapper.style.border = '3px inset #a250ff';
+        firstImageWrapper.style.borderRadius = '5px';
+        label = document.createElement('div');
+        label.classList.add('image-label');
+        label.innerHTML = 'Imagen principal';
+        firstImageWrapper.appendChild(label);
+    }
+}
+function addImageCom(image) {
+    let container = document.getElementById('image-containerCom');
+    let newImage = document.createElement('div');
+    newImage.setAttribute('class', 'image-wrapper');
+    newImage.style.position = 'relative';
+    newImage.style.marginInlineEnd = '10px';
+    newImage.style.marginBlockEnd = '5px';
+    newImage.style.marginBlockStart = '5px';
+    newImage.style.maxHeight =  '125';
+    newImage.setAttribute('data-path', image.path);
+    newImage.innerHTML = `
+        <img style="width: 10rem; height: 7.5rem" src="{{ url('/') }}${image.url}" alt="Image">
+        <div class="loading-text" style="position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Cargando...</div>
+        <button type="button" class="delete-image" style="  position: absolute;top: 0;right: 0;width: 30px;height: 30px;background-color: #f3395b;border-radius: 50%;color: white;font-size: 18px;text-align: center;line-height: 27px;vertical-align: middle;cursor: pointer;border: none;" data-path="${image.path}">&#x2715;</button>
+    `;
+    container.appendChild(newImage);
+    imagesArrayCom.push(image);
+    updateImagesInputCom();
+    let imageElement = newImage.querySelector('img');
+    imageElement.onload = function() {
+        newImage.querySelector('.loading-text').style.display = 'none';
+    }
+}
+
+function deleteImageCom(imagePath) {
+    console.log("Image path:", imagePath);
+    let container = document.getElementById('image-containerCom');
+    let imageWrapper = container.querySelector(`.image-wrapper[data-path="${imagePath}"]`);
+    console.log(imageWrapper);
+    container.removeChild(imageWrapper);
+    imagesArrayCom = imagesArrayCom.filter(image => image.path !== imagePath);
+    updateImagesInputCom();
+}
+function updateImageOrderCom(){
+  let container = document.getElementById('image-containerCom');
+  let imageWrapper = container.querySelectorAll('.image-wrapper');
+  imagesArrayCom = [];
+  for (let i = 0; i < imagesWrappers.length; i++){
+    let imageId = parseInt(imageWrappers[i].getAttribute('data-id'));
+    let image = {
+      id: imageId,
+      order: i
+    };
+    imagesArrayCom.push(image);
+  }
+  updateImagesInputCom();
+}
+function handleAddImageCom(file) {
+    let loadingIcon = document.getElementById('loading-icon');
+    loadingIcon.style.display = 'block';
+    document.getElementById('enviarBtn').disabled = true;
+    let formData = new FormData();
+    formData.append('uploaded_image', file);
+    formData.append('action', 'add');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_actionC') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            let image = {
+                path: data.image.path,
+                url: '/uploads/tianguis' + data.image.path
+            };
+            addImageCom(image);
+            loadingIcon.style.display = 'none';
+            document.getElementById('enviarBtn').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('loading-icon').style.display = 'none';
+            loadingIcon.classList.remove('rotate');
+            document.getElementById('add-imagesCom').disabled = false;
+        });
+}
+
+function handleDeleteImageCom(imagePath) {
+    let formData = new FormData();
+    formData.append('image_path', imagePath);
+    formData.append('action', 'delete');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_actionC') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                deleteImageCom(imagePath);
+            } else {
+                alert('Error al eliminar la imagen');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+function handleUpdateImageOrderCom(newOrder){
+  fetch('{{route('product.image_actionC')}}', {
+    method: 'POST',
+    headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({
+      action: 'update', 
+      new_oder: newOrder
+    })
+  }).then(response => response.json()).then(data =>{
+    if(data.error){
+      alert('Error al cambiar la posición la imagen');
+    }else{
+      updateImageOrderCom();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+}
+/*nuevas funciones (listeners) */
+document.getElementById('add-imagesCom').addEventListener('click', () => {
+  let fileInput = document.getElementById('file-inputCom');
+  fileInput.click();
+});
+document.getElementById('file-inputCom').addEventListener('change', (event) => {
+    let files = event.target.files;
+    if (imagesArrayCom.length + files.length <= maxFilesCom) {
+        for (let i = 0; i < files.length; i++) {
+            handleAddImageCom(files[i]);
+        }
+    } else {
+        alert('Has alcanzado el límite máximo de imágenes permitidas.');
+    }
+});
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.delete-image')) {
+        let imagePath = event.target.getAttribute('data-path');
+        handleDeleteImageCom(imagePath);
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    let sortable = Sortable.create(document.getElementById('image-containerCom'), {
+        animation: 150,
+        onEnd: function (evt) {
+            let oldIndex = evt.oldIndex;
+            let newIndex = evt.newIndex;
+            let movedItem = imagesArrayCom.splice(oldIndex, 1)[0];
+            imagesArrayCom.splice(newIndex, 0, movedItem);
+            let imageWrappers = document.querySelectorAll('#image-containerCom > div');
+            for (let i = 0; i < imageWrappers.length; i++) {
+                imageWrappers[i].setAttribute('data-index', i);
+            }
+
+            updateImagesInputCom();
+        }
+    });
+});
+
+$(document).ready(function(){
+    $('.editProductBtn').on('click', function(){
+    var productId = $(this).data('id');
+    var url = 'getComInfo/' + productId;
+    $('#comEditInfoContainer').empty();
+    $.ajax({
+      type: 'GET',
+      url: url,
+      success: function(response){
+        $('#comEditInfoContainer').html(response);
+        $('#modalForCom').modal('show');
+      },
+      error: function(xhr, status, error){
+        //
+      }
+    });
+  }); 
+});
 </script>
 @endsection

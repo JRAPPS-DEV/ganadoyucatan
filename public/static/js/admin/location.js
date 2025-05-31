@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-    url: "/admin/get-estados",
+    url: "/get-estados",
     type: "GET",
     dataType: "json",
     success: function (data) {
@@ -17,7 +17,7 @@ $(document).ready(function () {
     var estadoId = $(this).val();
     if (estadoId) {
       $.ajax({
-        url: "/admin/get-ciudades-by-estado/" + estadoId,
+        url: "/get-ciudades-by-estado/" + estadoId,
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -38,7 +38,7 @@ $(document).ready(function () {
     var ciudadId = $(this).val();
     if (ciudadId) {
       $.ajax({
-        url: "/admin/get-comisarias-by-ciudad/" + ciudadId,
+        url: "/get-comisarias-by-ciudad/" + ciudadId,
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -52,6 +52,64 @@ $(document).ready(function () {
       });
     } else {
       $("#comisarias").empty();
+    }
+  });
+});  
+//momentaneo
+$(document).ready(function () {
+    $.ajax({
+    url: "/get-estados",
+    type: "GET",
+    dataType: "json",
+    success: function (data) {
+      $("#estadosCom").empty();
+      $("#estadosCom").append('<option value="1">Seleccione un Estado</option>');
+      $.each(data, function (key, value) {
+        $("#estadosCom").append(
+          '<option value="' + value.id + '">' + value.nombre + "</option>"
+        );
+      });
+    },
+  });
+  $("#estadosCom").on("change", function () {
+    var estadoId = $(this).val();
+    if (estadoId) {
+      $.ajax({
+        url: "/get-ciudades-by-estado/" + estadoId,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          $("#ciudadesCom").empty();
+          $.each(data, function (key, value) {
+            $("#ciudadesCom").append(
+              '<option value="' + value.id + '">' + value.nombre + "</option>"
+            );
+          });
+        },
+      });
+    } else {
+      $("#ciudadesCom").empty();
+    }
+  });
+
+  $("#ciudadesCom").on("change", function () {
+    var ciudadId = $(this).val();
+    if (ciudadId) {
+      $.ajax({
+        url: "/get-comisarias-by-ciudad/" + ciudadId,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          $("#comisariasCom").empty();
+          $.each(data, function (key, value) {
+            $("#comisariasCom").append(
+              '<option value="' + value.id + '">' + value.nombre + "</option>"
+            );
+          });
+        },
+      });
+    } else {
+      $("#comisariasCom").empty();
     }
   });
 });  
