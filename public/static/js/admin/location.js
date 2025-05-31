@@ -113,3 +113,60 @@ $(document).ready(function () {
     }
   });
 });  
+$(document).ready(function () {
+    $.ajax({
+    url: "/get-estados",
+    type: "GET",
+    dataType: "json",
+    success: function (data) {
+      $("#estadosSub").empty();
+      $("#estadosSub").append('<option value="1">Seleccione un Estado</option>');
+      $.each(data, function (key, value) {
+        $("#estadosSub").append(
+          '<option value="' + value.id + '">' + value.nombre + "</option>"
+        );
+      });
+    },
+  });
+  $("#estadosSub").on("change", function () {
+    var estadoId = $(this).val();
+    if (estadoId) {
+      $.ajax({
+        url: "/get-ciudades-by-estado/" + estadoId,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          $("#ciudadesSub").empty();
+          $.each(data, function (key, value) {
+            $("#ciudadesSub").append(
+              '<option value="' + value.id + '">' + value.nombre + "</option>"
+            );
+          });
+        },
+      });
+    } else {
+      $("#ciudadesSub").empty();
+    }
+  });
+
+  $("#ciudadesSub").on("change", function () {
+    var ciudadId = $(this).val();
+    if (ciudadId) {
+      $.ajax({
+        url: "/get-comisarias-by-ciudad/" + ciudadId,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          $("#comisariasSub").empty();
+          $.each(data, function (key, value) {
+            $("#comisariasSub").append(
+              '<option value="' + value.id + '">' + value.nombre + "</option>"
+            );
+          });
+        },
+      });
+    } else {
+      $("#comisariasSub").empty();
+    }
+  });
+});  
