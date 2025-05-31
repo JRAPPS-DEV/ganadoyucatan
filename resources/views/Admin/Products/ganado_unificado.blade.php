@@ -233,6 +233,67 @@
                         <select class="form-control"  name="comisarias" id="comisarias">
                         </select>
                     </div>
+                     <!-- Incluye Envío -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkIncluyeEnvio" name="chkIncluyeEnvio" value="1">
+                                      Incluye Envío
+                                  </label>
+                              </div>
+                          </div>
+
+                          <!-- Precio del Envío (se muestra solo si se marca incluye envío) -->
+                          <div class="form-group col-md-6" id="divPrecioEnvio" style="display: none;">
+                              <label class="control-label">Precio del Envío</label>
+                              <input class="form-control" id="txtPrecioEnvio" name="txtPrecioEnvio" 
+                                     type="number" step="0.01" min="0">
+                              <small class="form-text text-muted">Costo del envío (opcional)</small>
+                          </div>
+                          <!-- Configuración de Envío (Mapa) -->
+                        <div id="divConfiguracionEnvio" style="display: none;">
+                            <div class="form-group col-md-12">
+                                <h5>Configuración del Área de Envío</h5>
+                                <hr>
+                            </div>
+                            
+                            <!-- Radio de Envío -->
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Radio de Envío (km)</label>
+                                <input class="form-control" id="txtEnvioRadio" name="txtEnvioRadio" 
+                                       type="number" min="1" max="500" placeholder="Ej: 50">
+                                <small class="form-text text-muted">Distancia máxima para envío</small>
+                            </div>
+                            
+                            <!-- Buscar ubicación -->
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Buscar Ubicación</label>
+                                <input class="form-control" id="txtBuscarUbicacion" type="text" 
+                                       placeholder="Buscar dirección...">
+                                <small class="form-text text-muted">Escribe para buscar una dirección</small>
+                            </div>
+                            
+                            <!-- Mapa -->
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Seleccionar Centro de Envío</label>
+                                <div id="mapEnvio" style="height: 400px; width: 100%; border: 1px solid #ccc;"></div>
+                                <small class="form-text text-muted">Haz clic en el mapa para seleccionar el centro de tu área de envío</small>
+                            </div>
+                            
+                            <!-- Campos ocultos para coordenadas -->
+                            <input type="hidden" id="txtEnvioLatitud" name="txtEnvioLatitud">
+                            <input type="hidden" id="txtEnvioLongitud" name="txtEnvioLongitud">
+                            <input type="hidden" id="txtEnvioDireccion" name="txtEnvioDireccion">
+                            
+                            <!-- Información seleccionada -->
+                            <div class="form-group col-md-12">
+                                <div id="infoUbicacionSeleccionada" class="alert alert-info" style="display: none;">
+                                    <strong>Ubicación seleccionada:</strong>
+                                    <p id="direccionSeleccionada"></p>
+                                    <small>Radio de envío: <span id="radioSeleccionado"></span> km</small>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <div class="col-md-4">
                   <div class="row">
@@ -261,10 +322,46 @@
                             <label class="control-label">Cantidad Disponible<span class="required">*</span></label>
                             <input class="form-control" maxlength="5" id="txtStock" name="txtStock" type="number" required="">
                         </div>
+                        <!-- Imagen de Arete (Obligatorio) -->
                           <div class="form-group col-md-6">
+                              <label class="control-label">Imagen del Arete<span class="required">*</span></label>
+                              <input class="form-control" id="txtAreteImagen" name="txtAreteImagen" type="file" 
+                                     accept="image/*" required="">
+                              <small class="form-text text-muted">Formatos permitidos: JPG, PNG, GIF</small>
+                          </div>
+
+                          <!-- Certificado de Propiedad -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Certificado de Propiedad</label>
+                              <input class="form-control" id="txtCertificadoPropiedad" name="txtCertificadoPropiedad" 
+                                     type="file" accept="image/*">
+                              <small class="form-text text-muted">Imagen del certificado (Opcional)</small>
+                          </div>
+
+                          <!-- Historial del Ganado -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Historial del Ganado</label>
+                              <input class="form-control" id="txtHistorialGanado" name="txtHistorialGanado" 
+                                     type="file" accept="image/*,.pdf">
+                              <small class="form-text text-muted">Imagen o PDF del historial (Opcional)</small>
+                          </div>
+
+                          <!-- Precio a Tratar -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkPrecioTratar" name="chkPrecioTratar" value="1">
+                                      Precio a Tratar
+                                  </label>
+                                  <small class="form-text text-muted">Marcar si el precio es negociable</small>
+                              </div>
+                          </div>
+
+
+                          {{-- <div class="form-group col-md-6">
                             <label class="control-label">Nombre del rancho</label>
                             <input class="form-control" maxlength="50" id="txtRancho" name="txtRancho" type="text" >
-                        </div>
+                        </div> --}}
                          <div class="form-group col-md-6">
                             <label class="control-label">Raza</label>
                             <select class="form-control selectpicker" id="txtRaza" name="txtRaza" >
@@ -303,21 +400,21 @@
                               <option value="Vacunado">Vacunado</option>
                               <option value="NO Vacunado">No Vacunado</option>
                             </select>
-                      </div>
+                      </div>{{-- 
                         <div class="form-group col-md-6">
                             <label class="control-label" for="listArete">Arete</label>
                             <select class="form-control selectpicker" id="listArete" name="listArete" >
                               <option value="Con Arete">Con Arete</option>
                               <option value="Sin Arete">Sin Arete</option>
                             </select>
-                        </div>
-                        <div class="form-group col-md-6">
+                        </div> --}}
+                       {{--  <div class="form-group col-md-6">
                             <label class="control-label" for="listCert">Certicado</label>
                             <select class="form-control selectpicker" id="listCert" name="listCert" >
                               <option value="Certificado">Cuenta con certificado</option>
                               <option value="NO certificado">NO cuenta con certificado</option>
                             </select>
-                        </div> 
+                        </div>  --}}
                         <div class="form-group col-md-6">
                             <label class="control-label" class="control-label">Tipo</label>
                             <select class="form-control selectpicker" id="txtTipo" name="txtTipo" >
@@ -615,19 +712,19 @@
                       <input class="form-control" id="txtLink" name="txtLink" type="text" >
                     </div>
                     <div class="form-group">
-                      <label class="control-label" for="estados">Estado:</label>
-                      <select class="form-control" name="estados" id="estados">
+                      <label class="control-label" for="estadosSub">Estado:</label>
+                      <select class="form-control" name="estadosSub" id="estadosSub">
                           <option value=""></option>
                       </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="ciudades">Ciudad:</label>
-                        <select  class="form-control" name="ciudades" id="ciudades">
+                        <label class="control-label" for="ciudadesSub">Ciudad:</label>
+                        <select  class="form-control" name="ciudadesSub" id="ciudadesSub">
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="comisarias">Comisarias:</label>
-                        <select class="form-control"  name="comisarias" id="comisarias">
+                        <label class="control-label" for="comisariasSub">Comisarias:</label>
+                        <select class="form-control"  name="comisariasSub" id="comisariasSub">
                         </select>
                     </div>
                 </div>
@@ -729,15 +826,15 @@
                 </div>
               </div>
               <div class="container">
-                    <input type="file" id="file-inputSub" name="imagenes-cargadas[]" multiple style="display:none;" required="Agregar al menos una imagen">
-                    <button type="button" id="add-images" class="btn btn-primary" style="background: #c31b36; border-color: #c31b36">Agregar imágenes Subasta</button>
+                    <input type="file" id="file-inputSub" name="imagenes-cargadasSub[]" multiple style="display:none;" required="Agregar al menos una imagen">
+                    <button type="button" id="add-imagesSub" class="btn btn-primary" style="background: #c31b36; border-color: #c31b36">Agregar imágenes Subasta</button>
                     <br>
-                    <div id="image-container" class="d-flex flex-wrap mt-3" >
+                    <div id="image-containerSub" class="d-flex flex-wrap mt-3" >
                         <!-- Imágenes aquí -->
                     </div>
                 <div id="hidden-inputs"></div>
                 <input type="hidden" name="deleted_images" id="deleted_images">
-                <input type="hidden" name="images" id="images" value="">
+                <input type="hidden" name="imagesSub" id="imagesSub" value="">
               </div>              
               <div class="container">
                     <label for="video">Cargar video:</label>
@@ -767,6 +864,170 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script>
+document.getElementById('chkIncluyeEnvio').addEventListener('change', function() {
+    const precioEnvioDiv = document.getElementById('divPrecioEnvio');
+    if (this.checked) {
+        precioEnvioDiv.style.display = 'block';
+    } else {
+        precioEnvioDiv.style.display = 'none';
+        document.getElementById('txtPrecioEnvio').value = '';
+    }
+});
+let map;
+let marker;
+let circle;
+let geocoder;
+let autocomplete;
+
+// Inicializar mapa
+function initMap() {
+    // Coordenadas de Mérida, Yucatán como centro inicial
+    const meridaCoords = { lat: 20.9674, lng: -89.5926 };
+    
+    map = new google.maps.Map(document.getElementById('mapEnvio'), {
+        zoom: 12,
+        center: meridaCoords,
+        mapTypeId: 'roadmap'
+    });
+    
+    geocoder = new google.maps.Geocoder();
+    
+    // Configurar autocompletado
+    const input = document.getElementById('txtBuscarUbicacion');
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        componentRestrictions: { country: 'mx' },
+        fields: ['place_id', 'geometry', 'name', 'formatted_address']
+    });
+    
+    // Listener para autocompletado
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+        
+        const location = place.geometry.location;
+        map.setCenter(location);
+        map.setZoom(15);
+        
+        actualizarUbicacion(location.lat(), location.lng(), place.formatted_address);
+    });
+    
+    // Listener para clics en el mapa
+    map.addListener('click', function(event) {
+        const lat = event.latLng.lat();
+        const lng = event.latLng.lng();
+        
+        // Obtener dirección de las coordenadas
+        geocoder.geocode({ location: { lat: lat, lng: lng } }, function(results, status) {
+            if (status === 'OK' && results[0]) {
+                actualizarUbicacion(lat, lng, results[0].formatted_address);
+            } else {
+                actualizarUbicacion(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+            }
+        });
+    });
+}
+
+function actualizarUbicacion(lat, lng, direccion) {
+    // Actualizar campos ocultos
+    document.getElementById('txtEnvioLatitud').value = lat;
+    document.getElementById('txtEnvioLongitud').value = lng;
+    document.getElementById('txtEnvioDireccion').value = direccion;
+    
+    // Limpiar marcador y círculo anteriores
+    if (marker) marker.setMap(null);
+    if (circle) circle.setMap(null);
+    
+    // Crear nuevo marcador
+    marker = new google.maps.Marker({
+        position: { lat: lat, lng: lng },
+        map: map,
+        title: 'Centro de envío',
+        draggable: true
+    });
+    
+    // Listener para cuando se arrastra el marcador
+    marker.addListener('dragend', function(event) {
+        const newLat = event.latLng.lat();
+        const newLng = event.latLng.lng();
+        
+        geocoder.geocode({ location: { lat: newLat, lng: newLng } }, function(results, status) {
+            if (status === 'OK' && results[0]) {
+                actualizarUbicacion(newLat, newLng, results[0].formatted_address);
+            } else {
+                actualizarUbicacion(newLat, newLng, `${newLat.toFixed(6)}, ${newLng.toFixed(6)}`);
+            }
+        });
+    });
+    
+    // Actualizar círculo
+    actualizarCirculo();
+    
+    // Mostrar información
+    document.getElementById('direccionSeleccionada').textContent = direccion;
+    document.getElementById('infoUbicacionSeleccionada').style.display = 'block';
+}
+
+function actualizarCirculo() {
+    const radio = document.getElementById('txtEnvioRadio').value;
+    if (!radio || !marker) return;
+    
+    // Limpiar círculo anterior
+    if (circle) circle.setMap(null);
+    
+    // Crear nuevo círculo
+    circle = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.15,
+        map: map,
+        center: marker.getPosition(),
+        radius: parseInt(radio) * 1000 // Convertir km a metros
+    });
+    
+    // Ajustar zoom para mostrar todo el círculo
+    const bounds = circle.getBounds();
+    map.fitBounds(bounds);
+    
+    // Actualizar información
+    document.getElementById('radioSeleccionado').textContent = radio;
+}
+
+// Event listeners
+document.getElementById('chkIncluyeEnvio').addEventListener('change', function() {
+    const precioEnvioDiv = document.getElementById('divPrecioEnvio');
+    const configuracionDiv = document.getElementById('divConfiguracionEnvio');
+    
+    if (this.checked) {
+        precioEnvioDiv.style.display = 'block';
+        configuracionDiv.style.display = 'block';
+        
+        // Inicializar mapa si no existe
+        if (!map) {
+            setTimeout(initMap, 100);
+        }
+    } else {
+        precioEnvioDiv.style.display = 'none';
+        configuracionDiv.style.display = 'none';
+        document.getElementById('txtPrecioEnvio').value = '';
+        document.getElementById('txtEnvioRadio').value = '';
+        document.getElementById('txtEnvioLatitud').value = '';
+        document.getElementById('txtEnvioLongitud').value = '';
+        document.getElementById('txtEnvioDireccion').value = '';
+        document.getElementById('infoUbicacionSeleccionada').style.display = 'none';
+    }
+});
+
+document.getElementById('txtEnvioRadio').addEventListener('input', function() {
+    actualizarCirculo();
+});
+</script>
+
+<!-- Cargar Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChlMigtzXBtS2ghPfmP4go4ycprwktPy0&libraries=places&callback=initMap" async defer></script>
+</script>
 <script >
   $(document).ready(function(){
     $('#viewProduct').on('click', function(){
@@ -1365,6 +1626,250 @@ $(document).ready(function(){
       }
     });
   }); 
+});
+//subasta ganaera
+let imagesArraySub= [];
+let deletedImagesSub = [];
+let maxFilesSub = 30;
+
+function updateImagesInputSub() {
+    let imagesInput = document.getElementById('imagesSub');
+    imagesInput.value = JSON.stringify(imagesArraySub);
+    let imageWrapper = document.querySelector('.image-wrapper[data-index="0"]');
+    let firstImageWrapper = document.querySelector('.image-wrapper');
+    let imageWrappers = document.querySelectorAll('.image-wrapper');
+    imageWrappers.forEach((imageWrapper) => {
+        if (imageWrapper.getAttribute('data-index') !== '0') {
+            imageWrapper.style.border = '';
+            imageWrapper.style.borderRadius = '';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.remove();
+            }
+        } else {
+            imageWrapper.style.border = '3px inset #a250ff';
+            imageWrapper.style.borderRadius = '5px';
+            let label = imageWrapper.querySelector('.image-label');
+            if (label) {
+                label.innerHTML = 'Imagen principal';
+            } else {
+                label = document.createElement('div');
+                label.classList.add('image-label');
+                label.innerHTML = 'Imagen principal';
+                imageWrapper.appendChild(label);
+            }
+        }
+    });
+    if (!imageWrapper) {
+        firstImageWrapper.style.border = '3px inset #a250ff';
+        firstImageWrapper.style.borderRadius = '5px';
+        label = document.createElement('div');
+        label.classList.add('image-label');
+        label.innerHTML = 'Imagen principal';
+        firstImageWrapper.appendChild(label);
+    }
+}
+function addImageSub(image) {
+    let container = document.getElementById('image-containerSub');
+    let newImage = document.createElement('div');
+    newImage.setAttribute('class', 'image-wrapper');
+    newImage.style.position = 'relative';
+    newImage.style.marginInlineEnd = '10px';
+    newImage.style.marginBlockEnd = '5px';
+    newImage.style.marginBlockStart = '5px';
+    newImage.style.maxHeight =  '125';
+    newImage.setAttribute('data-path', image.path);
+    newImage.innerHTML = `
+        <img style="width: 10rem; height: 7.5rem" src="{{ url('/') }}${image.url}" alt="Image">
+        <div class="loading-text" style="position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Cargando...</div>
+        <button type="button" class="delete-image" style="  position: absolute;top: 0;right: 0;width: 30px;height: 30px;background-color: #f3395b;border-radius: 50%;color: white;font-size: 18px;text-align: center;line-height: 27px;vertical-align: middle;cursor: pointer;border: none;" data-path="${image.path}">&#x2715;</button>
+    `;
+    container.appendChild(newImage);
+    imagesArraySub.push(image);
+    updateImagesInputSub();
+    let imageElement = newImage.querySelector('img');
+    imageElement.onload = function() {
+        newImage.querySelector('.loading-text').style.display = 'none';
+    }
+}
+
+function deleteImageSub(imagePath) {
+    console.log("Image path:", imagePath);
+    let container = document.getElementById('image-containerSub');
+    let imageWrapper = container.querySelector(`.image-wrapper[data-path="${imagePath}"]`);
+    console.log(imageWrapper);
+    container.removeChild(imageWrapper);
+    imagesArraySub = imagesArraySub.filter(image => image.path !== imagePath);
+    updateImagesInputSub();
+}
+function updateImageOrderSub(){
+  let container = document.getElementById('image-containerSub');
+  let imageWrapper = container.querySelectorAll('.image-wrapper');
+  imagesArraySub = [];
+  for (let i = 0; i < imagesWrappers.length; i++){
+    let imageId = parseInt(imageWrappers[i].getAttribute('data-id'));
+    let image = {
+      id: imageId,
+      order: i
+    };
+    imagesArraySub.push(image);
+  }
+  updateImagesInputSub();
+}
+function handleAddImageSub(file) {
+    let loadingIcon = document.getElementById('loading-icon');
+    loadingIcon.style.display = 'block';
+    document.getElementById('enviarBtn').disabled = true;
+    let formData = new FormData();
+    formData.append('uploaded_image', file);
+    formData.append('action', 'add');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_actionS') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            let image = {
+                path: data.image.path,
+                url: '/uploads/subasta' + data.image.path
+            };
+            addImageSub(image);
+            loadingIcon.style.display = 'none';
+            document.getElementById('enviarBtn').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('loading-icon').style.display = 'none';
+            loadingIcon.classList.remove('rotate');
+            document.getElementById('add-imagesSub').disabled = false;
+        });
+}
+
+function handleDeleteImageSub(imagePath) {
+    let formData = new FormData();
+    formData.append('image_path', imagePath);
+    formData.append('action', 'delete');
+    formData.append('_token', '{{ csrf_token() }}');
+
+    fetch('{{ route('product.image_actionS') }}', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                deleteImageSub(imagePath);
+            } else {
+                alert('Error al eliminar la imagen');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+function handleUpdateImageOrderSub(newOrder){
+  fetch('{{route('product.image_actionS')}}', {
+    method: 'POST',
+    headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({
+      action: 'update', 
+      new_oder: newOrder
+    })
+  }).then(response => response.json()).then(data =>{
+    if(data.error){
+      alert('Error al cambiar la posición la imagen');
+    }else{
+      updateImageOrderSub();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+}
+/*nuevas funciones (listeners) */
+document.getElementById('add-imagesSub').addEventListener('click', () => {
+  let fileInput = document.getElementById('file-inputSub');
+  fileInput.click();
+});
+document.getElementById('file-inputSub').addEventListener('change', (event) => {
+    let files = event.target.files;
+    if (imagesArraySub.length + files.length <= maxFilesSub) {
+        for (let i = 0; i < files.length; i++) {
+            handleAddImageSub(files[i]);
+        }
+    } else {
+        alert('Has alcanzado el límite máximo de imágenes permitidas.');
+    }
+});
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.delete-image')) {
+        let imagePath = event.target.getAttribute('data-path');
+        handleDeleteImageSub(imagePath);
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    let sortable = Sortable.create(document.getElementById('image-containerSub'), {
+        animation: 150,
+        onEnd: function (evt) {
+            let oldIndex = evt.oldIndex;
+            let newIndex = evt.newIndex;
+            let movedItem = imagesArraySub.splice(oldIndex, 1)[0];
+            imagesArraySub.splice(newIndex, 0, movedItem);
+            let imageWrappers = document.querySelectorAll('#image-containerSub > div');
+            for (let i = 0; i < imageWrappers.length; i++) {
+                imageWrappers[i].setAttribute('data-index', i);
+            }
+
+            updateImagesInputSub();
+        }
+    });
+});
+function openProductInNewTab(id){
+  const url = `/subastas/${id}`;
+  const newTab = window.open(url, '_blank');
+  if(newTab){
+    newTab.focus();
+  }else{
+    alert('Se ha bloqueado la apertura de una nueva ventana');
+  }
+}
+function confirmation(ev){
+  ev.preventDefault();
+  var url = ev.currentTarget.getAttribute('href');
+  swal({
+    title: "¿Desea eliminar esta subasta?",
+    text: "Esta subasta se eliminará para siempre",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((confirmCancel)=>{
+    if(confirmCancel){
+      window.location.href= url;
+    }
+  });
+}
+$(document).ready(function(){
+    $('.editProductBtn').on('click', function(){
+    var productId = $(this).data('id');
+    var url = 'getSubInfo/' + productId;
+    $('#subEditInfoContianer').empty();
+    $.ajax({
+      type: 'GET',
+      url: url,
+      success: function(response){
+        $('#subEditInfoContianer').html(response);
+        $('#modalForSub').modal('show');
+      },
+      error: function (xhr, status, error){
+        //error aun no implementando, recordar
+      }
+    });
+  });
 });
 </script>
 @endsection

@@ -377,7 +377,7 @@ class ProductsController extends Controller
             $date = date('Y-m-d H:i:s');
             $ruta = Str::slug($request->input('txtNombre'));
             $status = $request->input('listStatus');
-            $rancho = e($request->input('txtRancho'));
+            //$rancho = e($request->input('txtRancho'));
             $peso = e($request->input('txtCodigo'));
             $vendedorid = Auth::id();
             $raza  = $request->input('txtRaza');
@@ -401,8 +401,68 @@ class ProductsController extends Controller
 
 
             $product = new Product;
+            //nuevos campos
+            // Manejo de imagen de arete (obligatorio)
+            $areteImagen = null;
+            if ($request->hasFile('txtAreteImagen')) {
+                $file = $request->file('txtAreteImagen');
+                $filename = time() . '_arete_' . $file->getClientOriginalName();
+                
+                // Crear carpeta si no existe
+                if (!file_exists(public_path('uploads/aretes'))) {
+                    mkdir(public_path('uploads/aretes'), 0777, true);
+                }
+                
+                $file->move(public_path('uploads/aretes'), $filename);
+                $areteImagen = $filename;
+            }
 
-            
+            // Manejo de imagen de certificado de propiedad
+            $certificadoImagen = null;
+            if ($request->hasFile('txtCertificadoPropiedad')) {
+                $file = $request->file('txtCertificadoPropiedad');
+                $filename = time() . '_certificado_' . $file->getClientOriginalName();
+                
+                // Crear carpeta si no existe
+                if (!file_exists(public_path('uploads/certificados'))) {
+                    mkdir(public_path('uploads/certificados'), 0777, true);
+                }
+                
+                $file->move(public_path('uploads/certificados'), $filename);
+                $certificadoImagen = $filename;
+            }
+
+            // Manejo de historial del ganado (imagen o PDF)
+            $historialGanado = null;
+            if ($request->hasFile('txtHistorialGanado')) {
+                $file = $request->file('txtHistorialGanado');
+                $filename = time() . '_historial_' . $file->getClientOriginalName();
+                
+                // Crear carpeta si no existe
+                if (!file_exists(public_path('uploads/historiales'))) {
+                    mkdir(public_path('uploads/historiales'), 0777, true);
+                }
+                
+                $file->move(public_path('uploads/historiales'), $filename);
+                $historialGanado = $filename;
+            }
+
+            // Checkboxes (convertir a boolean)
+            $precioTratar = $request->has('chkPrecioTratar') ? true : false;
+            $incluyeEnvio = $request->has('chkIncluyeEnvio') ? true : false;
+            $precioEnvio = $incluyeEnvio && $request->input('txtPrecioEnvio') ? 
+                           floatval($request->input('txtPrecioEnvio')) : null;
+            $envioLatitud = null;
+            $envioLongitud = null;
+            $envioRadio = null;
+            $envioDireccion = null;
+
+            if ($incluyeEnvio) {
+                $envioLatitud = $request->input('txtEnvioLatitud') ? floatval($request->input('txtEnvioLatitud')) : null;
+                $envioLongitud = $request->input('txtEnvioLongitud') ? floatval($request->input('txtEnvioLongitud')) : null;
+                $envioRadio = $request->input('txtEnvioRadio') ? intval($request->input('txtEnvioRadio')) : null;
+                $envioDireccion = $request->input('txtEnvioDireccion') ? e($request->input('txtEnvioDireccion')) : null;
+            }
             $product->nombre = $nombre;
             $product->portada = $portada;
             $product->descripcion = $descripcion;
@@ -412,14 +472,14 @@ class ProductsController extends Controller
             $product->datecreated  = $date;
             $product->ruta = $ruta;
             $product->status = $status;
-            $product->rancho = $rancho;
+            //$product->rancho = $rancho;
             $product->peso = $peso;
             $product->vendedorid = $vendedorid;
             $product->carpeta = date('Y-m-d');
             $product->raza = $raza;
             $product->vacunado = $vacunado;
             $product->arete = $arete;
-            $product->certificado = $certificado;
+          //  $product->certificado = $certificado;
             $product->estatus = $estatus;
             $product->link = $ytlin;
             $product->estado = $estado;
@@ -427,6 +487,16 @@ class ProductsController extends Controller
             $product->comisaria = $comisaria;
             $product->premium = $premium;
             $product->edad = $edad;
+            $product->arete_imagen = $areteImagen;
+            $product->certificado_propiedad = $certificadoImagen;
+            $product->historial_ganado = $historialGanado;
+            $product->precio_tratar = $precioTratar;
+            $product->incluye_envio = $incluyeEnvio;
+            $product->precio_envio = $precioEnvio;
+            $product->envio_latitud = $envioLatitud;
+            $product->envio_longitud = $envioLongitud;
+            $product->envio_radio_km = $envioRadio;
+            $product->envio_direccion = $envioDireccion;
             $product->save();
             if ($request->hasFile('video')) {
                 $videoFile = $request->file('video');
@@ -741,7 +811,7 @@ class ProductsController extends Controller
             return back()->withErrors($validator)->with('message', 'Se ha producido un error')->with('typealert', 'danger')->withInput();
         }
         else{
-            $imagesJson = $request->input('images');
+            $imagesJson = $request->input('imagesSub');
             $images = json_decode($imagesJson, true);
             if (!$images || count($images) == 0) {
                 return back()->withErrors(['message' => 'Por favor, cargue al menos una imagen.'])->withInput();
