@@ -278,7 +278,7 @@
                 <p class="description">${{$p->precio}} MXN</p>
                 <p class="info">{{substr($p->descripcion, 0, 50)}}</p>
                 <div class="contact-button">
-					<button class="mainButtonB" onclick="location.href='https://wa.me/+52<?= $p->owner->telefono; ?>'"><a href="https://wa.me/+52<?= $p->owner->telefono; ?>" style="color: white;">Contacto</a></button>
+					{{-- <button class="mainButtonB" onclick="location.href='https://wa.me/+52<?= $p->owner->telefono; ?>'"><a href="https://wa.me/+52<?= $p->owner->telefono; ?>" style="color: white;">Contacto</a></button> --}}
                     <a id="openModal" href="#">Hacer contacto <span>></span></a>
                 </div>
             </div>
@@ -347,17 +347,55 @@
 			<input class="" type="text" id="vendedorid" name="vendedorid" value="<?= $p['vendedorid']; ?>" style="display: none;">
             <hr>
             <div class="form-group">
+	            <label for="perfil_comprador">Selecciona tu perfil: <span style="color: red;">*</span></label>
+	            <select id="perfil_comprador" name="perfil_comprador" required>
+	                <option value="">-- Seleccionar --</option>
+	                <option value="particular">Particular</option>
+	                <option value="emprendedor_ganadero">Emprendedor Ganadero</option>
+	                <option value="intermediario">Intermediario</option>
+	                <option value="productor_ganadero">Productor Ganadero</option>
+	            </select>
+	        </div>
+            <div class="form-group">
                 <label for="name">Nombre:</label>
                 <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
                 <label for="phone">Teléfono:</label>
                 <input type="tel" id="phone" name="phone">
-            </div>
-            <div class="form-group">
+            </div>   
+	        <div class="form-group checkbox-group">
+	            <label>
+	                <input type="checkbox" id="requiere_factura" name="requiere_factura" value="1">
+	                Requiero factura
+	            </label>
+	        </div>
+	        <!-- Rancho (solo visible para ciertos perfiles) -->
+	        <div class="form-group" id="div_rancho" style="display: none;">
+	            <label for="rancho">Rancho:</label>
+	            <input type="text" id="rancho" name="rancho" placeholder="Nombre del rancho">
+	        </div>
+
+	        <!-- Nombre de Asociación (solo para Productor Ganadero) -->
+	        <div class="form-group" id="div_asociacion" style="display: none;">
+	            <label for="nombre_asociacion">Nombre de la Asociación: <span style="color: red;">*</span></label>
+	            <input type="text" id="nombre_asociacion" name="nombre_asociacion">
+	        </div>
+	        <!-- RFC (solo si requiere factura) -->
+	        <div class="form-group" id="div_rfc" style="display: none;">
+	            <label for="rfc">RFC: <span style="color: red;">*</span></label>
+	            <input type="text" id="rfc" name="rfc" maxlength="13" placeholder="Ej: XAXX010101000">
+	        </div>
+	        <div class="form-group">
                 <label for="message">Mensaje:</label>
                 <textarea id="message" name="message" rows="4" required></textarea>
-            </div>
+            </div>        
+            <div class="form-group checkbox-group">
+	            <label>
+	                <input type="checkbox" id="pregunta_incluye_envio" name="pregunta_incluye_envio" value="1">
+	                ¿Incluye envío?
+	            </label>
+	        </div>
             <button class="mainButtonC" type="submit">Enviar</button>
         {!!Form::close()!!}
     </div>
@@ -378,7 +416,57 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const perfilSelect = document.getElementById('perfil_comprador');
+    const divRancho = document.getElementById('div_rancho');
+    const divAsociacion = document.getElementById('div_asociacion');
+    const divRfc = document.getElementById('div_rfc');
+    const requiereFactura = document.getElementById('requiere_factura');
+    const nombreAsociacion = document.getElementById('nombre_asociacion');
 
+    // Manejar cambios en el perfil
+    perfilSelect.addEventListener('change', function() {
+        const perfil = this.value;
+        
+        // Mostrar/ocultar campo rancho
+        if (['emprendedor_ganadero', 'intermediario', 'productor_ganadero'].includes(perfil)) {
+            divRancho.style.display = 'block';
+        } else {
+            divRancho.style.display = 'none';
+            document.getElementById('rancho').value = '';
+        }
+        
+        // Mostrar/ocultar campo asociación
+        if (perfil === 'productor_ganadero') {
+            divAsociacion.style.display = 'block';
+            nombreAsociacion.required = true;
+        } else {
+            divAsociacion.style.display = 'none';
+            nombreAsociacion.required = false;
+            nombreAsociacion.value = '';
+        }
+    });
+
+    // Manejar checkbox de factura
+    requiereFactura.addEventListener('change', function() {
+        const rfcInput = document.getElementById('rfc');
+        if (this.checked) {
+            divRfc.style.display = 'block';
+            rfcInput.required = true;
+        } else {
+            divRfc.style.display = 'none';
+            rfcInput.required = false;
+            rfcInput.value = '';
+        }
+    });
+
+    // Validación de RFC
+    document.getElementById('rfc').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
+</script>
 
 <script>
     const openModalButton = document.getElementById('openModal');

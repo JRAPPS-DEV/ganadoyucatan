@@ -109,7 +109,7 @@ class TiendaController extends Controller
         $data = ['product' => $product, 'images' => $images, 'random' => $random, 'video' => $video];
         return view('Tienda.product', $data);
     }
-    public function tiendaProductoMsg(Request $request, $id, $ruta){
+/*    public function tiendaProductoMsg(Request $request, $id, $ruta){
             $nombre = ucwords(strtolower(trim($request->input('name'))));
             $email = strtolower(trim($request->input('phone')));
             $mensaje = $request->input('message');
@@ -143,6 +143,76 @@ class TiendaController extends Controller
                     return back();
 
             }
+    }*/
+        public function tiendaProductoMsg(Request $request, $id, $ruta){
+        // Validación
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|max:20',
+            'estado' => 'required|string|max:100',
+            'rancho' => 'nullable|string|max:200',
+            'perfil_comprador' => 'nullable|in:particular,emprendedor_ganadero,intermediario,productor_ganadero',
+            'nombre_asociacion' => 'nullable|string|max:200',
+            'rfc' => 'nullable|string|size:13|regex:/^[A-Z&Ñ]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]$/',
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        $nombre = ucwords(strtolower(trim($request->input('name'))));
+        $telefono = trim($request->input('phone'));
+        $estado = $request->input('estado');
+        $rancho = $request->input('rancho');
+        $mensaje = $request->input('message');
+        $perfilComprador = $request->input('perfil_comprador');
+        $nombreAsociacion = $request->input('nombre_asociacion');
+        $rfc = $request->input('rfc');
+        $requiereFactura = $request->has('requiere_factura');
+        $preguntaIncluyeEnvio = $request->has('pregunta_incluye_envio');
+        $preguntaCostoEnvio = $request->has('pregunta_costo_envio');
+        
+        $useragent = $request->server('HTTP_USER_AGENT');
+        $ip = $request->server('REMOTE_ADDR');
+        $dispositivo = "PC";
+        $vendedorid = $request->input('vendedorid');
+        
+        if(preg_match("/mobile/i", $useragent)){
+            $dispositivo = "Móvil";
+        } else if (preg_match("/tablet/i", $useragent)) {
+            $dispositivo = "Tablet";
+        } else if (preg_match("/iPhone/i", $useragent)) {
+            $dispositivo = "iPhone";
+        } else if (preg_match("/iPad/i", $useragent)) {
+            $dispositivo = "iPad";
+        }
+        
+        $product = Product::where('idproducto', $id)->pluck('nombre')->first();
+        
+        $msg = new MensajeProducto;
+        $msg->nombre = $nombre;
+        $msg->telefono = $telefono;
+        $msg->estado = $estado;
+        $msg->rancho = $rancho;
+        $msg->mensaje = $mensaje . ' Para el producto: ' . $product;
+        $msg->email = $telefono; // Mantener compatibilidad con el campo existente
+        $msg->perfil_comprador = $perfilComprador;
+        $msg->nombre_asociacion = $nombreAsociacion;
+        $msg->rfc = $rfc;
+        $msg->requiere_factura = $requiereFactura;
+        $msg->pregunta_incluye_envio = $preguntaIncluyeEnvio;
+        //$msg->pregunta_costo_envio = $preguntaCostoEnvio;
+        $msg->ip = $ip;
+        $msg->dispositivo = $dispositivo;
+        $msg->useragent = $useragent;
+        $msg->datecreated = date('Y-m-d');
+        $msg->vendedorid = $vendedorid;
+        $msg->status = 0;
+        
+        if($msg->save()){
+            Alert::success('Éxito', 'El mensaje se envió correctamente.');
+            return back();
+        } else {
+            Alert::error('Error', 'No se pudo enviar el mensaje. Inténtalo de nuevo.');
+            return back();
+        }
     }
     public function contactInfo(Request $request){
         $nombre = ucwords(strtolower(trim($request->input('name'))));
