@@ -149,14 +149,13 @@ class TiendaController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
-            'estado' => 'required|string|max:100',
+            //'estado' => 'required|string|max:100',
             'rancho' => 'nullable|string|max:200',
             'perfil_comprador' => 'nullable|in:particular,emprendedor_ganadero,intermediario,productor_ganadero',
             'nombre_asociacion' => 'nullable|string|max:200',
             'rfc' => 'nullable|string|size:13|regex:/^[A-Z&Ñ]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]$/',
             'message' => 'nullable|string|max:1000',
         ]);
-
         $nombre = ucwords(strtolower(trim($request->input('name'))));
         $telefono = trim($request->input('phone'));
         $estado = $request->input('estado');
@@ -164,6 +163,7 @@ class TiendaController extends Controller
         $mensaje = $request->input('message');
         $perfilComprador = $request->input('perfil_comprador');
         $nombreAsociacion = $request->input('nombre_asociacion');
+        //$ruta = $ruta;
         $rfc = $request->input('rfc');
         $requiereFactura = $request->has('requiere_factura');
         $preguntaIncluyeEnvio = $request->has('pregunta_incluye_envio');
@@ -196,6 +196,7 @@ class TiendaController extends Controller
         $msg->perfil_comprador = $perfilComprador;
         $msg->nombre_asociacion = $nombreAsociacion;
         $msg->rfc = $rfc;
+        $msg->rancho = $product;
         $msg->requiere_factura = $requiereFactura;
         $msg->pregunta_incluye_envio = $preguntaIncluyeEnvio;
         //$msg->pregunta_costo_envio = $preguntaCostoEnvio;
