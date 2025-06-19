@@ -791,7 +791,7 @@ class ProductsController extends Controller
             $product->edad = $edad;
             
             if($product->save()){
-                return redirect('/admin/products/addNewCom')->with('message', 'Producto agregado con exito al sistema')->with('typealert', 'success'); 
+                return redirect('/admin/products/getAllGanado')->with('message', 'Producto agregado con exito al sistema')->with('typealert', 'success'); 
             }
         }
 
@@ -916,9 +916,9 @@ class ProductsController extends Controller
             $sub->id_producto = ProductS::where('vendedorid', Auth::id())->orderby('fechaCreado', 'desc')->value('id_producto');
             $sub->save();
             if($product->save()){
-                return redirect('/admin/products/addNewSub');
+                return redirect('/admin/products/getAllGanado');
             }else{
-                return redirect('/admin/products/addNewSub')->with('message', 'Error en el proceso')->with('typealert', 'danger');
+                return redirect('/admin/products/getAllGanado')->with('message', 'Error en el proceso')->with('typealert', 'danger');
             }
             
         }
@@ -991,7 +991,7 @@ class ProductsController extends Controller
             $product->save();
             
             if($product->save()){
-                return redirect('/admin/products/addNewSub')->with('message', 'Producto editado con exito en el sistema')->with('typealert', 'success'); 
+                return redirect('/admin/products/getAllGanado')->with('message', 'Producto editado con exito en el sistema')->with('typealert', 'success'); 
             }
         }
 
@@ -1025,6 +1025,70 @@ class ProductsController extends Controller
         $rancho = $request->input('txtRancho');
         $propietario = Auth::user()->nombres;
         $tipo = $request->input('txtTipo');
+
+        // Manejo de imagen de arete (obligatorio)
+        $areteImagen = null;
+        if ($request->hasFile('txtAreteImagent')) {
+            $file = $request->file('txtAreteImagent');
+            $filename = time() . '_arete_' . $file->getClientOriginalName();
+            
+            // Crear carpeta si no existe
+            if (!file_exists(public_path('uploads/aretes'))) {
+                mkdir(public_path('uploads/aretes'), 0777, true);
+            }
+            
+            $file->move(public_path('uploads/aretes'), $filename);
+            $areteImagen = $filename;
+        }
+        
+        // Manejo de imagen de certificado de propiedad
+        $certificadoImagen = null;
+        if ($request->hasFile('txtCertificadoPropiedadt')) {
+            $file = $request->file('txtCertificadoPropiedadt');
+            $filename = time() . '_certificado_' . $file->getClientOriginalName();
+            
+            // Crear carpeta si no existe
+            if (!file_exists(public_path('uploads/certificados'))) {
+                mkdir(public_path('uploads/certificados'), 0777, true);
+            }
+            
+            $file->move(public_path('uploads/certificados'), $filename);
+            $certificadoImagen = $filename;
+        }
+        
+        // Manejo de historial del ganado (imagen o PDF)
+        $historialGanado = null;
+        if ($request->hasFile('txtHistorialGanadot')) {
+            $file = $request->file('txtHistorialGanadot');
+            $filename = time() . '_historial_' . $file->getClientOriginalName();
+            
+            // Crear carpeta si no existe
+            if (!file_exists(public_path('uploads/historiales'))) {
+                mkdir(public_path('uploads/historiales'), 0777, true);
+            }
+            
+            $file->move(public_path('uploads/historiales'), $filename);
+            $historialGanado = $filename;
+        }
+        
+        // Checkboxes (convertir a boolean)
+        $precioTratar = $request->has('chkPrecioTratart') ? true : false;
+        $incluyeEnvio = $request->has('chkIncluyeEnviot') ? true : false;
+        $precioEnvio = $incluyeEnvio && $request->input('txtPrecioEnviot') ? 
+                       floatval($request->input('txtPrecioEnviot')) : null;
+        
+        $envioLatitud = null;
+        $envioLongitud = null;
+        $envioRadio = null;
+        $envioDireccion = null;
+        
+        if ($incluyeEnvio) {
+            $envioLatitud = $request->input('txtEnvioLatitudt') ? floatval($request->input('txtEnvioLatitudt')) : null;
+            $envioLongitud = $request->input('txtEnvioLongitudt') ? floatval($request->input('txtEnvioLongitudt')) : null;
+            $envioRadio = $request->input('txtEnvioRadiot') ? intval($request->input('txtEnvioRadiot')) : null;
+            $envioDireccion = $request->input('txtEnvioDirecciont') ? e($request->input('txtEnvioDirecciont')) : null;
+        }
+
         $id_producto = DB::table('productot')->insertGetId([
             'nombre' => $nombre,
             'estado' => $estado,
@@ -1048,7 +1112,18 @@ class ProductsController extends Controller
             'vendedorid' => Auth::id(),
             'imagen' =>  date('Y-m-d'),
             'status' => '2',
+            'arete_imagen' => $areteImagen,
+            'certificado_propiedad' => $certificadoImagen,
+            'historial_ganado' => $historialGanado,
+            'precio_tratar' => $precioTratar,
+            'incluye_envio' => $incluyeEnvio,
+            'precio_envio' => $precioEnvio,
+            'envio_latitud' => $envioLatitud,
+            'envio_longitud' => $envioLongitud,
+            'envio_radio_km' => $envioRadio,
+            'envio_direccion' => $envioDireccion,
         ]);
+        
         if ($request->hasFile('video')) {
             $videoFile = $request->file('video');
             $destinationPath = Storage::disk('videost')->path($videoFile);
@@ -1061,6 +1136,7 @@ class ProductsController extends Controller
             $video->producto_id = $productoid;
             $video->save();
         }
+        
         if(count($images) >= 1) {
             for ($i = 0; $i < count($images); $i++) {
                 $imageData = $images[$i];
@@ -1073,14 +1149,16 @@ class ProductsController extends Controller
                 $image->save();
             }
         }
+        
         $request->session()->forget('product.imagesCom');
         $request->session()->forget('product.imageCountCom');
         $request->session()->increment('product.imageCountCom');
         $request->session()->forget('product.randomStringCom');
+        
         if ($id_producto) {
-            return redirect('/admin/products/addNewCom')->with('message', 'Producto agregado con exito al sistema')->with('typealert', 'success'); 
+            return redirect('/admin/products/getAllGanado')->with('message', 'Producto agregado con exito al sistema')->with('typealert', 'success'); 
         } else {
-            return back('/admin/products/addNewCom')->with('message', 'Error al agregar el producto a  l sistema')->with('typealert', 'warning');
+            return back('/admin/products/getAllGanado')->with('message', 'Error al agregar el producto a  l sistema')->with('typealert', 'warning');
         }
     }
     public function deleteSub($id){
@@ -1088,16 +1166,16 @@ class ProductsController extends Controller
         if($product->delete()){
             return back()->with('message', 'Producto eliminado con exito al sistema')->with('typealert', 'success'); 
         }else{
-            return back('/admin/products/addNewSub')->with('message', 'Error al eliminar el producto eliminado del sistema')->with('typealert', 'warning');
+            return back('/admin/products/getAllGanado')->with('message', 'Error al eliminar el producto eliminado del sistema')->with('typealert', 'warning');
         }
 
     }
     public function deletecom($id){
         $product = ProductT::findOrfail($id);
         if($product->delete()){
-            return redirect('/admin/products/addNewCom')->with('message', 'Producto eliminado con exito al sistema')->with('typealert', 'success'); 
+            return redirect('/admin/products/getAllGanado')->with('message', 'Producto eliminado con exito al sistema')->with('typealert', 'success'); 
         }else{
-            return back('/admin/products/addNewCom')->with('message', 'Error al eliminar el producto eliminado del sistema')->with('typealert', 'warning');
+            return back('/admin/products/getAllGanado')->with('message', 'Error al eliminar el producto eliminado del sistema')->with('typealert', 'warning');
         }
     }
     public function deleteGen($id){

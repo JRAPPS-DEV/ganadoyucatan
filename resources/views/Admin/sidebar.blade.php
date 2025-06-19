@@ -148,7 +148,7 @@
                 </a></li>
                 <?php } ?>
 {{--                 <?php if(Auth::user()->rolid == '1'){ ?> --}}
-                <li><a class="treeview-item" href="{{url('/admin')}}/products/getAllGanado"><i class="icon fa fa-circle-o"></i> Ganado Subido</a></li>
+                <li><a class="treeview-item" href="{{url('/admin')}}/products/getAllGanado"><i class="icon fa fa-circle-o"></i> Panel Ganadero</a></li>
 {{--                 <?php } ?> --}}
                 <?php if(Auth::user()->rolid == '1'){ ?>
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewPajilla"><i class="icon fa fa-circle-o"></i> Pajillas</a></li>
@@ -156,9 +156,9 @@
                 <?php if(Auth::user()->rolid == '1'){ ?>
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewEmbrion"><i class="icon fa fa-circle-o"></i> Embriones</a></li>
                 <?php } ?>
-                <?php if(Auth::user()->rolid == '1'){ ?>
+{{--                 <?php if(Auth::user()->rolid == '1'){ ?>
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/TianguisAdmin"><i class="icon fa fa-circle-o"></i> Tianguis Ganadero</a></li>
-                <?php } ?>
+                <?php } ?> --}}
 {{--                 <?php if(Auth::user()->rolid == '1'){ ?>
                 <li><a class="app-menu__item" href="{{url('/admin')}}/expo">
                 <i class="fa fa-star" aria-hidden="true"></i><span class="app-menu__label">Exposicon</span></a></li><?php } ?> --}}
