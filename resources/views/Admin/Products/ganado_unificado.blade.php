@@ -266,12 +266,12 @@
                             </div>
                             
                             <!-- Buscar ubicación -->
-                            <div class="form-group col-md-6">
+{{--                             <div class="form-group col-md-6">
                                 <label class="control-label">Buscar Ubicación</label>
                                 <input class="form-control" id="txtBuscarUbicacion" type="text" 
                                        placeholder="Buscar dirección...">
                                 <small class="form-text text-muted">Escribe para buscar una dirección</small>
-                            </div>
+                            </div> --}}
                             
                             <!-- Mapa -->
                             <div class="form-group col-md-12">
@@ -521,6 +521,67 @@
                         <select class="form-control"  name="comisariasCom" id="comisariasCom">
                         </select>
                     </div>
+                     <!-- Incluye Envío -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkIncluyeEnviot" name="chkIncluyeEnviot" value="1">
+                                      Incluye Envío
+                                  </label>
+                              </div>
+                          </div>
+
+                          <!-- Precio del Envío (se muestra solo si se marca incluye envío) -->
+                          <div class="form-group col-md-6" id="divPrecioEnviot" style="display: none;">
+                              <label class="control-label">Precio del Envío</label>
+                              <input class="form-control" id="txtPrecioEnvio" name="txtPrecioEnviot" 
+                                     type="number" step="0.01" min="0">
+                              <small class="form-text text-muted">Costo del envío (opcional)</small>
+                          </div>
+                          <!-- Configuración de Envío (Mapa) -->
+                        <div id="divConfiguracionEnviot" style="display: none;">
+                            <div class="form-group col-md-12">
+                                <h5>Configuración del Área de Envío</h5>
+                                <hr>
+                            </div>
+                            
+                            <!-- Radio de Envío -->
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Radio de Envío (km)</label>
+                                <input class="form-control" id="txtEnvioRadiot" name="txtEnvioRadiot" 
+                                       type="number" min="1" max="500" placeholder="Ej: 50">
+                                <small class="form-text text-muted">Distancia máxima para envío</small>
+                            </div>
+                            
+                            <!-- Buscar ubicación -->
+{{--                             <div class="form-group col-md-6">
+                                <label class="control-label">Buscar Ubicación</label>
+                                <input class="form-control" id="txtBuscarUbicaciont" type="text" 
+                                       placeholder="Buscar dirección...">
+                                <small class="form-text text-muted">Escribe para buscar una dirección</small>
+                            </div> --}}
+                            
+                            <!-- Mapa -->
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Seleccionar Centro de Envío</label>
+                                <div id="mapEnviot" style="height: 400px; width: 100%; border: 1px solid #ccc;"></div>
+                                <small class="form-text text-muted">Haz clic en el mapa para seleccionar el centro de tu área de envío</small>
+                            </div>
+                            
+                            <!-- Campos ocultos para coordenadas -->
+                            <input type="hidden" id="txtEnvioLatitudt" name="txtEnvioLatitudt">
+                            <input type="hidden" id="txtEnvioLongitudt" name="txtEnvioLongitudt">
+                            <input type="hidden" id="txtEnvioDirecciont" name="txtEnvioDirecciont">
+                            
+                            <!-- Información seleccionada -->
+                            <div class="form-group col-md-12">
+                                <div id="infoUbicacionSeleccionadat" class="alert alert-info" style="display: none;">
+                                    <strong>Ubicación seleccionada:</strong>
+                                    <p id="direccionSeleccionadat"></p>
+                                    <small>Radio de envío: <span id="radioSeleccionado"></span> km</small>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <div class="col-md-4">
                   <div class="row">
@@ -552,7 +613,41 @@
                           <div class="form-group col-md-6">
                             <label class="control-label">Nombre del rancho</label>
                             <input class="form-control" maxlength="50" id="txtRancho" name="txtRancho" type="text" >
-                        </div>
+                        </div>   
+                                             <!-- Imagen de Arete (Obligatorio) -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Imagen del Arete<span class="required">*</span></label>
+                              <input class="form-control" id="txtAreteImagent" name="txtAreteImagent" type="file" 
+                                     accept="image/*" required="">
+                              <small class="form-text text-muted">Formatos permitidos: JPG, PNG, GIF</small>
+                          </div>
+
+                          <!-- Certificado de Propiedad -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Certificado de Propiedad</label>
+                              <input class="form-control" id="txtCertificadoPropiedadt" name="txtCertificadoPropiedadt" 
+                                     type="file" accept="image/*">
+                              <small class="form-text text-muted">Imagen del certificado (Opcional)</small>
+                          </div>
+
+                          <!-- Historial del Ganado -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Historial del Ganado</label>
+                              <input class="form-control" id="txtHistorialGanadot" name="txtHistorialGanadot" 
+                                     type="file" accept="image/*,.pdf">
+                              <small class="form-text text-muted">Imagen o PDF del historial (Opcional)</small>
+                          </div>
+
+                          <!-- Precio a Tratar -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkPrecioTratart" name="chkPrecioTratart" value="1">
+                                      Precio a Tratar
+                                  </label>
+                                  <small class="form-text text-muted">Marcar si el precio es negociable</small>
+                              </div>
+                          </div>
                          <!-- <div class="form-group col-md-6">
                             <label class="control-label">Raza</label>
                             <select class="form-control selectpicker" id="txtRaza" name="txtRaza" >
@@ -592,7 +687,7 @@
                               <option value="NO Vacunado">No Vacunado</option>
                             </select>
                       </div>
-                        <div class="form-group col-md-6">
+{{--                         <div class="form-group col-md-6">
                             <label class="control-label" for="listArete">Arete</label>
                             <select class="form-control selectpicker" id="listArete" name="listArete" >
                               <option value="Con Arete">Con Arete</option>
@@ -605,7 +700,7 @@
                               <option value="Certificado">Cuenta con certificado</option>
                               <option value="NO certificado">NO cuenta con certificado</option>
                             </select>
-                        </div> 
+                        </div>  --}}
                         <div class="form-group col-md-6">
                             <label class="control-label" class="control-label">Tipo</label>
                                 <select class="form-control selectpicker" id="txtTipo" name="txtTipo" >
@@ -727,6 +822,67 @@
                         <select class="form-control"  name="comisariasSub" id="comisariasSub">
                         </select>
                     </div>
+                        <!-- Incluye Envío -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkIncluyeEnvios" name="chkIncluyeEnvios" value="1">
+                                      Incluye Envío
+                                  </label>
+                              </div>
+                          </div>
+
+                          <!-- Precio del Envío (se muestra solo si se marca incluye envío) -->
+                          <div class="form-group col-md-6" id="divPrecioEnviot" style="display: none;">
+                              <label class="control-label">Precio del Envío</label>
+                              <input class="form-control" id="txtPrecioEnvios" name="txtPrecioEnvios" 
+                                     type="number" step="0.01" min="0">
+                              <small class="form-text text-muted">Costo del envío (opcional)</small>
+                          </div>
+                          <!-- Configuración de Envío (Mapa) -->
+                        <div id="divConfiguracionEnvios" style="display: none;">
+                            <div class="form-group col-md-12">
+                                <h5>Configuración del Área de Envío</h5>
+                                <hr>
+                            </div>
+                            
+                            <!-- Radio de Envío -->
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Radio de Envío (km)</label>
+                                <input class="form-control" id="txtEnvioRadios" name="txtEnvioRadios" 
+                                       type="number" min="1" max="500" placeholder="Ej: 50">
+                                <small class="form-text text-muted">Distancia máxima para envío</small>
+                            </div>
+                            
+                            <!-- Buscar ubicación -->
+{{--                             <div class="form-group col-md-6">
+                                <label class="control-label">Buscar Ubicación</label>
+                                <input class="form-control" id="txtBuscarUbicaciont" type="text" 
+                                       placeholder="Buscar dirección...">
+                                <small class="form-text text-muted">Escribe para buscar una dirección</small>
+                            </div> --}}
+                            
+                            <!-- Mapa -->
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Seleccionar Centro de Envío</label>
+                                <div id="mapEnviot" style="height: 400px; width: 100%; border: 1px solid #ccc;"></div>
+                                <small class="form-text text-muted">Haz clic en el mapa para seleccionar el centro de tu área de envío</small>
+                            </div>
+                            
+                            <!-- Campos ocultos para coordenadas -->
+                            <input type="hidden" id="txtEnvioLatituds" name="txtEnvioLatituds">
+                            <input type="hidden" id="txtEnvioLongituds" name="txtEnvioLongituds">
+                            <input type="hidden" id="txtEnvioDireccions" name="txtEnvioDireccions">
+                            
+                            <!-- Información seleccionada -->
+                            <div class="form-group col-md-12">
+                                <div id="infoUbicacionSeleccionadas" class="alert alert-info" style="display: none;">
+                                    <strong>Ubicación seleccionada:</strong>
+                                    <p id="direccionSeleccionadas"></p>
+                                    <small>Radio de envío: <span id="radioSeleccionados"></span> km</small>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <div class="col-md-6">
                   <div class="row">
@@ -787,8 +943,41 @@
                               <option value="Vacunado">Vacunado</option>
                               <option value="NO Vacunado">No Vacunado</option>
                             </select>
-                      </div>
-                        <div class="form-group col-md-6">
+                      </div>                                             <!-- Imagen de Arete (Obligatorio) -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Imagen del Arete<span class="required">*</span></label>
+                              <input class="form-control" id="txtAreteImagens" name="txtAreteImagens" type="file" 
+                                     accept="image/*" required="">
+                              <small class="form-text text-muted">Formatos permitidos: JPG, PNG, GIF</small>
+                          </div>
+
+                          <!-- Certificado de Propiedad -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Certificado de Propiedad</label>
+                              <input class="form-control" id="txtCertificadoPropiedads" name="txtCertificadoPropiedads" 
+                                     type="file" accept="image/*">
+                              <small class="form-text text-muted">Imagen del certificado (Opcional)</small>
+                          </div>
+
+                          <!-- Historial del Ganado -->
+                          <div class="form-group col-md-6">
+                              <label class="control-label">Historial del Ganado</label>
+                              <input class="form-control" id="txtHistorialGanados" name="txtHistorialGanados" 
+                                     type="file" accept="image/*,.pdf">
+                              <small class="form-text text-muted">Imagen o PDF del historial (Opcional)</small>
+                          </div>
+
+                          <!-- Precio a Tratar -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkPrecioTratars" name="chkPrecioTratars" value="1">
+                                      Precio a Tratar
+                                  </label>
+                                  <small class="form-text text-muted">Marcar si el precio es negociable</small>
+                              </div>
+                          </div>
+{{--                         <div class="form-group col-md-6">
                             <label class="control-label" for="listArete">Arete</label>
                             <select class="form-control selectpicker" id="listArete" name="listArete" >
                               <option value="Con Arete">Con Arete</option>
@@ -803,7 +992,7 @@
                             </select>
                         </div> 
                         <div class="form-group col-md-6">
-                        </div> 
+                        </div>  --}}
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
@@ -865,164 +1054,325 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script>
-document.getElementById('chkIncluyeEnvio').addEventListener('change', function() {
-    const precioEnvioDiv = document.getElementById('divPrecioEnvio');
-    if (this.checked) {
-        precioEnvioDiv.style.display = 'block';
-    } else {
-        precioEnvioDiv.style.display = 'none';
-        document.getElementById('txtPrecioEnvio').value = '';
+// Objetos para almacenar instancias separadas por sufijo
+let maps = {};
+let markers = {};
+let circles = {};
+let geocoder;
+let autocompletes = {};
+
+// Event listeners para todas las versiones
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar geocoder una sola vez
+    if (typeof google !== 'undefined' && google.maps) {
+        geocoder = new google.maps.Geocoder();
+    }
+    
+    // Versión original (sin sufijo)
+    const chkIncluyeEnvio = document.getElementById('chkIncluyeEnvio');
+    if (chkIncluyeEnvio) {
+        chkIncluyeEnvio.addEventListener('change', function() {
+            const precioEnvioDiv = document.getElementById('divPrecioEnvio');
+            const configuracionDiv = document.getElementById('divConfiguracionEnvio');
+            
+            if (this.checked) {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'block';
+                if (configuracionDiv) configuracionDiv.style.display = 'block';
+                
+                // Inicializar mapa si no existe
+                if (!maps['']) {
+                    setTimeout(() => initMap(''), 100);
+                }
+            } else {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'none';
+                if (configuracionDiv) configuracionDiv.style.display = 'none';
+                clearFields('');
+            }
+        });
+        
+        const txtEnvioRadio = document.getElementById('txtEnvioRadio');
+        if (txtEnvioRadio) {
+            txtEnvioRadio.addEventListener('input', function() {
+                actualizarCirculo('');
+            });
+        }
+    }
+    
+    // Versión con 't'
+    const chkIncluyeEnviot = document.getElementById('chkIncluyeEnviot');
+    if (chkIncluyeEnviot) {
+        chkIncluyeEnviot.addEventListener('change', function() {
+            const precioEnvioDiv = document.getElementById('divPrecioEnviot');
+            const configuracionDiv = document.getElementById('divConfiguracionEnviot');
+            
+            if (this.checked) {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'block';
+                if (configuracionDiv) configuracionDiv.style.display = 'block';
+                
+                // Inicializar mapa si no existe
+                if (!maps['t']) {
+                    setTimeout(() => initMap('t'), 100);
+                }
+            } else {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'none';
+                if (configuracionDiv) configuracionDiv.style.display = 'none';
+                clearFields('t');
+            }
+        });
+        
+        const txtEnvioRadiot = document.getElementById('txtEnvioRadiot');
+        if (txtEnvioRadiot) {
+            txtEnvioRadiot.addEventListener('input', function() {
+                actualizarCirculo('t');
+            });
+        }
+    }
+    
+    // Versión con 's'
+    const chkIncluyeEnvios = document.getElementById('chkIncluyeEnvios');
+    if (chkIncluyeEnvios) {
+        chkIncluyeEnvios.addEventListener('change', function() {
+            const precioEnvioDiv = document.getElementById('divPrecioEnvios');
+            const configuracionDiv = document.getElementById('divConfiguracionEnvios');
+            
+            if (this.checked) {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'block';
+                if (configuracionDiv) configuracionDiv.style.display = 'block';
+                
+                // Inicializar mapa si no existe
+                if (!maps['s']) {
+                    setTimeout(() => initMap('s'), 100);
+                }
+            } else {
+                if (precioEnvioDiv) precioEnvioDiv.style.display = 'none';
+                if (configuracionDiv) configuracionDiv.style.display = 'none';
+                clearFields('s');
+            }
+        });
+        
+        const txtEnvioRadios = document.getElementById('txtEnvioRadios');
+        if (txtEnvioRadios) {
+            txtEnvioRadios.addEventListener('input', function() {
+                actualizarCirculo('s');
+            });
+        }
     }
 });
-let map;
-let marker;
-let circle;
-let geocoder;
-let autocomplete;
 
-// Inicializar mapa
-function initMap() {
+function clearFields(suffix) {
+    const txtPrecioEnvio = document.getElementById('txtPrecioEnvio' + suffix);
+    const txtEnvioRadio = document.getElementById('txtEnvioRadio' + suffix);
+    const txtEnvioLatitud = document.getElementById('txtEnvioLatitud' + suffix);
+    const txtEnvioLongitud = document.getElementById('txtEnvioLongitud' + suffix);
+    const txtEnvioDireccion = document.getElementById('txtEnvioDireccion' + suffix);
+    const infoUbicacion = document.getElementById('infoUbicacionSeleccionada' + suffix);
+    
+    if (txtPrecioEnvio) txtPrecioEnvio.value = '';
+    if (txtEnvioRadio) txtEnvioRadio.value = '';
+    if (txtEnvioLatitud) txtEnvioLatitud.value = '';
+    if (txtEnvioLongitud) txtEnvioLongitud.value = '';
+    if (txtEnvioDireccion) txtEnvioDireccion.value = '';
+    if (infoUbicacion) infoUbicacion.style.display = 'none';
+}
+
+// Inicializar mapa específico para cada sufijo
+function initMap(suffix) {
+    console.log('Inicializando mapa para sufijo: "' + suffix + '"');
+    
     // Coordenadas de Mérida, Yucatán como centro inicial
     const meridaCoords = { lat: 20.9674, lng: -89.5926 };
     
-    map = new google.maps.Map(document.getElementById('mapEnvio'), {
+    const mapElement = document.getElementById('mapEnvio' + suffix);
+    if (!mapElement) {
+        console.error('No se encontró el elemento del mapa: mapEnvio' + suffix);
+        return;
+    }
+    
+    // Crear mapa específico para este sufijo
+    maps[suffix] = new google.maps.Map(mapElement, {
         zoom: 12,
         center: meridaCoords,
         mapTypeId: 'roadmap'
     });
     
-    geocoder = new google.maps.Geocoder();
+    console.log('Mapa creado exitosamente para sufijo: "' + suffix + '"');
+    
+    // Inicializar geocoder si no existe
+    if (!geocoder && typeof google !== 'undefined' && google.maps) {
+        geocoder = new google.maps.Geocoder();
+    }
     
     // Configurar autocompletado
-    const input = document.getElementById('txtBuscarUbicacion');
-    autocomplete = new google.maps.places.Autocomplete(input, {
-        componentRestrictions: { country: 'mx' },
-        fields: ['place_id', 'geometry', 'name', 'formatted_address']
-    });
-    
-    // Listener para autocompletado
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (!place.geometry) return;
+    const input = document.getElementById('txtBuscarUbicacion' + suffix);
+    if (input && typeof google !== 'undefined' && google.maps && google.maps.places) {
+        console.log('Configurando autocompletado para: txtBuscarUbicacion' + suffix);
         
-        const location = place.geometry.location;
-        map.setCenter(location);
-        map.setZoom(15);
+        // Limpiar el input
+        input.value = '';
         
-        actualizarUbicacion(location.lat(), location.lng(), place.formatted_address);
-    });
+        autocompletes[suffix] = new google.maps.places.Autocomplete(input, {
+            componentRestrictions: { country: 'mx' },
+            fields: ['place_id', 'geometry', 'name', 'formatted_address'],
+            types: ['address']
+        });
+        
+        // Listener para autocompletado
+        autocompletes[suffix].addListener('place_changed', function() {
+            const place = autocompletes[suffix].getPlace();
+            
+            if (!place.geometry || !place.geometry.location) {
+                console.log('No se pudo obtener la ubicación');
+                return;
+            }
+            
+            const location = place.geometry.location;
+            maps[suffix].setCenter(location);
+            maps[suffix].setZoom(15);
+            
+            actualizarUbicacion(location.lat(), location.lng(), place.formatted_address || place.name, suffix);
+        });
+        
+        // Listener adicional para Enter
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+        
+        // Evitar que el formulario se envíe al presionar Enter en el campo de búsqueda
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        console.log('Autocompletado configurado exitosamente para sufijo: "' + suffix + '"');
+    }
     
     // Listener para clics en el mapa
-    map.addListener('click', function(event) {
+    maps[suffix].addListener('click', function(event) {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         
         // Obtener dirección de las coordenadas
-        geocoder.geocode({ location: { lat: lat, lng: lng } }, function(results, status) {
-            if (status === 'OK' && results[0]) {
-                actualizarUbicacion(lat, lng, results[0].formatted_address);
-            } else {
-                actualizarUbicacion(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-            }
-        });
+        if (geocoder) {
+            geocoder.geocode({ location: { lat: lat, lng: lng } }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    actualizarUbicacion(lat, lng, results[0].formatted_address, suffix);
+                } else {
+                    actualizarUbicacion(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`, suffix);
+                }
+            });
+        }
     });
 }
 
-function actualizarUbicacion(lat, lng, direccion) {
+function actualizarUbicacion(lat, lng, direccion, suffix) {
+    console.log('Actualizando ubicación para sufijo: "' + suffix + '"');
+    
     // Actualizar campos ocultos
-    document.getElementById('txtEnvioLatitud').value = lat;
-    document.getElementById('txtEnvioLongitud').value = lng;
-    document.getElementById('txtEnvioDireccion').value = direccion;
+    const txtEnvioLatitud = document.getElementById('txtEnvioLatitud' + suffix);
+    const txtEnvioLongitud = document.getElementById('txtEnvioLongitud' + suffix);
+    const txtEnvioDireccion = document.getElementById('txtEnvioDireccion' + suffix);
     
-    // Limpiar marcador y círculo anteriores
-    if (marker) marker.setMap(null);
-    if (circle) circle.setMap(null);
+    if (txtEnvioLatitud) txtEnvioLatitud.value = lat;
+    if (txtEnvioLongitud) txtEnvioLongitud.value = lng;
+    if (txtEnvioDireccion) txtEnvioDireccion.value = direccion;
     
-    // Crear nuevo marcador
-    marker = new google.maps.Marker({
+    // Limpiar marcador y círculo anteriores de este sufijo específico
+    if (markers[suffix]) markers[suffix].setMap(null);
+    if (circles[suffix]) circles[suffix].setMap(null);
+    
+    // Crear nuevo marcador para este sufijo
+    markers[suffix] = new google.maps.Marker({
         position: { lat: lat, lng: lng },
-        map: map,
+        map: maps[suffix],
         title: 'Centro de envío',
         draggable: true
     });
     
     // Listener para cuando se arrastra el marcador
-    marker.addListener('dragend', function(event) {
+    markers[suffix].addListener('dragend', function(event) {
         const newLat = event.latLng.lat();
         const newLng = event.latLng.lng();
         
-        geocoder.geocode({ location: { lat: newLat, lng: newLng } }, function(results, status) {
-            if (status === 'OK' && results[0]) {
-                actualizarUbicacion(newLat, newLng, results[0].formatted_address);
-            } else {
-                actualizarUbicacion(newLat, newLng, `${newLat.toFixed(6)}, ${newLng.toFixed(6)}`);
-            }
-        });
+        if (geocoder) {
+            geocoder.geocode({ location: { lat: newLat, lng: newLng } }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    actualizarUbicacion(newLat, newLng, results[0].formatted_address, suffix);
+                } else {
+                    actualizarUbicacion(newLat, newLng, `${newLat.toFixed(6)}, ${newLng.toFixed(6)}`, suffix);
+                }
+            });
+        }
     });
     
     // Actualizar círculo
-    actualizarCirculo();
+    actualizarCirculo(suffix);
     
     // Mostrar información
-    document.getElementById('direccionSeleccionada').textContent = direccion;
-    document.getElementById('infoUbicacionSeleccionada').style.display = 'block';
+    const direccionSeleccionada = document.getElementById('direccionSeleccionada' + suffix);
+    const infoUbicacion = document.getElementById('infoUbicacionSeleccionada' + suffix);
+    
+    if (direccionSeleccionada) direccionSeleccionada.textContent = direccion;
+    if (infoUbicacion) infoUbicacion.style.display = 'block';
 }
 
-function actualizarCirculo() {
-    const radio = document.getElementById('txtEnvioRadio').value;
-    if (!radio || !marker) return;
+function actualizarCirculo(suffix) {
+    const txtEnvioRadio = document.getElementById('txtEnvioRadio' + suffix);
+    const radio = txtEnvioRadio ? txtEnvioRadio.value : null;
     
-    // Limpiar círculo anterior
-    if (circle) circle.setMap(null);
+    if (!radio || !markers[suffix]) return;
     
-    // Crear nuevo círculo
-    circle = new google.maps.Circle({
+    // Limpiar círculo anterior de este sufijo específico
+    if (circles[suffix]) circles[suffix].setMap(null);
+    
+    // Crear nuevo círculo para este sufijo
+    circles[suffix] = new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
         strokeWeight: 2,
         fillColor: '#FF0000',
         fillOpacity: 0.15,
-        map: map,
-        center: marker.getPosition(),
+        map: maps[suffix],
+        center: markers[suffix].getPosition(),
         radius: parseInt(radio) * 1000 // Convertir km a metros
     });
     
     // Ajustar zoom para mostrar todo el círculo
-    const bounds = circle.getBounds();
-    map.fitBounds(bounds);
+    const bounds = circles[suffix].getBounds();
+    maps[suffix].fitBounds(bounds);
     
     // Actualizar información
-    document.getElementById('radioSeleccionado').textContent = radio;
+    const radioSeleccionado = document.getElementById('radioSeleccionado');
+    if (radioSeleccionado) radioSeleccionado.textContent = radio;
 }
 
-// Event listeners
-document.getElementById('chkIncluyeEnvio').addEventListener('change', function() {
-    const precioEnvioDiv = document.getElementById('divPrecioEnvio');
-    const configuracionDiv = document.getElementById('divConfiguracionEnvio');
+// Función para reinicializar mapas cuando sea necesario (útil para modales)
+function reinitializeMap(suffix) {
+    console.log('Reinicializando mapa para sufijo: "' + suffix + '"');
     
-    if (this.checked) {
-        precioEnvioDiv.style.display = 'block';
-        configuracionDiv.style.display = 'block';
-        
-        // Inicializar mapa si no existe
-        if (!map) {
-            setTimeout(initMap, 100);
-        }
-    } else {
-        precioEnvioDiv.style.display = 'none';
-        configuracionDiv.style.display = 'none';
-        document.getElementById('txtPrecioEnvio').value = '';
-        document.getElementById('txtEnvioRadio').value = '';
-        document.getElementById('txtEnvioLatitud').value = '';
-        document.getElementById('txtEnvioLongitud').value = '';
-        document.getElementById('txtEnvioDireccion').value = '';
-        document.getElementById('infoUbicacionSeleccionada').style.display = 'none';
+    // Limpiar instancias anteriores
+    if (maps[suffix]) {
+        maps[suffix] = null;
     }
-});
+    if (markers[suffix]) {
+        markers[suffix] = null;
+    }
+    if (circles[suffix]) {
+        circles[suffix] = null;
+    }
+    if (autocompletes[suffix]) {
+        autocompletes[suffix] = null;
+    }
+    
+    // Reinicializar
+    setTimeout(() => initMap(suffix), 100);
+}
 
-document.getElementById('txtEnvioRadio').addEventListener('input', function() {
-    actualizarCirculo();
-});
+// Función global para llamar desde fuera si es necesario
+window.reinitializeMap = reinitializeMap;
 </script>
 
 <!-- Cargar Google Maps API -->
