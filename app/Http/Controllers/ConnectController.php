@@ -30,7 +30,7 @@ class ConnectController extends Controller
             $userId = Auth::id();
             $currentDateTime = Carbon::now();
             Persona::where('idpersona', $userId)->update(['ult_vez' => $currentDateTime]);
-            return redirect('/admin/products/home');
+            return redirect('/admin/products/getAllGanado');
         } else {
             return back()->with('message', 'Usuario o contraseña incorrecta')->with('typealert', 'danger');
         }  
@@ -80,6 +80,7 @@ class ConnectController extends Controller
             $user->ciudad = e($request->input('ciudades'));
             $user->municipio = e($request->input('comisarias'));
             $user->rolid = '6';
+            $user->status = '0';
             $user->estado = '1';//e($request->input('intEstado'));
             $user->datecreated = now();
             $user->updated_at = now();
@@ -100,14 +101,20 @@ class ConnectController extends Controller
                 $user->logo = $nombreLogo;
             }
 
-            if($user->save()){
+                        if($user->save()){
+                return redirect('/pago')->with('message', 'Registro exitoso, por favor realiza tu pago para activar tu cuenta.');
+            }
+/*if($user->save()){
                 if(Auth::attempt(['email_user' => $request->input('telefono'), 'password' => $request->input('password')], true)){
                    return redirect('/admin/products/home');
                 }
-            }else{
+            }*/else{
                 return back()->with('message', 'Se ha producdio un al registrarse')->with('typealert', 'danger');
             }  
         }
+    }
+    public function showPago() {
+        return view('index.pago');
     }
 
 }
