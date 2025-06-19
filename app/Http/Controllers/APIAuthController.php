@@ -30,9 +30,14 @@ class APIAuthController extends Controller
         $user->foto = null;
         $user->save();
         $credentials = ['email_user' => $request->email, 'password' => $request->password];
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Error al generar token'], 500);
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Error al generar token'], 401);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Error de autenticación', 'message' => $e->getMessage()], 500);
         }
+
         return response()->json(['token' => $token]);
     }
     public function login(Request $request){

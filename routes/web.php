@@ -28,6 +28,7 @@ Route::get('/', function () {
 Route::get('/api/products', [ApiController::class, 'getProducts']);
 Route::get('/register', [ConnectController::class, 'getRegister']);
 Route::post('/register', [ConnectController::class, 'postRegister']);
+Route::get('/pago', [ConnectController::class, 'showPago']);
 Route::get('/login', [ConnectController::class, 'getLogin']);
 Route::post('/login', [ConnectController::class, 'postLogin'])->name('login');
 Route::get('/logout', [ConnectController::class, 'getLogout']);
@@ -58,7 +59,9 @@ Route::get('/pajillas/producto/{id}', [TiendaController::class, 'getProductPajil
 
 /*ciudades*/
 Route::get('/get-estados', [TiendaController::class, 'getEstados']);
+Route::get('/get-estadosRegister', [TiendaController::class, 'getEstadosRegister']);
 Route::get('/get-ciudades-by-estado/{estadoId}', [TiendaController::class, 'getCiudadesByEstado']);
+Route::get('/get-comisarias-by-ciudad/{ciudadId}', [TiendaController::class, 'getComisariasByCiudad']);
 Route::middleware('auth')->group(function () {
     Route::post('support-conversations', [SupportConversationController::class, 'store']);
 

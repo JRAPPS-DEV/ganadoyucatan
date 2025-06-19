@@ -472,6 +472,7 @@ function handleUpdateImageOrder(newOrder){
 }
 /*nuevas funciones (listeners) */
 document.getElementById('add-images').addEventListener('click', () => {
+alert('hola');
   let fileInput = document.getElementById('file-input');
   fileInput.click();
 });

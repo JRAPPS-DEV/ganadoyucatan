@@ -30,7 +30,7 @@ class ConnectController extends Controller
             $userId = Auth::id();
             $currentDateTime = Carbon::now();
             Persona::where('idpersona', $userId)->update(['ult_vez' => $currentDateTime]);
-            return redirect('/admin/products/home');
+            return redirect('/admin/products/getAllGanado');
         } else {
             return back()->with('message', 'Usuario o contraseña incorrecta')->with('typealert', 'danger');
         }  
@@ -77,9 +77,11 @@ class ConnectController extends Controller
             $user->registro_asociacion = e($request->input('registro_asociacion'));
             $user->rfc = e($request->input('rfc'));
             $user->mercado_destino = e($request->input('mercado_destino'));
-            $user->municipio = e($request->input('municipio'));
+            $user->ciudad = e($request->input('ciudades'));
+            $user->municipio = e($request->input('comisarias'));
             $user->rolid = '6';
-            $user->estado = e($request->input('intEstado'));
+            $user->status = '0';
+            $user->estado = '1';//e($request->input('intEstado'));
             $user->datecreated = now();
             $user->updated_at = now();
             if ($request->hasFile('imagen')) {
@@ -91,14 +93,28 @@ class ConnectController extends Controller
             } else {
                 $user->foto_fierro = null;
             }
-            if($user->save()){
+            if ($request->hasFile('logo')) {
+                $logo = $request->file('logo');
+                $nombreLogo = e($request->input('telefono')) . '_logo.webp';
+                $imgWebpLogo = imagecreatefromstring(file_get_contents($logo->getRealPath()));
+                imagewebp($imgWebpLogo, 'userspics/' . $nombreLogo);
+                $user->logo = $nombreLogo;
+            }
+
+                        if($user->save()){
+                return redirect('/pago')->with('message', 'Registro exitoso, por favor realiza tu pago para activar tu cuenta.');
+            }
+/*if($user->save()){
                 if(Auth::attempt(['email_user' => $request->input('telefono'), 'password' => $request->input('password')], true)){
                    return redirect('/admin/products/home');
                 }
-            }else{
+            }*/else{
                 return back()->with('message', 'Se ha producdio un al registrarse')->with('typealert', 'danger');
             }  
         }
+    }
+    public function showPago() {
+        return view('index.pago');
     }
 
 }
