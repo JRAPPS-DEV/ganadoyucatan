@@ -25,6 +25,7 @@
                           <th>Teléfono</th>
                           <th>Mensaje</th>
                           <th>Recibido</th>
+                          <th>Producto</th>
                           {{-- <th>Leer</th> --}}
                         </tr>
                       </thead>
@@ -36,6 +37,7 @@
                             <td>{{ $m->email }}</td>
                             <td>{{ $m->mensaje }}</td>
                             <td>{{ $m->datecreated }}</td>
+                            <td>{{ $m->rancho }}</td>
                             {{-- <td>@if($m->status == 1)<button disabled type="submit" class="btn btn-info btn-sm" title="Ver mensaje"><i class="far fa-eye"></i></button>@else<form id="readMsgForm" action="{{route('readMensajesHome', ['id' => $m->id]) }}" method="POST">@csrf<button type="submit" class="btn btn-info btn-sm" style="background-color: #21d633; border-color: #21d633;" title="Ver mensaje"><i class="far fa-eye"></i></button></form>@endif</td> --}}
                           </tr>
                         @endforeach
