@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Date;
     use App\Models\Pajilla;
     use App\Models\PajillaImagen;
     use App\Models\PajillaVideo;
+use App\Models\Contacto;
 class ProductsController extends Controller
 {
     public function __construct(){
@@ -1493,5 +1494,44 @@ class ProductsController extends Controller
         } else {
             return redirect()->back()->with('message', 'El producto no existe')->with('typealert', 'danger');
         }
+    }
+    ///funct contactosPago
+    public function getContactosHome(){
+        $msg = Contacto::where('leido', false)
+                        ->get();
+
+        $data = ['contactos' => $msg];
+
+        return view('Admin.contactosHome', $data);
+    }
+    public function readContactHome($id){
+        $msg = Contacto::find($id);
+
+        if ($msg) {
+            if (!$msg->leido) {
+                $msg->leido = true;
+                $msg->save();
+
+                return back()->with('message', 'Mensaje marcado como leído')->with('typealert', 'success');
+            } else {
+                return back()->with('message', 'El mensaje ya ha sido leído')->with('typealert', 'info');
+            }
+        } else {
+            return back()->with('message', 'Mensaje no encontrado')->with('typealert', 'error');
+        }
+    }
+
+    public function markMultipleAsReadConctact(Request $request){
+        $messageIds = $request->input('contacto_ids');
+
+        if (!is_array($messageIds) || count($messageIds) == 0) {
+            return back()->with('message', 'No se seleccionaron mensajes')->with('typealert', 'error');
+        }
+
+        $updatedMessages = Contacto::whereIn('id', $messageIds)
+                                   ->where('leido', false)
+                                   ->update(['leido' => true]);
+
+        return back()->with('message', 'Mensajes marcados como leídos')->with('typealert', 'success');
     }
 }

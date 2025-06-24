@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator, Hash, Auth;
 use App\Models\Persona;
 use Carbon\Carbon;
+use App\Models\Contacto;
 class ConnectController extends Controller
 {   
     public function getLogin(){
@@ -116,5 +117,17 @@ class ConnectController extends Controller
     public function showPago() {
         return view('index.pago');
     }
+    public function guardarContacto(Request $request){
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:100',
+            'rancho' => 'required|string|max:100',
+            'ubicacion' => 'required|string|max:150',
+            'mensaje' => 'required|string',
+            'paquete' => 'required|string|max:100',
+        ]);
 
+        Contacto::create($validated);
+
+        return redirect('/pago')->with('success', 'Formulario enviado correctamente.');
+    }
 }
