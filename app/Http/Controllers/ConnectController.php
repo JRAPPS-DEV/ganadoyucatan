@@ -71,7 +71,12 @@ class ConnectController extends Controller
             $user->telefono = e($request->input('telefono'));
             $user->email_user = e($request->input('telefono'));
             $user->password = Hash::make($request->input('password'));
-            $user->tipo_explotacion = e($request->input('tipo_explotacion'));
+            //$user->tipo_explotacion = e($request->input('tiendas_interes'));
+            $tiendas = $request->input('tiendas_interes', []);
+            // 3) Límpialo un poco si quieres
+            $tiendas = array_map('strip_tags', $tiendas);
+            // 4) Guárdalo.  Gracias al cast se serializa solo como JSON.
+            $user->tipo_explotacion = implode(',', $tiendas);
             $user->numero_registro_union = e($request->input('numero_registro_union'));
             $user->tamano_ato = e($request->input('tamano_ato'));
             $user->tipo_produccion = e($request->input('tipo_produccion'));
