@@ -30,20 +30,69 @@
 </style>
 
 <main class="app-content">
+  @php
+    // Convierte el string en array y quita espacios
+    $tiendas      = array_map('trim', explode(',', Auth::user()->tipo_explotacion ?? ''));
+
+    // Categorías que “habilitan” el botón
+    $publicables  = [
+        'Ganado comercial',
+        'Ganado genético',
+        'Subasta ganadera',
+    ];
+
+    // ¿El usuario marcó al menos una de las 3?
+    $puedePublicar = count(array_intersect($publicables, $tiendas)) > 0;
+@endphp
+
   <div class="app-title">
+@if( count(array_intersect($publicables, $tiendas)) )
     <div class="d-flex justify-content-between align-items-center">
-      <h1>Panel de Control Ganadero</h1>
-      <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fas fa-plus-circle"></i> Publicar Ganado
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#agregarGenetico">Ganado Genético</a></li>
-          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#agregarComercial">Ganado Comercial</a></li>
-          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#agregarSubasta">Subasta Ganadera</a></li>
-        </ul>
-      </div>
+        <h1>Panel de Control Ganadero</h1>
+
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="fas fa-plus-circle"></i> Publicar Ganado
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                {{-- Ganado Genético --}}
+                @if(in_array('Ganado genético', $tiendas))
+                    <li>
+                        <a class="dropdown-item" href="#"
+                           data-bs-toggle="modal" data-bs-target="#agregarGenetico">
+                           Ganado Genético
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Ganado Comercial --}}
+                @if(in_array('Ganado comercial', $tiendas))
+                    <li>
+                        <a class="dropdown-item" href="#"
+                           data-bs-toggle="modal" data-bs-target="#agregarComercial">
+                           Ganado Comercial
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Subasta Ganadera --}}
+                @if(in_array('Subasta ganadera', $tiendas))
+                    <li>
+                        <a class="dropdown-item" href="#"
+                           data-bs-toggle="modal" data-bs-target="#agregarSubasta">
+                           Subasta Ganadera
+                        </a>
+                    </li>
+                @endif
+
+            </ul>
+        </div>
     </div>
+@endif
   </div>
 
   <!-- Tabla de Ganado Genético -->

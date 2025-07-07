@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Livewire\Chat;
 use App\Http\Controllers\APIAuthController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,9 @@ Route::post('/login', [ConnectController::class, 'postLogin'])->name('login');
 Route::get('/logout', [ConnectController::class, 'getLogout']);
 Route::get('/migrate-passwords', [ConnectController::class, 'migratePasswords']);
 /*tienda*/
+///nueva ruta reviews
+Route::post('/tienda/producto/{product}/review', [ReviewController::class,'store'])
+        ->name('reviews.store');
 Route::get('/tienda', [TiendaController::class, 'tiendaHome']);
 Route::post('/contactInfo', [TiendaController::class, 'contactInfo'])->name('contactInfo');
 Route::get('/tienda/producto/{id}/{ruta}', [TiendaController::class, 'tiendaProducto']);

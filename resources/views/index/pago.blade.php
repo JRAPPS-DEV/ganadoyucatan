@@ -36,7 +36,9 @@
         align-items: center;
         justify-content: center;
     }
-
+    .carrusel.paused {
+        animation-play-state: paused !important;
+    }
     .paquete {
         flex: 0 0 380px;       /* más ancho */
         max-width: 380px;
@@ -286,13 +288,21 @@
 </div>
 <script>
     function abrirModal(nombrePaquete = '') {
+        // abre el modal
         document.getElementById('paqueteModal').style.display = 'flex';
         document.getElementById('paquete').value = nombrePaquete;
+
+        // PAUSA el carrusel
+        document.getElementById('carrusel').classList.add('paused');
     }
 
     function cerrarModal(event) {
         if (event.target.id === 'paqueteModal') {
+            // cierra el modal
             document.getElementById('paqueteModal').style.display = 'none';
+
+            // REANUDA el carrusel (opcional; elimínalo si no quieres que vuelva a moverse)
+            document.getElementById('carrusel').classList.remove('paused');
         }
     }
 
@@ -302,7 +312,7 @@
             card.addEventListener('click', () => abrirModal(nombre));
         });
     });
-
 </script>
+
 
 @endsection

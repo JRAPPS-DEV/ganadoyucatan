@@ -284,11 +284,123 @@
             </div>
         </div>
     </div>
-    <div class="description-product">
-        <div class="desc-left">
-        	Visitas: {{$p->visits->count()}}
-            <p>{{$p->descripcion}} <span> </span></p>
-        </div>
+    <style>
+	    .review-form {
+	        margin-top: 20px;
+	        padding: 20px;
+	        background: #f9f9f9;
+	        border-radius: 12px;
+	        box-shadow: 0 0 8px rgba(0,0,0,0.05);
+	    }
+	    .review-form h3 {
+	        margin-bottom: 15px;
+	        color: #333;
+	    }
+	    .review-form input,
+	    .review-form textarea {
+	        width: 100%;
+	        padding: 10px 12px;
+	        margin-bottom: 12px;
+	        border: 1px solid #ccc;
+	        border-radius: 6px;
+	        font-size: 15px;
+	    }
+	    .review-form button {
+	        background-color: #4CAF50;
+	        color: #fff;
+	        border: none;
+	        padding: 10px 20px;
+	        font-size: 15px;
+	        border-radius: 6px;
+	        cursor: pointer;
+	    }
+	    .review-form button:hover {
+	        background-color: #45a049;
+	    }
+
+	    .stars {
+	        display: flex;
+	        flex-direction: row-reverse;
+	        justify-content: flex-end;
+	        margin-bottom: 12px;
+	    }
+	    .stars input { display: none; }
+	    .star {
+	        font-size: 28px;
+	        color: #ccc;
+	        cursor: pointer;
+	        transition: color 0.2s;
+	        margin-left: 5px;
+	    }
+	    .star.checked {
+	        color: #f0c040;
+	    }
+
+	    .review {
+	        margin-bottom: 18px;
+	        padding-bottom: 12px;
+	        border-bottom: 1px solid #e3e3e3;
+	    }
+	</style>
+	<div class="description-product">
+		<div class="desc-left">
+		    <p><strong>Visitas:</strong> {{ $p->visits->count() }}</p>
+		    <p>{{ $p->descripcion }}</p>
+
+		    {{-- FORM DE RESEÑA --}}
+		    <div class="review-form">
+		        <h3>Deja tu reseña</h3>
+		        @if(session('success'))
+		            <p style="color:green">{{ session('success') }}</p>
+		        @endif
+		        <form action="{{ route('reviews.store', ['product' => $p->idproducto]) }}" method="POST">
+		            @csrf
+
+		            {{-- Honeypot anti-spam --}}
+		            <input type="text" name="website" style="display:none">
+
+		            {{-- Estrellas --}}
+		            <div class="stars" id="starWrapper">
+		                @for($i=5;$i>=1;$i--)
+		                    <label class="star" data-value="{{ $i }}">&#9733;</label>
+		                    <input type="radio" name="estrellas" value="{{ $i }}">
+		                @endfor
+		            </div>
+
+		            <input type="text"  name="nombre"   placeholder="Tu nombre" required>
+		            <input type="text"  name="telefono" placeholder="Teléfono (opcional)">
+		            <input type="text"  name="rancho"   placeholder="Rancho (opcional)">
+		            <textarea name="mensaje" rows="4" placeholder="Cuéntanos tu experiencia..." required></textarea>
+
+		            <button type="submit">Enviar reseña</button>
+		        </form>
+		    </div>
+
+		    {{-- LISTA DE RESEÑAS --}}
+		    <div style="margin-top: 30px;">
+		        <h3>Reseñas ({{ $p->reviews->count() }})</h3>
+		        @forelse($p->reviews as $r)
+		            <div class="review">
+		                <div>
+		                    @for($i=1;$i<=5;$i++)
+		                        <span style="color:{{ $i <= $r->estrellas ? '#f0c040':'#ccc' }}">&#9733;</span>
+		                    @endfor
+		                    <strong>{{ $r->nombre }}</strong>
+		                    <small>· {{ $r->created_at->diffForHumans() }}</small>
+		                </div>
+		                <p>{{ $r->mensaje }}</p>
+		                @if($r->rancho || $r->telefono)
+		                    <small>
+		                        @if($r->rancho) Rancho: {{ $r->rancho }} @endif
+		                        @if($r->telefono) · Tel: {{ $r->telefono }} @endif
+		                    </small>
+		                @endif
+		            </div>
+		        @empty
+		            <p>(Aún sin reseñas)</p>
+		        @endforelse
+		    </div>
+		</div>
         <div class="desc-right">
             <h2>Descripción del Ganado</h2>
             <div class="container-desc">
@@ -569,5 +681,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function contactUser() {
         alert('Función de contacto no implementada aún.');
     }
+    ///resenas 
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.getElementById('starWrapper');
+        wrapper?.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', () => {
+                const val = star.dataset.value;
+                wrapper.querySelector(`input[value="${val}"]`).checked = true;
+                wrapper.querySelectorAll('.star').forEach(s => {
+                    s.classList.toggle('checked', s.dataset.value <= val);
+                });
+            });
+        });
+    });
 </script>
 @endsection

@@ -8,6 +8,7 @@ use App\Models\Estado;
 use App\Models\Ciudad;
 use App\Models\Persona;
 use App\Models\Visits;
+use App\Models\Review;
 class Product extends Model
 {
     use HasFactory;
@@ -32,5 +33,8 @@ class Product extends Model
     }
     public function videos(){
         return $this->hasMany(Video::class, 'producto_id', 'idproducto');
+    }
+    public function reviews(){
+        return $this->hasMany(Review::class, 'product_id', 'idproducto');
     }
 }
