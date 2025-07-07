@@ -136,7 +136,7 @@
                 <i class="treeview-indicator fa fa-angle-right"></i>
             </a>
             <ul class="treeview-menu">
-                <?php if(Auth::user()->rolid == '1' || Auth::user()->rolid == '6'){ ?>
+{{--                 <?php if(Auth::user()->rolid == '1' || Auth::user()->rolid == '6'){ ?>
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewGen"><i class="icon fa fa-circle-o"></i> Ganado Genético
                 </a></li>
                 <?php } ?>
@@ -147,14 +147,31 @@
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewSub"><i class="icon fa fa-circle-o"></i> Subasta Ganadera
                 </a></li>
                 <?php } ?>
-{{--                 <?php if(Auth::user()->rolid == '1'){ ?> --}}
+                <?php if(Auth::user()->rolid == '1'){ ?> --}}
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/getAllGanado"><i class="icon fa fa-circle-o"></i> Panel Ganadero</a></li>
 {{--                 <?php } ?> --}}
-                <?php if(Auth::user()->rolid == '1'){ ?>
-                <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewPajilla"><i class="icon fa fa-circle-o"></i> Pajillas</a></li>
+@php
+    $tiendas = array_map('trim', explode(',', Auth::user()->tipo_explotacion ?? ''));
+@endphp
+               <?php if(Auth::user()->rolid == '1' || Auth::user()->rolid == '6'){ ?>
+                @if( in_array('Pajillas de semen bovino', $tiendas) )
+                    <li>
+                        <a class="treeview-item"
+                           href="{{ url('/admin/products/addNewPajilla') }}">
+                            <i class="icon fa fa-circle-o"></i> Pajillas
+                        </a>
+                    </li>
+                @endif
                 <?php } ?> 
-                <?php if(Auth::user()->rolid == '1'){ ?>
-                <li><a class="treeview-item" href="{{url('/admin')}}/products/addNewEmbrion"><i class="icon fa fa-circle-o"></i> Embriones</a></li>
+                <?php if(Auth::user()->rolid == '1' || Auth::user()->rolid == '6'){ ?>
+                @if( in_array('Embriones en venta', $tiendas) )
+                    <li>
+                        <a class="treeview-item"
+                           href="{{ url('/admin/products/addNewEmbrion') }}">
+                            <i class="icon fa fa-circle-o"></i> Embriones
+                        </a>
+                    </li>
+                @endif
                 <?php } ?>
 {{--                 <?php if(Auth::user()->rolid == '1'){ ?>
                 <li><a class="treeview-item" href="{{url('/admin')}}/products/TianguisAdmin"><i class="icon fa fa-circle-o"></i> Tianguis Ganadero</a></li>
