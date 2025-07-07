@@ -57,6 +57,9 @@ Route::get('/products/deleteSubImage/{id}/{portada}', [ProductsController::class
 Route::get('/mensajes', [ProductsController::class, 'getMensajesHome'])->name('mensajesHome');
 Route::post('/mensajes/{id}', [ProductsController::class, 'readMensajesHome'])->name('readMensajesHome');
 Route::post('/readMsgs', [ProductsController::class, 'markMultipleAsRead'])->name('markMultipleAsRead');
+Route::get('/contactos', [ProductsController::class, 'getContactosHome'])->name('contactosHome');
+Route::post('/contactos/{id}', [ProductsController::class, 'readContactHome'])->name('readContactHome');
+Route::post('/readctct', [ProductsController::class, 'markMultipleAsReadConctact'])->name('markMultipleAsReadConctact');
 /*Usuarios*/
 Route::get('/users', [UsersController::class, 'getUsers'])->name('usersHome')->middleware(['IsAdmin']);
 Route::get('/get-user-info/{id}', [UsersController::class, 'getUserInfo'])->middleware(['IsAdmin']);

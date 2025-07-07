@@ -29,6 +29,7 @@ Route::get('/api/products', [ApiController::class, 'getProducts']);
 Route::get('/register', [ConnectController::class, 'getRegister']);
 Route::post('/register', [ConnectController::class, 'postRegister']);
 Route::get('/pago', [ConnectController::class, 'showPago']);
+Route::post('/guardar-contacto', [ConnectController::class, 'guardarContacto'])->name('guardar.contacto');
 Route::get('/login', [ConnectController::class, 'getLogin']);
 Route::post('/login', [ConnectController::class, 'postLogin'])->name('login');
 Route::get('/logout', [ConnectController::class, 'getLogout']);
