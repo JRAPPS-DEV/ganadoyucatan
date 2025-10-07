@@ -149,7 +149,7 @@
                     <label for="politicasPrivacidad">Acepto las <a href="/politicaPrivacidad" class="privacy-policy-link">políticas de privacidad</a></label>
                 </div>
                 @php
-                    $dir = public_path('userspics');
+                    $dir = public_path('public/userspics');
                     $imagenes = [];
                     if (is_dir($dir)) {
                         $files = glob($dir . '/*_fierro.webp');
