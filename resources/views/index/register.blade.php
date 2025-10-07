@@ -148,18 +148,47 @@
                 <input type="checkbox" id="politicasPrivacidad" required>
                     <label for="politicasPrivacidad">Acepto las <a href="/politicaPrivacidad" class="privacy-policy-link">políticas de privacidad</a></label>
                 </div>
+                @php
+                    $dir = public_path('userspics');
+                    $imagenes = [];
+                    if (is_dir($dir)) {
+                        $files = glob($dir . '/*_fierro.webp');
+                        usort($files, function($a, $b) {
+                            return filemtime($b) - filemtime($a);
+                        });
+
+                        foreach ($files as $path) {
+                            $basename = basename($path);
+                            $imagenes[] = [
+                                'url' => asset('userspics/' . $basename),
+                                'v'   => filemtime($path)
+                            ];
+                        }
+                    }
+                @endphp
+
                 <div class="image-carousel">
                     <div class="carousel-images">
-                        @if(isset($user) && $user->foto_fierro)
-                            <img src="{{ asset('userspics/' . $user->foto_fierro) }}" alt="Fierro del usuario">
+                        @if(count($imagenes) > 0)
+                            @foreach($imagenes as $i => $img)
+                                <img src="{{ $img['url'] . '?v=' . $img['v'] }}" alt="Fierro {{ $i+1 }}" class="{{ $i === 0 ? 'active' : '' }}" loading="lazy">
+                            @endforeach
                         @else
                             <img src="{{ asset('static/new/placeholder.webp') }}" alt="Sin imagen">
                         @endif
                     </div>
+
                     <div class="carousel-dots">
-                        <span class="dot active"></span>
+                        @if(count($imagenes) > 0)
+                            @foreach($imagenes as $i => $img)
+                                <span class="dot {{ $i === 0 ? 'active' : '' }}"></span>
+                            @endforeach
+                        @else
+                            <span class="dot active"></span>
+                        @endif
                     </div>
                 </div>
+
 
                 <button class="mainButton" type="submit">Entrar</button>
             {!! Form::close() !!}
