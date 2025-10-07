@@ -63,23 +63,23 @@
                 </div>
 
                 <div class="form-group custom-file-upload">
-                    <label for="imagen">Sube tu fierro</label>
+                    <label for="fierro">Sube tu fierro</label>
                     <div class="file-wrapper">
                         <button type="button" class="file-btn">Seleccionar archivo</button>
                         <span class="file-name">Ningún archivo seleccionado</span>
-                        <input type="file" id="imagen" name="imagen" accept="image/*" hidden>
+                        <input type="file" id="fierro" name="fierro" accept="image/*" hidden>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    {{-- <label for="logo">Sube tu logo</label>
-                    <input type="file" id="logo" name="logo" accept="image/*"> --}}
-                    <label for="imagen">Sube tu logo</label>
+                    <label for="logo">Sube tu logo</label>
                     <div class="file-wrapper">
                         <button type="button" class="file-btn">Seleccionar archivo</button>
                         <span class="file-name">Ningún archivo seleccionado</span>
-                        <input type="file" id="imagen" name="imagen" accept="image/*" hidden>
+                        <input type="file" id="logo" name="logo" accept="image/*" hidden>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="tiendasDropdown">Tiendas de Interés</label>
                     <div class="custom-dropdown" id="tiendasDropdown">

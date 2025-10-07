@@ -90,22 +90,31 @@ class ConnectController extends Controller
             $user->estado = '1';//e($request->input('intEstado'));
             $user->datecreated = now();
             $user->updated_at = now();
-            if ($request->hasFile('imagen')) {
-                $imagen = $request->file('imagen');
+            if ($request->hasFile('fierro')){
+                $imagen = $request->file('fierro');
                 $nombreArchivo = e($request->input('telefono')) . '_fierro.webp';
+                if (!file_exists(public_path('userspics'))) {
+                    mkdir(public_path('userspics'), 0777, true);
+                }
                 $imgWebp = imagecreatefromstring(file_get_contents($imagen->getRealPath()));
-                imagewebp($imgWebp, 'userspics/' . $nombreArchivo);
+                imagewebp($imgWebp, public_path('userspics/' . $nombreArchivo));
+                imagedestroy($imgWebp);
                 $user->foto_fierro = $nombreArchivo;
             } else {
                 $user->foto_fierro = null;
             }
-            if ($request->hasFile('logo')) {
+            if ($request->hasFile('logo')){
                 $logo = $request->file('logo');
                 $nombreLogo = e($request->input('telefono')) . '_logo.webp';
+                if (!file_exists(public_path('userspics'))) {
+                    mkdir(public_path('userspics'), 0777, true);
+                }
                 $imgWebpLogo = imagecreatefromstring(file_get_contents($logo->getRealPath()));
-                imagewebp($imgWebpLogo, 'userspics/' . $nombreLogo);
+                imagewebp($imgWebpLogo, public_path('userspics/' . $nombreLogo));
+                imagedestroy($imgWebpLogo);
                 $user->logo = $nombreLogo;
             }
+
 
             /*if($user->save()){
                 return redirect('/pago')->with('message', 'Registro exitoso, por favor realiza tu pago para activar tu cuenta.');
