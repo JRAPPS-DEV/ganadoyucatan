@@ -209,17 +209,20 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById('imagen');
-    const fileBtn = document.querySelector('.file-btn');
-    const fileName = document.querySelector('.file-name');
+    const wrappers = document.querySelectorAll('.file-wrapper');
+    wrappers.forEach(wrapper => {
+        const fileInput = wrapper.querySelector('input[type="file"]');
+        const fileBtn = wrapper.querySelector('.file-btn');
+        const fileName = wrapper.querySelector('.file-name');
+        fileBtn.addEventListener('click', () => fileInput.click());
 
-    fileBtn.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', function () {
-        fileName.textContent = this.files.length > 0 ? this.files[0].name : 'Ningún archivo seleccionado';
+        fileInput.addEventListener('change', function () {
+            fileName.textContent = this.files.length > 0 ? this.files[0].name : 'Ningún archivo seleccionado';
+        });
     });
 });
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const images = document.querySelectorAll('.carousel-images img');
