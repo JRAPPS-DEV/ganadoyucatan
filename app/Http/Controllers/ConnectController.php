@@ -107,14 +107,14 @@ class ConnectController extends Controller
                 $user->logo = $nombreLogo;
             }
 
-                        if($user->save()){
+            /*if($user->save()){
                 return redirect('/pago')->with('message', 'Registro exitoso, por favor realiza tu pago para activar tu cuenta.');
-            }
-/*if($user->save()){
+            }*/
+            if($user->save()){
                 if(Auth::attempt(['email_user' => $request->input('telefono'), 'password' => $request->input('password')], true)){
                    return redirect('/admin/products/home');
                 }
-            }*/else{
+            }else{
                 return back()->with('message', 'Se ha producdio un al registrarse')->with('typealert', 'danger');
             }  
         }

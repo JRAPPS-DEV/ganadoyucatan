@@ -150,16 +150,17 @@
                 </div>
                 <div class="image-carousel">
                     <div class="carousel-images">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXkqRVY8Lmc8EdVHTznCUmUz4FKmMWAug_Aw&s" alt="Imagen 1">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQct-THo9_M3Ja8U-ELjDWZu3QtEDOtC9IRHQ&s" alt="Imagen 2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmKLKBxUf7jZy36_Ff54h46F5C4O8r2UI86Q&s" alt="Imagen 3">
+                        @if(isset($user) && $user->foto_fierro)
+                            <img src="{{ asset('userspics/' . $user->foto_fierro) }}" alt="Fierro del usuario">
+                        @else
+                            <img src="{{ asset('static/new/placeholder.webp') }}" alt="Sin imagen">
+                        @endif
                     </div>
                     <div class="carousel-dots">
                         <span class="dot active"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
                     </div>
                 </div>
+
                 <button class="mainButton" type="submit">Entrar</button>
             {!! Form::close() !!}
         </div>
