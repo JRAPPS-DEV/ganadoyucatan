@@ -8,7 +8,7 @@
         <p onclick="location.href='/pajillas'">Pajillas</p>
         <p onclick="location.href='/blog'">Blog</p>
         <p onclick="location.href='/recomendaciones'">Recomendaciones</p>
-        <p onclick="location.href='{{ url('/register') }}'">Publicar gratis</p>
+        <p onclick="location.href='{{ url('/gratis') }}'">Publicar gratis</p>
 
     </div>
     <div class="navbar__content--right">
@@ -41,7 +41,7 @@
                         <p class="click-menu" onclick="location.href='/embriones'">Embriones</p>
                         <p class="click-menu" onclick="location.href='/pajillas'">Pajillas</p>
                         <p class="click-menu" onclick="location.href='/blog'">Blog</p>
-                        <p class="click-menu" onclick="location.href='{{ url('/register') }}'">Publicar gratis</p>
+                        <p class="click-menu" onclick="location.href='{{ url('/gratis') }}'">Publicar gratis</p>
 
                     </div>
                 </div>
