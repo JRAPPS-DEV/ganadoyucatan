@@ -399,10 +399,21 @@ class TiendaController extends Controller
             ]);
         }
         if ($id_producto) {
-            return "HOLA";
+            return '
+                <div style="text-align:center; padding:20px; border:1px solid #ddd; border-radius:5px; background-color:#f9f9f9;">
+                    <p style="font-size:16px; color:#333;">
+                        Gracias por publicar, te avisaremos cuando tu publicación sea aprobada.
+                    </p>
+                    <a href="https://ganadoyucatan.com/tienda" 
+                       style="display:inline-block; margin-top:10px; padding:10px 20px; background-color:#007BFF; color:#fff; text-decoration:none; border-radius:4px;">
+                        Ir al catálogo
+                    </a>
+                </div>
+            ';
         } else {
             return "Error al agregar el producto";
         }
+
     }
     public function getSubasta($id){
         $p = ProductS::where('status', 1)->findOrFail($id);
