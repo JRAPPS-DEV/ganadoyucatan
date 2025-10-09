@@ -44,8 +44,8 @@ Route::post('/contactInfo', [TiendaController::class, 'contactInfo'])->name('con
 Route::get('/tienda/producto/{id}/{ruta}', [TiendaController::class, 'tiendaProducto']);
 Route::post('/tienda/producto/{id}/{ruta}', [TiendaController::class, 'tiendaProductoMsg'])->name('tiendaProductoMsg');
 Route::get('/tianguisTienda', [TiendaController::class, 'getTianguisTienda'])->name('tiendaHome');
-Route::get('/tianguis', [TiendaController::class, 'getTianguis'])->name('subirTianguis');
-Route::post('/tianguis', [TiendaController::class, 'postTianguis'])->name('postTianguis');
+Route::get('/gratis', [TiendaController::class, 'getTianguis'])->name('subirTianguis');
+Route::post('/gratis', [TiendaController::class, 'postTianguis'])->name('postTianguis');
 Route::get('/tianguis/producto/{id}', [TiendaController::class, 'tianguisProducto'])->name('tianguisProducto');
 Route::get('/subastas', [TiendaController::class, 'getSubastas'])->name('getSubastas');
 Route::post('/sendOffer/{id}',  [TiendaController::class, 'sendOffer'])->name('sendOffer');

@@ -21,13 +21,13 @@
               <div class="tile">
                 <div class="tile-body">
                   <div class="table-responsive">
-                    <table class="table table-hover table-bordered"  data-sortable="true" id="tableUsuarios">
+                    <table class="table table-hover table-bordered" id="tableUsuarios">
                       <thead>
                         <tr>
 							<th data-field="nombres" data-sortable="true">Nombres</th>
             				<th data-field="email_user" data-sortable="true">Tel</th>
             				<th data-field="estado" data-sortable="true">Ubicacion</th>
-            				<th data-field="datecreated" data-sortable="true">Registro</th>
+                    <th data-field="datecreated" data-sortable="true" data-sorter="dateSorter">Registro</th>
             				<th data-field="ult_vez" data-sortable="true">Últ. Vez</th>
             				<th data-field="asociacion" data-sortable="true">Asociación</th>
                          	<th >Acciones</th>
@@ -195,6 +195,21 @@
       });
       });
     });
+let sortAsc = false;
+$('#tableUsuarios th[data-field="datecreated"]').on('click', function() {
+    var rows = $('#tableUsuarios tbody tr').get();
+    rows.sort(function(a, b) {
+        var dateA = new Date($(a).children('td').eq(3).text());
+        var dateB = new Date($(b).children('td').eq(3).text());
+
+        return sortAsc ? dateA - dateB : dateB - dateA;
+    });
+    $.each(rows, function(index, row) {
+        $('#tableUsuarios tbody').append(row);
+    });
+    sortAsc = !sortAsc;
+});
+
 </script>
 
 @endsection

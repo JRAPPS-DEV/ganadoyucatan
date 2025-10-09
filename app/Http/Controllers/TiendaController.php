@@ -333,6 +333,9 @@ class TiendaController extends Controller
 
         return view('Tienda.Subasta.subastaHome', $data);
     }
+    public function getGratis(){
+        return view('Tienda.gratis');
+    }
     public function postTianguis(Request $request){
         $estado = $request->input('estados', 1);
         $ciudad = $request->input('ciudades', 1);
