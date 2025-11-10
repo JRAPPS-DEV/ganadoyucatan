@@ -750,5 +750,9 @@ class APIProductsController extends Controller
             return response()->json(['error' => 'Error al eliminar el producto: ' . $e->getMessage()], 500);
         }
     }
+    public function getEstadosRegister(){
+        $estados = Estado::where('id', 1)->get();
+        return response()->json($estados);
+    }
 }
 //imagen, titulo, raza, peso, precio, vistas, estatus
