@@ -39,7 +39,7 @@ Route::middleware('jwt.auth')->post('/updateFiscoData', [APIUserController::clas
 Route::middleware('jwt.auth')->get('/getUserMsgs', [APIUserController::class, 'getUserMsgs']);
 Route::middleware('jwt.auth')->post('/updateMessageStatus', [APIUserController::class, 'updateMessageStatus']);
 /*fetching data*/
-Route::get('/estados', [APIProductsController::class, 'getEstados']);
+Route::get('/estados', [APIProductsController::class, 'getEstadosRegister']);
 Route::get('/ciudades/{estadoId}', [APIProductsController::class, 'getCiudadesByEstado'])->withoutMiddleware('throttle');
 Route::get('/comisarias/{ciudadId}', [APIProductsController::class, 'getComisariasByCiudad']);
 /*product post methods*/
