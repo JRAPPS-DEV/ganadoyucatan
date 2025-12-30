@@ -451,6 +451,7 @@ class ProductsController extends Controller
             // Checkboxes (convertir a boolean)
             $precioTratar = $request->has('chkPrecioTratar') ? true : false;
             $incluyeEnvio = $request->has('chkIncluyeEnvio') ? true : false;
+            $contactoPersonal = $request->has('chkContactoPersonal') ? true : false;
             $precioEnvio = $incluyeEnvio && $request->input('txtPrecioEnvio') ? 
                            floatval($request->input('txtPrecioEnvio')) : null;
             $envioLatitud = null;
@@ -494,6 +495,7 @@ class ProductsController extends Controller
             $product->precio_tratar = $precioTratar;
             $product->incluye_envio = $incluyeEnvio;
             $product->precio_envio = $precioEnvio;
+            $product->permitir_contacto_personal = $contactoPersonal;
             $product->envio_latitud = $envioLatitud;
             $product->envio_longitud = $envioLongitud;
             $product->envio_radio_km = $envioRadio;

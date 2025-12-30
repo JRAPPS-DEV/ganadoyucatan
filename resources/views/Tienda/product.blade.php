@@ -273,15 +273,38 @@
 				</div> --}}
             </div>
             <div class="information-product">
-                <p class="description">{{$p->nombre}}</p>
-                <p class="raza">{{$p->location->nombre}} , {{$p->ciudades->nombre}}</p>
-                <p class="description">${{$p->precio}} MXN</p>
-                <p class="info">{{substr($p->descripcion, 0, 50)}}</p>
-                <div class="contact-button">
-					{{-- <button class="mainButtonB" onclick="location.href='https://wa.me/+52<?= $p->owner->telefono; ?>'"><a href="https://wa.me/+52<?= $p->owner->telefono; ?>" style="color: white;">Contacto</a></button> --}}
-                    <a id="openModal" href="#">Hacer contacto <span>></span></a>
-                </div>
-            </div>
+			    <p class="description">{{$p->nombre}}</p>
+			    <p class="raza">{{$p->location->nombre}} , {{$p->ciudades->nombre}}</p>
+			    <p class="description">${{$p->precio}} MXN</p>
+			    <p class="info">{{substr($p->descripcion, 0, 50)}}</p>
+			    
+			    <div class="contact-button">
+				    @if($p->permitir_contacto_personal && $p->owner && $p->owner->email_user)
+				        {{-- Mostrar contacto directo cuando el vendedor lo permite --}}
+				        <a href="https://wa.me/+52{{ $p->owner->email_user }}"
+				           style="
+				               display: inline-block;
+				               background-color: var(--red-subasta);
+				               color: #fff;
+				               padding: 12px 20px;
+				               border-radius: 999px;
+				               text-decoration: none;
+				               font-weight: 600;
+				               text-align: center;
+				           ">
+				            <i class="fab fa-whatsapp"></i> Contactar al {{ $p->owner->email_user }}
+				        </a>
+				    @endif
+					<div class="contact-button">
+					    {{-- Mostrar modal de contacto cuando el vendedor NO permite contacto directo --}}
+					    <a id="openModal" href="#"
+					       style="display: inline-block;background-color: var(--red-subasta);color: #fff;padding: 12px 20px;border-radius: 999px;text-decoration: none;font-weight: 600;text-align: center;
+					       ">
+					        Hacer contacto a traves de la plataforma
+					    </a>
+					</div>
+			    </div>
+			</div>
         </div>
     </div>
     <style>

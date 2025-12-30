@@ -394,7 +394,6 @@
                                      type="file" accept="image/*,.pdf">
                               <small class="form-text text-muted">Imagen o PDF del historial (Opcional)</small>
                           </div>
-
                           <!-- Precio a Tratar -->
                           <div class="form-group col-md-6">
                               <div class="checkbox">
@@ -403,6 +402,17 @@
                                       Precio a Tratar
                                   </label>
                                   <small class="form-text text-muted">Marcar si el precio es negociable</small>
+                              </div>
+                          </div>
+
+                          <!-- Permitir Contacto Personal (NUEVO) -->
+                          <div class="form-group col-md-6">
+                              <div class="checkbox">
+                                  <label class="control-label">
+                                      <input type="checkbox" id="chkContactoPersonal" name="chkContactoPersonal" value="1">
+                                      Permitir contacto a mi número personal
+                                  </label>
+                                  <small class="form-text text-muted">Los compradores verán tu número de teléfono</small>
                               </div>
                           </div>
 
